@@ -317,6 +317,7 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
     os.system('rm -rf %s' % tmp_path)
     return fig, ax
 
+
 def sensC_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
                 legend_show=True, color='auto', kernel='all', **kwargs):
     """
@@ -516,6 +517,7 @@ def sensC_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
     os.system('rm -rf %s' % tmp_path)
 
     return fig, ax
+
 
 def _get_plot_labels(label, colormap, colormap_index):
     marker = '^'
@@ -810,16 +812,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
     m.drawparallels(np.arange(-90., 120., 60.), linewidth=meridians_thick, zorder=1, dashes=(None,None))
     m.drawmeridians(np.arange(0., 420., 60.), linewidth=meridians_thick, zorder=1, dashes=(None,None))
 
-    ## tectonic plates
-    #if lon_0 == 0: # as shapes, only works for lon_0=0
-    #    path = tplates.__path__[0]
-    #    tecplates = '%s/PB2002_plates' % path
-    #    pt = m.readshapefile(tecplates, name='tecplates', drawbounds=True,
-    #                         color='k', linewidth=0.85)
-    #    col = pt[-1]
-    #    col.set_linestyle('dotted')
-
-    if plates: # scaterring has no wrapping depending on lon_0
+    if plates: # scattering has no wrapping depending on lon_0
         path = tplates.__path__[0]
         f = '%s/original/PB2002_plates.dig.ALL.txt' % path
         f = open(f, 'r')
@@ -831,7 +824,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
                    marker=",", zorder=500)
         #ax.scatter(x, y, c=outline_color, s=outline_thick, zorder=500)
 
-    if llsvp: # scaterring has no wrapping depending on lon_0
+    if llsvp: # scattering has no wrapping depending on lon_0
         path = LLSVP.__path__[0]
         f = '%s/LLSVP_countour.dat' % path
         f = open(f, 'r')

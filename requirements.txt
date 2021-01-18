@@ -1,0 +1,12 @@
+pytorch torchvision -c pytorch
+obspy -c conda-forge
+basemap cartopy -c conda-forge
+mechanize
+natsort
+numpy
+pandas
+pandoc
+pip
+scipy
+sqlite
+tk=8.6.8

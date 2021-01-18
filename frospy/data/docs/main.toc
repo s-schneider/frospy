@@ -1,0 +1,16 @@
+\contentsline {section}{\numberline {1}Introduction}{1}
+\contentsline {section}{\numberline {2}Run Synthetics}{1}
+\contentsline {section}{\numberline {3}Get Data}{2}
+\contentsline {subsection}{\numberline {3.1}Download}{2}
+\contentsline {subsection}{\numberline {3.2}Cleaning and Conversion}{2}
+\contentsline {subsection}{\numberline {3.3}Select Data Sets}{3}
+\contentsline {paragraph}{Each new event}{3}
+\contentsline {paragraph}{Stations}{3}
+\contentsline {paragraph}{Picking}{3}
+\contentsline {paragraph}{Picking for FSI}{4}
+\contentsline {section}{\numberline {4}Spectrum}{4}
+\contentsline {subsection}{\numberline {4.1}Plotting}{4}
+\contentsline {subsection}{\numberline {4.2}Pick Segments}{4}
+\contentsline {section}{\numberline {5}CST/FSI Inversion}{4}
+\contentsline {subsection}{\numberline {5.1}Build CST Inversion}{4}
+\contentsline {subsection}{\numberline {5.2}Analyse Inversion Results}{5}

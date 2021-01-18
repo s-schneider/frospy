@@ -31,6 +31,13 @@ import glob
 import subprocess
 
 
+class Bin(object):
+    def __init__(self):
+        self.sc_cstkernels = "/net/home/talavera/bin/mdcplmrho_all_cstkernels"
+        self.sc_dstkernels = "/net/home/talavera/bin/mdcplmrho_kmr_cstkernels"
+        self.cc_kernels = "/net/home/talavera/bin/mdcplmrho_allC_cstkernels"
+
+
 def plot_cst_partial(path, labels=None, weights=None):
 
     if labels is None:
@@ -84,6 +91,10 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
     """
     :params mode: frospy.core.modes.Mode
     """
+    bins = Bin()
+    if not os.path.exists(bins.sc_cstkernels):
+        raise OSError('senskernel bin not found!')
+
     if 'fontsize' in kwargs:
         fontsize = float(kwargs['fontsize'])
     else:
@@ -118,14 +129,16 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
     ## get the kernel.dat files with mdcplmrho, works for all degrees
     ## e.g. 0s2 flips the sign of its kernel between deg=0(+) and deg=2(-)
     if kind == "cst":
-        sc_cstkernels = "/net/home/talavera/bin/mdcplmrho_all_cstkernels"
+        # sc_cstkernels = "/net/home/talavera/bin/mdcplmrho_all_cstkernels"
+        sc_cstkernels = bins.sc_cstkernels
         ktypes = ["s", "p", "r"]
         vp = []
         vs = []
         rho = []
         depth = []
     elif kind == "dst":
-        sc_cstkernels = "/net/home/talavera/bin/mdcplmrho_kmr_cstkernels"
+        # sc_cstkernels = "/net/home/talavera/bin/mdcplmrho_kmr_cstkernels"
+        sc_cstkernels = bins.sc_dstkernels
         ktypes = ["k", "m"]
         kappa = []
         mu = []
@@ -323,6 +336,9 @@ def sensC_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
     """
     :params mode: frospy.core.modes.Mode
     """
+    bins = Bin()
+    if not os.path.exists(bins.cc_kernels):
+        raise OSError('cc sens kernel bin not found!')
     if 'fontsize' in kwargs:
         fontsize = float(kwargs['fontsize'])
     else:
@@ -341,7 +357,8 @@ def sensC_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
         fig.set_size_inches(4, 11)
         ax.lines = []
 
-    cc_cstkernels = "/net/home/talavera/bin/mdcplmrho_allC_cstkernels"
+    cc_cstkernels = bins.cc_kernels
+    # cc_cstkernels = "/net/home/talavera/bin/mdcplmrho_allC_cstkernels"
 
     cwd = os.getcwd()
     tmp_path = 'tmp_ckernel'

@@ -66,28 +66,6 @@ def read(ifile=None, format=None, modenames=None):
                 if values['name'] not in modenames:
                     continue
             modes += Mode(header=values)
-
-        # Old .dat file, use .json instead
-        # path = frospydata.__path__[0] + "/AD/modes-full.dat"
-        # modesl = np.loadtxt(path, dtype={'names': ('n', 'name', 'l',
-        #                                  'frequency', 'Q', 'sensitivity'),
-        #                     'formats': (np.int, '|S15', np.int, np.float,
-        #                                 np.float, '|S15')},
-        #                     delimiter=', ').tolist()
-        #
-        # modes = Modes()
-        # for entry in modesl:
-        #     name = str(entry[0]) + str(entry[1]).upper() + str(entry[2])
-
-        #     mode = Mode({'n': entry[0],
-        #                  'type': str(entry[1]).upper(),
-        #                  'l': entry[2],
-        #                  'freq': entry[3],
-        #                  'Q': entry[4],
-        #                  'sens': entry[5],
-        #                  'name': name,
-        #                  })
-        #     modes += mode
         return modes
 
 

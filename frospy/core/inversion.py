@@ -42,8 +42,8 @@ class Inversion(object):
         streams of seismic data (per event) :obspy.core.Stream:
         streams of synthtic data (per event) :obspy.core.Stream:
         inventory of used stations (per event) :obspy.core.Inventory:
-        Segments (per event) :frospy.core.Segment:
-        Modes that were inverted for :frospy.core.modes.Modes:
+        Segments (per event) :nmpy.core.Segment:
+        Modes that were inverted for :nmpy.core.modes.Modes:
 
     SplittinFunc or FSI object:
         the result of the cst inversion

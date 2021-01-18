@@ -1,7 +1,7 @@
 from frospy.core.splittingfunc import SplittingFunc as SplitF
 
 # To Run on eejit, basemap is not installed yet
-from frospy.core.splittingfunc.plot import _plot_coeffs, _plot_map
+from frospy.core.splittingfunc.plot import _plot_coeffs, _plot_map, Bin
 from frospy.core.splittingfunc.splittingfunc import _calc_SH_matrix
 from frospy.core.splittingfunc.plot import sens_kernel, sensC_kernel
 
@@ -16,6 +16,7 @@ except ImportError:
 
 from obspy.core import AttribDict
 from frospy.util.base import sort_human
+import os
 
 import numpy as np
 from copy import deepcopy
@@ -434,6 +435,7 @@ class Set(object):
 
     def plot_map(self, vmin=None, vmax=None, kind='cst',  # vlim='auto',
                  verbose=False, **kwargs):
+        bins = Bin()
         smin = None
         smax = None
 
@@ -519,8 +521,12 @@ class Set(object):
             else:
                 vlim = [vmin, vmax]
 
-            fig, axes = plt.subplots(nrows=1, ncols=len(self.splitf)+2,
-                                     gridspec_kw=gridspec_kw)
+            if os.path.exists(bins.sc_cstkernels):
+                fig, axes = plt.subplots(nrows=1, ncols=len(self.splitf) + 2,
+                                         gridspec_kw=gridspec_kw)
+            else:
+                fig, axes = plt.subplots(nrows=1, ncols=len(self.splitf) + 1)
+                axes = np.hstack([np.array([None]), axes])
 
             for ax, sf in zip(axes.flat[1:-1], self.splitf):
                 if (
@@ -576,6 +582,7 @@ class Set(object):
                     ax.set_axis_off()
 
             # sens_kernel plot
+            
             ax = axes.flat[0]
             try:
                 if m.l == 0 or max(sdegs) == 0 :

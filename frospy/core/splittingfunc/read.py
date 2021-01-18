@@ -86,7 +86,9 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
                           'sens': None, 'freq': 0, 'Q': 0}
                 modes_cc += Mode(header)
     elif modes is not None:
-
+        if type(modes) != list:
+            modes = [modes]
+        modes = [x.upper() for x in modes]
         modesin = ['-']
         modes_ccin = ['-']
         for m in modes:
@@ -165,6 +167,9 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif cfile in ['MW', 'WZM']:
         cst, dst, cst_errors, dst_errors = read_cst_MW(modesin, modes_ccin,
                                                        folder_name=cfile)
+    
+    elif cfile.upper() == 'SAS':
+        cst, dst, cst_errors, dst_errors = read_cst_SAS(modes, setup)
 
     elif cfile in ['S20RTS+CRUST+BT', 'S20RTS+CRUST+Tr',
                    'S20RTS+CRUST+Ro', 'S20RTS+CRUST+Wh',
@@ -565,6 +570,14 @@ def get_cst(modes, modes_cc, c, noc, modes_dst=None):
                     dst.pop(name, None)
 
     return cst, dst
+
+
+def read_cst_SAS(modes, setup):
+    db_file = "%s/SAS/cst.sqlite3" % frospydata.__path__[0]
+    cst, dst, cst_errors, dst_errors = read_cst_db(setup=setup, modes=modes,
+                                                   file_name=db_file,
+                                                   model='data')
+    return cst, dst, cst_errors, dst_errors
 
 
 def read_cst_db(model, setup=None, modes=None, file_name=None, R=-0.2):

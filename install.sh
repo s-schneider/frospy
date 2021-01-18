@@ -56,7 +56,7 @@ find . -type f -name "*.pyc" -delete
 echo '                - Installing new files'
 
 if [ "$lib" == "full" ]; then
-    rm -rf $path
+    rm -rf $path/frospy
     echo "                  $wdir/frospy --> $path"
     rsync -r --delete frospy $path
     
@@ -64,14 +64,6 @@ else
     rm -rf $path/$lib
     echo "                  $wdir/$lib --> $path/frospy/$lib"
     rsync -r --delete frospy/$lib $path/$lib
-fi
-
-if (( startup == 1 )); then
-    echo '=============== Updating startup file ===================='
-    # rm ~/dev/.ipython/profile_default/startup/startup.py
-    # cp startup.py ~/dev/.ipython/profile_default/startup/.
-    rm ~/.ipython/profile_default/startup/startup.py
-    cp startup.py ~/.ipython/profile_default/startup/.
 fi
 
 echo "=============== frospy succesful updated ==================="

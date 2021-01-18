@@ -135,8 +135,9 @@ class Mode(AttribDict):
 
     def __init__(self, header={}, **args):
         if header == {}:
-            header = args.copy()
-            header['name'] = "{}{}{}".format(header['n'], header['type'].upper(), header['l'])
+            if len(args) != 0:
+                header = args.copy()
+                header['name'] = "{}{}{}".format(header['n'], header['type'].upper(), header['l'])
         super(Mode, self).__init__(header)
 
     def __setitem__(self, key, value):

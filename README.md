@@ -4,7 +4,6 @@ Small toolbox to help with spectra and data-preparation for splitting function m
  * [Core Classes]( #core-classes)
  * [Installation](#installation)
  * [Update](#update)
- * [Troubleshooting](#troubleshooting)
  * [Usage](#usage)
  * [Spectrum](#spectrum)
  * [Run](#run)
@@ -30,27 +29,24 @@ I recommend to run this toolbox using anaconda.
 
 Create a new environment:
 ```
-$ conda create -n nmpy python=3.7
-$ conda activate nmpy
-(nmpy) $
+$ conda create -n frospy_env python=3.7
+$ conda activate frospy_env
+(frospy_env) $
 ```
 
 Install required packages
 ```
-(nmpy) $ ./install_requirements
+(frospy_env) $ ./install_requirements
 ```
 
 Install nmpy
+clone this repo
 ```
-(nmpy) $ git clone git@git.science.uu.nl:DeepEarth-UU/modes/nmPy.git
-(nmpy) $ cd into nmPy
-(nmpy) $ chmod 755 INSTALL.sh
-(nmpy) $ chmod 755 update.sh
-(nmpy) $ ./INSTALL.sh 1
+(frospy_env) $ cd into frospy
+(frospy_env) $ chmod 755 install.sh
+(frospy_env) $ chmod 755 update.sh
+(frospy_env) $ ./install.sh
 ```
-The number following INSTALL.sh defines the following (default is 1):
-* - 1 installs nmpy with a startup file for ipython
-* - 0 installs nmpy without startup file
 
 start ipython
 
@@ -64,39 +60,6 @@ To update the current branch, run
 To update other branches, run  
 `./update.sh Branch_Name`
 
-## Troubleshooting
-If you have issues with the environment, e.g. you get an `ImportError` for 
-`import obspy`, make sure all installations are removed outside the environment.
-
-```
-(nmpy) $ source deactivate nmpy
-$ conda uninstall PACKAGE
-$ source activate nmpy
-(nmpy) $  conda install PACKAGE
-```
-
-
-If you see a message like
-```
-On branch development
-Your branch is up-to-date with 'origin/development'.
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
-
-	modified:   nmpy/util/geodesy.so
-
-no changes added to commit (use "git add" and/or "git commit -a")
-```
-although it is in `.gitignore` you need to clean up your tracked files in git.  
-Use the following commands:
-```
-git rm -r --cached .
-git add .
-git commit -m ".gitignore is now working"
-git push
-```
 ## Usage
 ```
 from frospy.spectrum.app import spectrum

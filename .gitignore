@@ -16,3 +16,4 @@ frospy/docs/*fls
 frospy/docs/*log
 frospy/docs/*synctex.gz
 frospy/docs/*toc
+tmp_*

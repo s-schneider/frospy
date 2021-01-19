@@ -1,7 +1,7 @@
 # Free Oscillation Toolbox - FrosPy
 Small toolbox to help with spectra and data-preparation for splitting function measurements.
 ## Content
- * [Toroidal Mode Splittinfunctions](#toroidal-mode-splittingfunctions)
+ * [Toroidal Mode Splittingfunctions](#toroidal-mode-splittingfunctions)
  * [Core Classes]( #core-classes)
  * [Installation](#installation)
  * [Update](#update)
@@ -12,7 +12,7 @@ Small toolbox to help with spectra and data-preparation for splitting function m
  * [Picking Frequency Windows](#picking-frequency-windows)
  * [Timewindow and tapershape test](#timewindow-and-tapershape-test)
 
-## Toroidal Mode Splittinfunctions
+## Toroidal Mode Splittingfunctions
 
 The splittingfunctions of our [toroidal mode overtone paper](https://doi.org/10.1093/gji/ggaa567) can be found here:
   [Toroidal mode overtones](https://github.com/s-schneider/frospy/tree/main/frospy/data/SAS/cst-coef-T.dat)

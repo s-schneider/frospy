@@ -1,5 +1,5 @@
 # Free Oscillation Toolbox - FrosPy
-Small toolbox to help with spectra and data-preparation for splitting function measurements.
+Small toolbox to help with visualization of spectra and data-handling for splitting function measurements.
 ## Content
  * [Toroidal Mode Splittingfunctions](#toroidal-mode-splittingfunctions)
  * [Core Classes]( #core-classes)

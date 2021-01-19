@@ -1,18 +1,88 @@
-# Normal Modes Toolbox
+# Free Oscillation Toolbox - FrosPy
 Small toolbox to help with spectra and data-preparation for splitting function measurements.
 ## Content
- * [Features and commands]( #features-and-commands)
+ * [Toroidal Mode Splittinfunctions](#toroidal-mode-splittingfunctions)
+ * [Core Classes]( #core-classes)
  * [Installation](#installation)
- * [Run](#run)
  * [Update](#update)
- * [Troubleshooting](#troubleshooting)
  * [Usage](#usage)
+ * [Spectrum](#spectrum)
+ * [Run](#run)
  * [Commands and kwargs](#commands-and-kwargs)
-   * [Picking Frequency Windows](#picking-frequency-windows)
-   * [Timewindow and tapershape test](#timewindow-and-tapershape-test)
+ * [Picking Frequency Windows](#picking-frequency-windows)
+ * [Timewindow and tapershape test](#timewindow-and-tapershape-test)
+
+## Toroidal Mode Splittinfunctions
+
+The splittingfunctions of our [toroidal mode overtone paper](https://doi.org/10.1093/gji/ggaa567) can be found here:
+  [Toroidal mode overtones](https://github.com/s-schneider/frospy/tree/main/frospy/data/SAS/cst-coef-T.dat)
 
 
-## Features and commands
+
+## Core Classes
+
+* Modes / Mode
+* Spectrum
+* Pick / Segment
+* Splittingfunc / Set
+* Setup
+
+## Installation
+I recommend to run this toolbox using anaconda.
+
+[Follow the instructions on their homepage](https://www.anaconda.com/download/)
+
+[How to manage your environments](https://conda.io/docs/user-guide/tasks/manage-environments.html)
+
+Create a new environment:
+```
+$ conda create -n frospy_env python=3.7
+$ conda activate frospy_env
+(frospy_env) $
+```
+
+Install required packages
+```
+(frospy_env) $ ./install_requirements
+```
+
+Install nmpy
+clone this repo
+```
+(frospy_env) $ cd into frospy
+(frospy_env) $ chmod 755 install.sh
+(frospy_env) $ chmod 755 update.sh
+(frospy_env) $ ./install.sh
+```
+
+start ipython
+
+voilá
+
+## Update
+
+To update the current branch, run  
+`./update.sh`
+
+To update other branches, run  
+`./update.sh Branch_Name`
+
+## Usage
+```
+from frospy.spectrum.app import spectrum
+data = 'PATH-TO-DATA-FILE'
+syn = 'PATH-TO-SYNTHETICS-FILE'
+spectrum(data, syn)
+```
+
+## Spectrum
+Spectrum is an example tool that uses frospy's core classes to plot normal mode frequency spectra.
+
+## Run
+To run spectrum enter the following line
+```
+(nmpy) $ ipython run_spectrum.py
+```
 
 | Command | Description |
 | :- |:-|
@@ -50,98 +120,6 @@ Small toolbox to help with spectra and data-preparation for splitting function m
 |unload segments    |    Unload segment file, remove plotted lines    |
 
 For most of the [commands](#commands) keyword-arguments (kwargs) are allowed
-
-
-## Installation
-I recommend to run this toolbox using anaconda.
-
-[Follow the instructions on their homepage](https://www.anaconda.com/download/)
-
-[How to manage your environments](https://conda.io/docs/user-guide/tasks/manage-environments.html)
-
-Create a new environment:
-```
-$ conda create -n nmpy python=3.7
-$ conda activate nmpy
-(nmpy) $
-```
-
-Install required packages
-```
-(nmpy) $ ./install_requirements
-```
-
-Install nmpy
-```
-(nmpy) $ git clone git@git.science.uu.nl:DeepEarth-UU/modes/nmPy.git
-(nmpy) $ cd into nmPy
-(nmpy) $ chmod 755 INSTALL.sh
-(nmpy) $ chmod 755 update.sh
-(nmpy) $ ./INSTALL.sh 1
-```
-The number following INSTALL.sh defines the following (default is 1):
-* - 1 installs nmpy with a startup file for ipython
-* - 0 installs nmpy without startup file
-
-start ipython
-
-voilá
-
-## Run
-To run spectrum enter the following line
-```
-(nmpy) $ ipython run_spectrum.py
-```
-
-## Update
-
-To update the current branch, run  
-`./update.sh`
-
-To update other branches, run  
-`./update.sh Branch_Name`
-
-## Troubleshooting
-If you have issues with the environment, e.g. you get an `ImportError` for 
-`import obspy`, make sure all installations are removed outside the environment.
-
-```
-(nmpy) $ source deactivate nmpy
-$ conda uninstall PACKAGE
-$ source activate nmpy
-(nmpy) $  conda install PACKAGE
-```
-
-
-If you see a message like
-```
-On branch development
-Your branch is up-to-date with 'origin/development'.
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
-
-	modified:   nmpy/util/geodesy.so
-
-no changes added to commit (use "git add" and/or "git commit -a")
-```
-although it is in `.gitignore` you need to clean up your tracked files in git.  
-Use the following commands:
-```
-git rm -r --cached .
-git add .
-git commit -m ".gitignore is now working"
-git push
-```
-## Usage
-```
-from frospy.spectrum.app import spectrum
-data = 'PATH-TO-DATA-FILE'
-syn = 'PATH-TO-SYNTHETICS-FILE'
-spectrum(data, syn)
-```
-
 ### Commands and kwargs
 After a command is entered, some additional information or keywords may be
 needed as a keyword argument (kwarg). E.g. after entering `modes`, the name of

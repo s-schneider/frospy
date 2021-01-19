@@ -1,56 +1,25 @@
-# Normal Modes Toolbox
+# Free Oscillation Toolbox - FrosPy
 Small toolbox to help with spectra and data-preparation for splitting function measurements.
 ## Content
- * [Features and commands]( #features-and-commands)
+ * [Core Classes]( #core-classes)
  * [Installation](#installation)
- * [Run](#run)
  * [Update](#update)
  * [Troubleshooting](#troubleshooting)
  * [Usage](#usage)
+ * [Spectrum](#spectrum)
+ * [Run](#run)
  * [Commands and kwargs](#commands-and-kwargs)
    * [Picking Frequency Windows](#picking-frequency-windows)
    * [Timewindow and tapershape test](#timewindow-and-tapershape-test)
 
 
-## Features and commands
+## Core Classes
 
-| Command | Description |
-| :- |:-|
-|bts    |    Back to the start    |
-|d    |    Delete current station    |
-|fsep    |    Alter the amount of shown modes    |
-|fsep    |    frequency resolution of mode-lines in plot    |
-|fw    |    re-enter the frequency window    |
-|goto    |    Jump to Station/Channel by index    |
-|help    |    display this window    |
-|list or l    |     list all stations and indices    |
-|list all or la    |    list all station with meta informaton    |
-|load segments or ls    |    Load and plot segment file    |
-|mfac    |    Multiplication factor for synthetics    |
-|modes    |    Display Mode-frequencies    |
-|next, nsp    |    go to next station    |
-|p all    |    Pick freq-windows, set for all stations    |
-|p    |    Pick freq-windows for segment-file    |
-|print fpeaks    |    write max freqs to file    |
-|print segments    |    write segments to file ($IDdat)    |
-|print station    |    Print all stations to 'stationdat'    |
-|printw all    |    write curr win for all stations to file    |
-|printw    |    write curr win for curr station to file    |
-|psp    |    go to previous station    |
-|qcycle    |    sets tw and fw for a given mode    |
-|quit    |    exit spectrum    |
-|reset    |    Reload original files    |
-|save    |    Save current stream    |
-|set segments or ss |   Set loaded segments as picks    |
-|search    |    search for station attribut    |
-|taper    |    set shape of taper window in time-domain    |
-|taper test    |    testing all available taper shapes    |
-|tw    |    re-enter the time-window    |
-|tw test    |    testing different timewindows around qcycle    |
-|unload segments    |    Unload segment file, remove plotted lines    |
-
-For most of the [commands](#commands) keyword-arguments (kwargs) are allowed
-
+* Modes / Mode
+* Spectrum
+* Pick / Segment
+* Splittingfunc / Set
+* Setup
 
 ## Installation
 I recommend to run this toolbox using anaconda.
@@ -86,12 +55,6 @@ The number following INSTALL.sh defines the following (default is 1):
 start ipython
 
 voilá
-
-## Run
-To run spectrum enter the following line
-```
-(nmpy) $ ipython run_spectrum.py
-```
 
 ## Update
 
@@ -142,6 +105,51 @@ syn = 'PATH-TO-SYNTHETICS-FILE'
 spectrum(data, syn)
 ```
 
+## Spectrum
+Spectrum is an example tool that uses frospy's core classes to plot normal mode frequency spectra.
+
+## Run
+To run spectrum enter the following line
+```
+(nmpy) $ ipython run_spectrum.py
+```
+
+| Command | Description |
+| :- |:-|
+|bts    |    Back to the start    |
+|d    |    Delete current station    |
+|fsep    |    Alter the amount of shown modes    |
+|fsep    |    frequency resolution of mode-lines in plot    |
+|fw    |    re-enter the frequency window    |
+|goto    |    Jump to Station/Channel by index    |
+|help    |    display this window    |
+|list or l    |     list all stations and indices    |
+|list all or la    |    list all station with meta informaton    |
+|load segments or ls    |    Load and plot segment file    |
+|mfac    |    Multiplication factor for synthetics    |
+|modes    |    Display Mode-frequencies    |
+|next, nsp    |    go to next station    |
+|p all    |    Pick freq-windows, set for all stations    |
+|p    |    Pick freq-windows for segment-file    |
+|print fpeaks    |    write max freqs to file    |
+|print segments    |    write segments to file ($IDdat)    |
+|print station    |    Print all stations to 'stationdat'    |
+|printw all    |    write curr win for all stations to file    |
+|printw    |    write curr win for curr station to file    |
+|psp    |    go to previous station    |
+|qcycle    |    sets tw and fw for a given mode    |
+|quit    |    exit spectrum    |
+|reset    |    Reload original files    |
+|save    |    Save current stream    |
+|set segments or ss |   Set loaded segments as picks    |
+|search    |    search for station attribut    |
+|taper    |    set shape of taper window in time-domain    |
+|taper test    |    testing all available taper shapes    |
+|tw    |    re-enter the time-window    |
+|tw test    |    testing different timewindows around qcycle    |
+|unload segments    |    Unload segment file, remove plotted lines    |
+
+For most of the [commands](#commands) keyword-arguments (kwargs) are allowed
 ### Commands and kwargs
 After a command is entered, some additional information or keywords may be
 needed as a keyword argument (kwarg). E.g. after entering `modes`, the name of

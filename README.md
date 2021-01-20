@@ -10,7 +10,7 @@ Small toolbox to help with visualization of spectra and data-handling for splitt
 ## Toroidal Mode Splittingfunctions
 
 The splittingfunctions of our [toroidal mode overtone paper](https://doi.org/10.1093/gji/ggaa567) can be found here:
-  [Toroidal mode overtones](https://github.com/s-schneider/frospy/tree/main/frospy/data/SAS/cst-coef-T.dat)
+  [cst file](https://github.com/s-schneider/frospy/tree/main/frospy/data/SAS/cst-coef-T.dat)
 
 
 ## Installation

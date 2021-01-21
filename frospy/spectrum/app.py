@@ -198,9 +198,10 @@ def check_input(data, args):
         and cmap != 'Grays'
         and cmap.lower() != 'black'
          ):
-        msg = "\n\033[93mUnknown colormap. Set to 'rainbow'\033[0m\n"
-        print(msg)
-        cmap = 'rainbow'
+        if not isinstance(cmap, type(iter([]))):
+            msg = "\n\033[93mUnknown colormap. Set to 'rainbow'\033[0m\n"
+            print(msg)
+            cmap = 'rainbow'
 
     check_data_files = True
     if type(data) == obspy.core.stream.Stream:

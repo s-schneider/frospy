@@ -1659,7 +1659,7 @@ def get_iter_colormap(input_list, cmap, random_values=False):
         colormap = iter(getattr(cm, cmap)(
                         np.linspace(0.1, 0.9, len(input_list)))
                         )
-    elif len(input_list) > 3:
+    elif hasattr(cm, cmap):  # len(input_list) > 3:
         colormap = iter(getattr(cm, cmap)(
                         np.linspace(0, 1, len(input_list)))
                         )

@@ -99,7 +99,7 @@ def plot_spectrum(main, gui=False):
 
         # Plotting Imaginary part
         main.spec.plot(main.fw[0], main.fw[1], part='Im', width=main.line_width,
-                       ax=ax.imag,  cmap=main.cmap,
+                       ax=ax.imag, cmap=main.cmap,
                        cmap_highlight=main.cmap_highlight)
 
     # Plotting Amplitude
@@ -182,7 +182,7 @@ def plot_spectrum(main, gui=False):
     if main.minispec == 'pretty':
         fig.subplots_adjust(hspace=0)
         fig.axes[0].tick_params(axis='both', which='both',
-                                bottom=False, labelsize=12, width=1.4)
+                                bottom=False, labelsize=main.fs - 2, width=1.4)
         fig.axes[0].spines['bottom'].set_visible(False)
         for axis in ['top', 'bottom', 'left', 'right']:
             fig.axes[0].spines[axis].set_linewidth(1.8)
@@ -190,11 +190,11 @@ def plot_spectrum(main, gui=False):
         fig.axes[1].get_legend().remove()
         fig.axes[1].xaxis.set_major_locator(plt.MaxNLocator(3))
         fig.axes[1].tick_params(axis='both', which='major',
-                                labelsize=12, width=1.4)
+                                labelsize=main.fs - 2, width=1.4)
         fig.axes[1].xaxis.set_minor_locator(ticker.MultipleLocator(0.005))
-        fig.axes[1].set_xlabel("f(mHz)", fontsize=14)
-        fig.axes[0].set_ylabel("Phase", fontsize=14)
-        fig.axes[1].set_ylabel("Amplitude", fontsize=14)
+        fig.axes[1].set_xlabel("f(mHz)", fontsize=main.fs)
+        fig.axes[0].set_ylabel("Phase", fontsize=main.fs)
+        fig.axes[1].set_ylabel("Amplitude", fontsize=main.fs)
         cat = read_std_cat(main.cmt_id)
 
         for descr in cat[0].event_descriptions:
@@ -220,10 +220,10 @@ def plot_spectrum(main, gui=False):
         t3 = "$%s$ $\mathrm{station,}$ $%d$-$%d\mathrm{h}$"
         t3 = t3 % (main.spec.stats.station.code, main.spec.stats.tw[0]/3600.,
                    main.spec.stats.tw[1]/3600.)
-        fig.axes[0].set_title('%s\n%s\n%s' % (t1, t2, t3), fontsize=14)
+        fig.axes[0].set_title('%s\n%s\n%s' % (t1, t2, t3), fontsize=main.fs)
         fig.axes[1].legend(loc='upper left', frameon=False, borderpad=0,
                            handlelength=1, handletextpad=0.3, labelspacing=0.2,
-                           fontsize=12)
+                           fontsize=main.fs - 2)
         fig.set_size_inches(5.5, 6.5)
         plt.subplots_adjust(left=0.1, top=0.82)
 

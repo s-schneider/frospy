@@ -196,6 +196,7 @@ def check_input(data, args):
         and cmap != 'GreensBlues'
         and cmap != 'BlueBlackGreysRed'
         and cmap != 'Grays'
+        and cmap.lower() != 'black'
          ):
         msg = "\n\033[93mUnknown colormap. Set to 'rainbow'\033[0m\n"
         print(msg)

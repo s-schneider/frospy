@@ -158,7 +158,8 @@ def get_defaults(args):
                 'fig_size': (12, 8),
                 'line_width': 0.825,
                 'border_width': 1,
-                'tick_width': 1
+                'tick_width': 1,
+                'fig_abc': False
                 }
 
     fs = 10
@@ -294,7 +295,6 @@ def check_input(data, args):
     else:
         modes = None
     args['modes'] = modes
-
     if type(data) == obspy.core.stream.Stream:
         return data, args
     else:

@@ -220,7 +220,14 @@ def plot_spectrum(main, gui=False):
         t3 = "$%s$ $\mathrm{station,}$ $%d$-$%d\mathrm{h}$"
         t3 = t3 % (main.spec.stats.station.code, main.spec.stats.tw[0]/3600.,
                    main.spec.stats.tw[1]/3600.)
-        fig.axes[0].set_title('%s\n%s\n%s' % (t1, t2, t3), fontsize=main.fs)
+        if main.fig_abc is not False:
+            pretty_title = r"$\bf{" + main.fig_abc + ")}$  "
+        else:
+            pretty_title = ''
+
+        pretty_title = pretty_title + '%s\n%s\n%s' % (t1, t2, t3)
+        fig.axes[0].set_title(pretty_title, fontsize=main.fs)
+
         fig.axes[1].legend(loc='upper left', frameon=False, borderpad=0,
                            handlelength=1, handletextpad=0.3, labelspacing=0.2,
                            fontsize=main.fs - 2)

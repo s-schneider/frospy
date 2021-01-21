@@ -189,16 +189,16 @@ def check_input(data, args):
     cmap = args['cmap']
     show_modes = args['modes']
     syn = args['syn']
-    if (
-        not hasattr(cm, cmap)
-        and cmap != 'BlackGreysRed'
-        and cmap != 'BlackRedGreys'
-        and cmap != 'GreensBlues'
-        and cmap != 'BlueBlackGreysRed'
-        and cmap != 'Grays'
-        and cmap.lower() != 'black'
-         ):
-        if not isinstance(cmap, type(iter([]))):
+    if not isinstance(cmap, type(iter([]))):
+        if (
+            not hasattr(cm, cmap)
+            and cmap != 'BlackGreysRed'
+            and cmap != 'BlackRedGreys'
+            and cmap != 'GreensBlues'
+            and cmap != 'BlueBlackGreysRed'
+            and cmap != 'Grays'
+            and cmap.lower() != 'black'
+             ):
             msg = "\n\033[93mUnknown colormap. Set to 'rainbow'\033[0m\n"
             print(msg)
             cmap = 'rainbow'

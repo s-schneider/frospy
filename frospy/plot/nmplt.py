@@ -1644,12 +1644,12 @@ def get_iter_colormap(input_list, cmap, random_values=False):
                         np.linspace(0, 1, 10))
                         )
     elif cmap == 'Set1' and random_values is False:
-        colormap = iter(['k'] * len(input_list))
-
-    elif cmap.lower() == 'black' and random_values is False:
         colormap = iter(getattr(cm, cmap)(
                         np.linspace(0, 1, 9))
                         )
+
+    elif cmap.lower() == 'black' and random_values is False:
+        colormap = iter(['k'] * len(input_list))
 
     elif random_values != False and random_values != 'center':
         colormap = iter(getattr(cm, cmap)(

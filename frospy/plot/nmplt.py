@@ -1585,7 +1585,10 @@ def shiftedColorMap(cmap, start=0, midpoint=0.5, stop=1.0, name='shiftedcmap'):
 
 
 def get_iter_colormap(input_list, cmap, random_values=False):
-    if cmap == 'GreensBlues' and len(input_list) > 3:
+    if isinstance(cmap, type(iter([]))):
+        colormap = cmap
+
+    elif cmap == 'GreensBlues' and len(input_list) > 3:
         Greens = cm.get_cmap('Greens', 256)
         Blues = cm.get_cmap('Blues', 256)
         green = Greens(np.linspace(0.25, 0.75, len(input_list)/2))
@@ -1648,6 +1651,9 @@ def get_iter_colormap(input_list, cmap, random_values=False):
                         np.linspace(0, 1, 9))
                         )
 
+    elif cmap.lower() == 'black' and random_values is False:
+        colormap = iter(['k'] * len(input_list))
+
     elif random_values != False and random_values != 'center':
         colormap = iter(getattr(cm, cmap)(
                         np.random.rand(len(input_list)))
@@ -1656,7 +1662,7 @@ def get_iter_colormap(input_list, cmap, random_values=False):
         colormap = iter(getattr(cm, cmap)(
                         np.linspace(0.1, 0.9, len(input_list)))
                         )
-    elif len(input_list) > 3:
+    elif hasattr(cm, cmap):  # len(input_list) > 3:
         colormap = iter(getattr(cm, cmap)(
                         np.linspace(0, 1, len(input_list)))
                         )

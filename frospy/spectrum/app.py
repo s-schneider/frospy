@@ -158,7 +158,8 @@ def get_defaults(args):
                 'fig_size': (12, 8),
                 'line_width': 0.825,
                 'border_width': 1,
-                'tick_width': 1
+                'tick_width': 1,
+                'fig_abc': False
                 }
 
     fs = 10
@@ -189,17 +190,19 @@ def check_input(data, args):
     cmap = args['cmap']
     show_modes = args['modes']
     syn = args['syn']
-    if (
-        not hasattr(cm, cmap)
-        and cmap != 'BlackGreysRed'
-        and cmap != 'BlackRedGreys'
-        and cmap != 'GreensBlues'
-        and cmap != 'BlueBlackGreysRed'
-        and cmap != 'Grays'
-         ):
-        msg = "\n\033[93mUnknown colormap. Set to 'rainbow'\033[0m\n"
-        print(msg)
-        cmap = 'rainbow'
+    if not isinstance(cmap, type(iter([]))):
+        if (
+            not hasattr(cm, cmap)
+            and cmap != 'BlackGreysRed'
+            and cmap != 'BlackRedGreys'
+            and cmap != 'GreensBlues'
+            and cmap != 'BlueBlackGreysRed'
+            and cmap != 'Grays'
+            and cmap.lower() != 'black'
+             ):
+            msg = "\n\033[93mUnknown colormap. Set to 'rainbow'\033[0m\n"
+            print(msg)
+            cmap = 'rainbow'
 
     check_data_files = True
     if type(data) == obspy.core.stream.Stream:
@@ -292,7 +295,6 @@ def check_input(data, args):
     else:
         modes = None
     args['modes'] = modes
-
     if type(data) == obspy.core.stream.Stream:
         return data, args
     else:

@@ -9,11 +9,11 @@ Small toolbox to help with visualization of spectra and data-handling for splitt
 
 ## Splittingfunction Coefficients
 
-The splittingfunctions of our [toroidal mode overtone paper](https://doi.org/10.1093/gji/ggaa567) can be found here:
+The splittingfunctions of [toroidal mode overtone paper](https://doi.org/10.1093/gji/ggaa567) can be found here:
      
 [cst file](https://github.com/s-schneider/frospy/tree/main/frospy/data/SAS/cst-coef-T.dat)
 
-The splitting functions of our [radial mode paper](https://doi.org/10.1093/gji/ggaa499) can be found here:
+The splitting functions of [radial mode paper](https://doi.org/10.1093/gji/ggaa499) can be found here:
 
 [cst file 1](https://github.com/s-schneider/frospy/tree/main/frospy/data/STS/STS_SC.dat)
 [cst file 2](https://github.com/s-schneider/frospy/tree/main/frospy/data/STS/STS_GC.dat)

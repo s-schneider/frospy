@@ -9,7 +9,7 @@ Small toolbox to help with visualization of spectra and data-handling for splitt
 
 ## Splittingfunction Coefficients
 
-The splittingfunctions of [Schneider & Deuss, 2020](https://doi.org/10.1093/gji/ggaa567) can be found here:
+The splitting functions of [Schneider & Deuss, 2020](https://doi.org/10.1093/gji/ggaa567) can be found here:
      
 [cst-coef-T.dat](https://github.com/s-schneider/frospy/tree/main/frospy/data/SAS/cst-coef-T.dat)
 

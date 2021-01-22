@@ -9,14 +9,20 @@ Small toolbox to help with visualization of spectra and data-handling for splitt
 
 ## Splittingfunction Coefficients
 
-The splittingfunctions of [toroidal mode overtone paper](https://doi.org/10.1093/gji/ggaa567) can be found here:
+The splittingfunctions of [Schneider & Deuss, 2020](https://doi.org/10.1093/gji/ggaa567) can be found here:
      
-[cst file](https://github.com/s-schneider/frospy/tree/main/frospy/data/SAS/cst-coef-T.dat)
+[cst-coef-T.dat](https://github.com/s-schneider/frospy/tree/main/frospy/data/SAS/cst-coef-T.dat)
 
-The splitting functions of [radial mode paper](https://doi.org/10.1093/gji/ggaa499) can be found here:
+The splitting functions of [Talavera-Soza & Deuss, 2020](https://doi.org/10.1093/gji/ggaa499) can be found here:
 
-[cst file 1](https://github.com/s-schneider/frospy/tree/main/frospy/data/STS/STS_SC.dat)
-[cst file 2](https://github.com/s-schneider/frospy/tree/main/frospy/data/STS/STS_GC.dat)
+
+[STS_SC.dat](https://github.com/s-schneider/frospy/blob/main/frospy/data/STS/STS_SC.dat): file containing the Radial Modes observations using the self-coupling approximation
+
+[STS_GC_SC.dat](https://github.com/s-schneider/frospy/blob/main/frospy/data/STS/STS_GC_SC.dat): file containing the self-coupling splitting functions of Radial Modes and their corresponding l=2 modes using the group-coupling approximation
+ 
+[STS_GC_CC.dat](https://github.com/s-schneider/frospy/blob/main/frospy/data/STS/STS_GC_CC.dat): file containing the cross-coupling splitting functions of Radial Modes and their corresponding l=2 modes using the group-coupling approximation
+
+
 
 ## Installation
 I recommend to run this toolbox using anaconda.

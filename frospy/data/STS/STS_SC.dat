@@ -5,19 +5,19 @@ The first of these contains the c_st coefficients and the second line the corres
 The coefficients are ordered c_s0, Re(c_s1), Im(c_s1), Re(c_s2), Im(c_s2), ... etc.
 0  0
   1.03  -0.03
-  0.00   0.01
+  0.00  -0.01
 1  0
   0.73  -0.36
   0.03   0.02
 2  0
  -7.21   0.00
-  0.28   0.26
+  0.28  -0.26
 3  0
   4.33  -0.61
-  0.22   0.23
+  0.22  -0.27
 4  0
   2.66  -1.22
-  0.42   0.28
+  0.42  -0.44
 5  0
  14.80  -0.87
   0.16   0.26

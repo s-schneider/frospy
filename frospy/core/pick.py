@@ -96,10 +96,12 @@ class Pick(object):
     :type weight: float
     :param weight: Weight of this pick for later use in inversion
     """
-    def __init__(self, header=None, fw1=0, fw2=0, tw1=0, tw2=0, weight=0):
+    def __init__(self, header=None, fw1=0, fw2=0, tw1=0, tw2=0, weight=0, **args):
         # property of pick:
         if header is None:
             header = {}
+        if len(args) != 0:
+            header = args.copy()
         elif type(header) is Trace:
             header_tmp = {'station': header.stats.station,
                           'channel': header.stats.channel}

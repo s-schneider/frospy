@@ -409,7 +409,7 @@ class Modes(object):
                 self.modes.sort(key=lambda x: getattr(x, _i), reverse=reverse)
         return self
 
-    def write(self, fname, overwrite=False, format=None):
+    def write(self, fname, overwrite=False, format='full'):
         try:
             if not overwrite:
                 i = 0
@@ -437,6 +437,15 @@ class Modes(object):
 
             if format == 'pickle':
                 _write_pickle(self, filename)
+            elif format == 'short':
+                with open(filename, 'w') as fh:
+                    # for each stationname 'key' fw and tw is written
+                    fh.write("{}\n".format(len(self)))
+                    for mode in self:
+                        _name = format_name(mode.name, 3)
+                        fh.write("{} {} {}\n".format(_name[0:3], _name[3], _name[4:]))
+                msg = "\033[92mMode-file written to %s\033[0m" % filename
+                print(msg)
             else:
                 with open(filename, 'w') as fh:
                     # for each stationname 'key' fw and tw is written

@@ -627,9 +627,6 @@ def mode_lines(ax, xrange, modes, overlap=True,
             txt_width = 1.2 * label_width * (ax.get_xlim()[1] - ax.get_xlim()[0])
             text_positions = get_text_positions(mode_freqs, m_ypos, txt_width,
                                                 txt_height)
-            # print(m_ypos)
-            # print(text_positions)
-            # print(ax.get_ylim()[1])
             text_plotter(mode_freqs, m_ypos, text_positions, m_names, ax,
                          txt_width, txt_height, fontsize)
 

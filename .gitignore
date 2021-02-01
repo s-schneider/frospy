@@ -18,7 +18,13 @@ frospy/docs/*synctex.gz
 frospy/docs/*toc
 tmp_*
 
-frospy/data/AD
+frospy/data/AD/*json
+frospy/data/AD/omega*
+frospy/data/AD/*xml
+frospy/data/AD/noise*
+frospy/data/AD/cmt*
+frospy/data/AD/AD*
+
 frospy/data/CB
 frospy/data/DE
 frospy/data/HT

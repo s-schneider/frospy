@@ -265,6 +265,15 @@ def read_omega_dat(qfile):
     return omega
 
 
+def read_omega(file):
+    fQ = []
+    with open(file, 'r') as fh:
+        content = fh.readlines()
+    for line in content:
+        _fQ = line.split()
+        fQ += [[float(x) for x in _fQ]]
+    return fQ
+
 def get_mode_names(modes, modes_cc):
     self_coupling = []
     cross_coupling = []

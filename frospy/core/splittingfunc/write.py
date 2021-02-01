@@ -2,7 +2,8 @@ from frospy.util.base import sort_human
 from frospy.util.base import split_digit_nondigit
 
 
-def write(SF, filename='cst-coef', format='dat', coupling='self'):
+def write(SF, filename='cst-coef', format='dat', coupling='self',
+          verbose=False):
     """
     format = 'dat' -> Arwens format, that is downloadable
     http://www.geo.uu.nl/~deuss/img/cst-coef.dat
@@ -27,10 +28,16 @@ The coefficients are ordered c_s0, Re(c_s1), Im(c_s1), Re(c_s2), Im(c_s2), ... e
 
         for sfunc in SF:
             for mode in sfunc.cst:
+                if verbose:
+                    print(mode)
                 if cmod == 'sc':
+                    if '-' in mode:
+                        continue
                     n, name, l = split_digit_nondigit(mode)
-                    msg += "{}  {}\n".format(n, l)
+                    msg += "{} {} {}\n".format(n, name, l)
                 elif cmod == 'cc':
+                    if '-' not in mode:
+                        continue
                     ccdegs = list(sfunc.cst[mode].keys())
                     n1, name1, l1, _, n2, name2, l2= split_digit_nondigit(mode)
                     msg += "{} {} {}  {} {} {}\n".format(n1, name1, l1, n2, name2, l2)

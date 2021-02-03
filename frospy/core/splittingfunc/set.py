@@ -475,7 +475,6 @@ class Set(object):
             fig_abc = str(kwargs['fig_abc'])
             abc = ['-c', '-b', '-a', 'a', 'b', 'c',
                    'd', 'e', 'f', 'g', 'h', 'i']
-            print(fig_abc)
             abc = iter(abc[abc.index(fig_abc)::])
             fig_abc = True
         else:

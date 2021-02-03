@@ -638,7 +638,6 @@ class Set(object):
                             _y = kwargs['fig_abc_y']
                         else:
                             _y = 1.15
-                        print(next(abc))
                         ax.set_title('%s)' % next(abc),
                                      x=0.2, y=_y, weight="bold")
                     elif fig_abc:

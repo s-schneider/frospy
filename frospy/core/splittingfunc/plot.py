@@ -524,9 +524,8 @@ def sensC_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
             _bbox = (0.6, 1.2)
         ax.legend(legend_ax, legend, ncol=3,
                   handlelength=0.3, handletextpad=0.1, columnspacing=0.25,
-                  loc='upper center', bbox_to_anchor=(0.6, 1.2), frameon=False,
+                  loc='upper center', bbox_to_anchor=_bbox, frameon=False,
                   fontsize=fontsize, borderpad=0)
-    print('after')
     if not ticks:
         ax.axes.get_xaxis().set_ticks([])
         ax.axes.get_yaxis().set_ticks([])

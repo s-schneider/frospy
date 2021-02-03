@@ -609,7 +609,7 @@ class Set(object):
                         else:
                             _y = 1.15
                         ax.set_title('%s)' % next(abc),
-                                     x=0.2, y=_, weight="bold")
+                                     x=0.2, y=_y, weight="bold")
                     elif fig_abc:
                         ax.set_title('%s)' % next(abc),
                                      x=0.2, y=1, weight="bold")

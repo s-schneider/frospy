@@ -629,9 +629,13 @@ class Set(object):
 
                     # I have to discuss with Su about this title
                     # I cannot see the title with y=1.15
-                    # if kwargs['legend_show'] and fig_abc:
-                    #     ax.set_title('%s)' % next(abc),
-                    #                  x=0.2, y=1.15, weight="bold")
+                    if kwargs['legend_show'] and fig_abc:
+                        if kwargs['fig_abc_y']:
+                            _y = kwargs['fig_abc_y']
+                        else:
+                            _y = 1.15
+                        ax.set_title('%s)' % next(abc),
+                                     x=0.2, y=_y, weight="bold")
                     if fig_abc:
                         ax.set_title('%s)' % next(abc),
                                      x=0.2, y=1, weight="bold")

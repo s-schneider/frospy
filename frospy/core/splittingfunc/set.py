@@ -582,7 +582,7 @@ class Set(object):
                     ax.set_axis_off()
 
             # sens_kernel plot
-            
+
             ax = axes.flat[0]
             try:
                 if m.l == 0 or max(sdegs) == 0 :
@@ -627,6 +627,7 @@ class Set(object):
                         e = traceback.format_exc()
                         print(e)
                     if kwargs['legend_show'] and fig_abc:
+                        print('here')
                         ax.set_title('%s)' % next(abc),
                                      x=0.2, y=1.15, weight="bold")
                     elif fig_abc:

@@ -293,13 +293,24 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
     else:
         ticks = True
 
+
+
     if legend_show and ticks:
+        if 'bbox_to_anchor' in kwargs:
+            _bbox = kwargs['bbox_to_anchor']
+        else:
+            _bbox = (-0.08, -0.03)
+        print('1', _bbox)
         ax.legend(legend_ax, legend, frameon=False,
-                  bbox_to_anchor=(-0.08, -0.03),
+                  bbox_to_anchor=_bbox,
                   handlelength=0.5, handletextpad=0.1, loc='lower left',
                   fontsize=fontsize)
-
     if legend_show and not ticks:
+        if 'bbox_to_anchor' in kwargs:
+            _bbox = kwargs['bbox_to_anchor']
+        else:
+            _bbox = (0.6, 1.2)
+        print('2', _bbox)
         ax.legend(legend_ax, legend, ncol=3,
                   handlelength=0.3, handletextpad=0.1, columnspacing=0.25,
                   loc='upper center', bbox_to_anchor=(0.6, 1.2), frameon=False,
@@ -497,12 +508,22 @@ def sensC_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
         ticks = True
 
     if legend_show and ticks:
+        if 'bbox_to_anchor' in kwargs:
+            _bbox = kwargs['bbox_to_anchor']
+        else:
+            _bbox = (-0.08, -0.03)
+        print('1', _bbox)
         ax.legend(legend_ax, legend, frameon=False,
-                  bbox_to_anchor=(-0.08, -0.03),
+                  bbox_to_anchor=_bbox,
                   handlelength=0.5, handletextpad=0.1, loc='lower left',
                   fontsize=fontsize)
 
     if legend_show and not ticks:
+        if 'bbox_to_anchor' in kwargs:
+            _bbox = kwargs['bbox_to_anchor']
+        else:
+            _bbox = (0.6, 1.2)
+        print('2', _bbox)
         ax.legend(legend_ax, legend, ncol=3,
                   handlelength=0.3, handletextpad=0.1, columnspacing=0.25,
                   loc='upper center', bbox_to_anchor=(0.6, 1.2), frameon=False,

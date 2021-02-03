@@ -475,6 +475,7 @@ class Set(object):
             fig_abc = str(kwargs['fig_abc'])
             abc = ['-c', '-b', '-a', 'a', 'b', 'c',
                    'd', 'e', 'f', 'g', 'h', 'i']
+            print(fig_abc)
             abc = iter(abc[abc.index(fig_abc)::])
             fig_abc = True
         else:
@@ -604,7 +605,7 @@ class Set(object):
                         print(e)
 
                     if kwargs['legend_show'] and fig_abc:
-                        if kwargs['fig_abc_y']:
+                        if 'fig_abc_y' in kwargs:
                             _y = kwargs['fig_abc_y']
                         else:
                             _y = 1.15
@@ -638,6 +639,7 @@ class Set(object):
                             _y = kwargs['fig_abc_y']
                         else:
                             _y = 1.15
+                        print(next(abc))
                         ax.set_title('%s)' % next(abc),
                                      x=0.2, y=_y, weight="bold")
                     elif fig_abc:

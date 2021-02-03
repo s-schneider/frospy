@@ -300,7 +300,6 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
             _bbox = kwargs['bbox_to_anchor']
         else:
             _bbox = (-0.08, -0.03)
-        print('1', _bbox)
         ax.legend(legend_ax, legend, frameon=False,
                   bbox_to_anchor=_bbox,
                   handlelength=0.5, handletextpad=0.1, loc='lower left',
@@ -311,7 +310,6 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
             _bbox = kwargs['bbox_to_anchor']
         else:
             _bbox = (0.6, 1.2)
-        print('2', _bbox)
         ax.legend(legend_ax, legend, ncol=3,
                   handlelength=0.3, handletextpad=0.1, columnspacing=0.25,
                   loc='upper center', bbox_to_anchor=_bbox, frameon=False,

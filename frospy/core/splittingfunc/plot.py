@@ -769,17 +769,22 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
         m = Basemap(ax=ax, **map_config)
         if show_colorbar is True:
-            if kind_in_title:
-                title = "%s %s \n $_{%s}%s_{%s},$ $s$=$%s$-$%s$"
-                title = title % (kind, suptitle, mode.n, mode.type,
-                                 mode.l, smin, smax)
-            elif not show_title:
-                title = "$_{%s}%s_{%s},$ $s$=$%s$-$%s$"
-                title = title % (mode.n, mode.type, mode.l, smin, smax)
+            if smin == smax:
+                _sdegs = "$s$=${}$".format(smin)
             else:
-                title = "%s \n $_{%s}%s_{%s},$ $s$=$%s$-$%s$"
+                _sdegs = "$s$=${}$-${}$".format(smin, smax)
+
+            if kind_in_title:
+                title = "%s %s \n $_{%s}%s_{%s},$ %s"
+                title = title % (kind, suptitle, mode.n, mode.type,
+                                 mode.l, _sdegs)
+            elif not show_title:
+                title = "$_{%s}%s_{%s},$ %s"
+                title = title % (mode.n, mode.type, mode.l, _sdegs)
+            else:
+                title = "%s \n $_{%s}%s_{%s},$ %s"
                 title = title % (suptitle, mode.n, mode.type,
-                                 mode.l, smin, smax)
+                                 mode.l,_sdegs)
         else:
             if kind_in_title:
                 title = "%s %s \n $_{%s}%s_{%s},$ $s_{max}=%s$"

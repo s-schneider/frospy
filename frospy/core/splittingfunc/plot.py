@@ -823,23 +823,27 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
         m = Basemap(ax=ax, **map_config)
         ccn = split_digit_nondigit(mode.name)
+        if smin == smax:
+            _sdegs = "$s$=${}$".format(smin)
+        else:
+            _sdegs = "$s$=${}$-${}$".format(smin, smax)
         if kind_in_title:
-            title = "%s %s\n$_{%s}%s_{%s}$-$_{%s}%s_{%s},$ $s=%s$-$%s$"
+            title = "%s %s\n$_{%s}%s_{%s}$-$_{%s}%s_{%s},$ %s"
             title = title % (kind, suptitle,
                              int(ccn[0]), str(ccn[1]).upper(), int(ccn[2]),
                              int(ccn[4]), str(ccn[5]).upper(), int(ccn[6]),
-                             smin, smax)
+                             _sdegs)
         elif not show_title:
-            title = "$_{%s}%s_{%s}$-$_{%s}%s_{%s},$ $s=%s$-$%s$"
+            title = "$_{%s}%s_{%s}$-$_{%s}%s_{%s},$ %s"
             title = title % (int(ccn[0]), str(ccn[1]).upper(), int(ccn[2]),
                              int(ccn[4]), str(ccn[5]).upper(), int(ccn[6]),
-                             smin, smax)
+                             _sdegs)
         else:
-            title = "%s\n$_{%s}%s_{%s}$-$_{%s}%s_{%s},$ $s=%s$-$%s$"
+            title = "%s\n$_{%s}%s_{%s}$-$_{%s}%s_{%s},$ %s"
             title = title % (suptitle,
                              int(ccn[0]), str(ccn[1]).upper(), int(ccn[2]),
                              int(ccn[4]), str(ccn[5]).upper(), int(ccn[6]),
-                             smin, smax)
+                             _sdegs)
         if 'filename' in kwargs:
             ax.set_title('%s \n %s' % (kwargs['filename'], title))
         elif not kind_in_title:

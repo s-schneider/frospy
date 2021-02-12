@@ -27,7 +27,7 @@ def write_cst(SF, db_path, model, author=None, lcut='all', verbose=False):
                             ce = sf_errors[mode][deg]['uncertainty'][0]
                             ce_u = sf_errors[mode][deg]['upper_uncertainty'][0]
                             ce_l = sf_errors[mode][deg]['lower_uncertainty'][0]
-                            ce_c = sf_errors[mode][deg]['confidence_level']
+                            ce_c = sf_errors[mode][deg]['confidence_level'][0]
                             cm = "%s %s %s %s" % (str(ce), str(ce_u),
                                                   str(ce_l), str(ce_c))
                             cst_errors = [cm]
@@ -35,7 +35,7 @@ def write_cst(SF, db_path, model, author=None, lcut='all', verbose=False):
                             ce = sf_errors[mode][deg]['uncertainty']
                             ce_u = sf_errors[mode][deg]['upper_uncertainty']
                             ce_l = sf_errors[mode][deg]['lower_uncertainty']
-                            ce_c = sf_errors[mode][deg]['confidence_level']
+                            ce_c = sf_errors[mode][deg]['confidence_level'][0]
 
                             cst_errors = []
                             for i, e in enumerate(ce):
@@ -74,6 +74,9 @@ def write_cst(SF, db_path, model, author=None, lcut='all', verbose=False):
                     v = (mode, kind, deg, ', '.join(cst_str),
                          lcut, damp, author, mtype, 0)
                     values.append(v)
+
+
+
 
     db = sqlite3.connect(db_path)
     c = db.cursor()

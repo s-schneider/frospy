@@ -28,7 +28,7 @@ MIN_PYTHON_VERSION = (3, 6)
 
 setup(
     name="frospy",
-    version="0.8.4",
+    version="0.8.5",
     description="Python toolbox for normal mode seismologists",
     long_description=README,
     long_description_content_type="text/markdown",

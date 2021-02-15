@@ -21,14 +21,14 @@ INSTALL_REQUIRES = [
     'natsort>=6.0.0',
     'numpy>=1.17.2',
     'pandas>=0.25.1',
-    'scipy>=1.5.3',
+    'scipy',
     ]
 
 MIN_PYTHON_VERSION = (3, 6)
 
 setup(
     name="frospy",
-    version="0.8.2",
+    version="0.8.4",
     description="Python toolbox for normal mode seismologists",
     long_description=README,
     long_description_content_type="text/markdown",

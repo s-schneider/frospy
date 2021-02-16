@@ -756,8 +756,6 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
                     ax_cb = fig.add_axes([0.4, 0.1, 0.4, 0.04])
 
             else:
-                msg = 'sens_kernel not plotted, error: %s' % e
-                print(msg)
                 ax = fig.add_subplot()
 
                 if show_colorbar is True:

@@ -22,6 +22,7 @@ INSTALL_REQUIRES = [
     'numpy>=1.17.2',
     'pandas>=0.25.1',
     'scipy',
+    'pyshtools',
     ]
 
 MIN_PYTHON_VERSION = (3, 6)
@@ -52,6 +53,7 @@ setup(
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Physics'],
     packages=find_packages(),
+    package_data={'frospy': ['data/*/*json']},
     python_requires=f'>={MIN_PYTHON_VERSION[0]}.{MIN_PYTHON_VERSION[1]}',
     install_requires=INSTALL_REQUIRES
 )

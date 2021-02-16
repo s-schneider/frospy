@@ -19,6 +19,7 @@ frospy/core/modes.py
 frospy/core/pick.py
 frospy/core/segment.py
 frospy/core/database/__init__.py
+frospy/core/database/postgresql.py
 frospy/core/database/query.py
 frospy/core/database/write.py
 frospy/core/spectrum/__init__.py

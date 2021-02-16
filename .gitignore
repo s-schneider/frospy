@@ -39,3 +39,5 @@ frospy/data/TCB
 frospy/data/TZ
 frospy/data/WZM
 frospy/data/cnn
+
+build_commands.sh

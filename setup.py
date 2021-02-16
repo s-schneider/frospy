@@ -17,18 +17,18 @@ HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 INSTALL_REQUIRES = [
+    'obspy>=1.2.2',
+    'natsort>=6.0.0',
     'numpy>=1.17.2',
     'pandas>=0.25.1',
     'scipy',
-    'obspy',
-    'natsort>=6.0.0'
     ]
 
 MIN_PYTHON_VERSION = (3, 6)
 
 setup(
     name="frospy",
-    version="0.8.5",
+    version="0.1.2",
     description="Python toolbox for normal mode seismologists",
     long_description=README,
     long_description_content_type="text/markdown",

@@ -12,7 +12,8 @@ from __future__ import absolute_import, print_function
 from obspy.core.util import AttribDict
 
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 import matplotlib as mpl
 from mpl_toolkits.basemap import Basemap
 from matplotlib.pyplot import cm
@@ -39,6 +40,8 @@ class Bin(object):
 
 
 def plot_cst_partial(path, labels=None, weights=None):
+    fig = Figure()
+    ax  = fig.add_subplot(111)
 
     if labels is None:
         # num = np.arange(1, len(path)+1).astype(str)
@@ -54,9 +57,10 @@ def plot_cst_partial(path, labels=None, weights=None):
         y = weights[i] * y.diagonal()
         x = range(y.size)
 
-        plt.plot(x, y, label=labels[i])
-    plt.legend()
-    plt.show()
+
+        ax.plot(x, y, label=labels[i])
+    ax.legend()
+    # plt.show()
 
     return
 
@@ -109,7 +113,8 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
         os.system('rm *-kernel.dat')
 
     if ax is None:
-        fig, ax = plt.subplots()
+        fig = Figure()
+        ax  = fig.add_subplot(111)
         fig.set_size_inches(4, 11)
         ax.lines = []
 
@@ -364,7 +369,8 @@ def sensC_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
         os.system('rm *-kernel.dat')
 
     if ax is None:
-        fig, ax = plt.subplots()
+        fig = Figure()
+        ax  = fig.add_subplot(111)
         fig.set_size_inches(4, 11)
         ax.lines = []
 
@@ -613,6 +619,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
               meridians_thick=0.5, lon_0=180.0,
               **kwargs):
 
+    bins = Bin()
     fig_config = {'figsize': (3, 1.8)}
     map_config = {'projection': 'kav7', 'lon_0': lon_0,
                   'resolution': 'c'}
@@ -628,7 +635,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
         fig.set_size_inches(8, 4)
     else:
         if html is False:
-            fig = plt.figure(**fig_config)
+            fig = Figure(**fig_config)
         else:
             # print("html is ", html)
             fig = mpl.figure.Figure(**fig_config)
@@ -737,27 +744,21 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
     if '-' not in mode.name:
         if ax is None:
-            try:
+            if os.path.exists(bins.sc_cstkernels):
                 gs = gridspec.GridSpec(1, 2, width_ratios=[0.8, 3.2],
                                        wspace=0.05)
-                if html is False:
-                    ax0 = plt.subplot(gs[0])
-                    ax = plt.subplot(gs[1])
-                else:
-                    ax0 = fig.add_subplot(gs[0])
-                    ax = fig.add_subplot(gs[1])
+
+                ax0 = fig.add_subplot(gs[0])
+                ax = fig.add_subplot(gs[1])
                 sens_kernel(mode, title=False, ax=ax0, kind=kind, **kwargs)
 
                 if show_colorbar is True:
                     ax_cb = fig.add_axes([0.4, 0.1, 0.4, 0.04])
 
-            except Exception as e:
+            else:
                 msg = 'sens_kernel not plotted, error: %s' % e
                 print(msg)
-                if html is False:
-                    ax = plt.subplot()
-                else:
-                    ax = fig.add_subplot()
+                ax = fig.add_subplot()
 
                 if show_colorbar is True:
                     # To do: Have to change the values here to make it centered
@@ -808,12 +809,8 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
             #ax = fig.add_axes([0.1, 0.2, 0.7, 0.75])
             gs = gridspec.GridSpec(1, 2, width_ratios=[0.8, 3.2],
                                        wspace=0.05)
-            if html is False:
-                ax0 = plt.subplot(gs[0])
-                ax = plt.subplot(gs[1])
-            else:
-                ax0 = fig.add_subplot(gs[0])
-                ax = fig.add_subplot(gs[1])
+            ax0 = fig.add_subplot(gs[0])
+            ax = fig.add_subplot(gs[1])
 
             sensC_kernel(mode, title=False, ax=ax0, **kwargs)
 
@@ -893,13 +890,15 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
     # plot it and set up / format labels
     if show_colorbar is True:
+        cb = fig.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
+                          orientation='horizontal', extend='both')
         if html is True:
-            cb = plt.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
-                              orientation='horizontal', extend='both')
+            pass
+            # cb = plt.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
+            #                   orientation='horizontal', extend='both')
             # cb.clim(s.min(), s.max())
         else:
-            cb = fig.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
-                              orientation='horizontal', extend='both')
+
             cb.set_clim(s.min(), s.max())
 
         cb.ax.set_title(r'$\mu$Hz', x=1.2, y=-0.7)
@@ -955,11 +954,11 @@ def _plot_coeffs(coeffs, errors, mode_name, label, modes, kind,
 
     if mode_name not in modes:
         modes[mode_name] = AttribDict()
-        if html is False:
-            fig = plt.figure()
-        else:
-            fig = mpl.figure.Figure()
-            gs = gridspec.GridSpec(N, 1)
+        # if html is False:
+        #     fig = plt.figure()
+        # else:
+        fig = mpl.figure.Figure()
+        gs = gridspec.GridSpec(N, 1)
 
         # Try to get mode name
         try:
@@ -997,11 +996,11 @@ def _plot_coeffs(coeffs, errors, mode_name, label, modes, kind,
             axes[degree] = AttribDict()
             axes[degree]['xmax'] = 0
             axes[degree]['ymax'] = 0
-            if html is False:
-                axes[degree]['ax'] = plt.subplot2grid((N, 2), (a_i, 0),
-                                                      colspan=2)
-            else:
-                axes[degree]['ax'] = fig.add_subplot(gs[a_i, :])
+            # if html is False:
+            #     axes[degree]['ax'] = plt.subplot2grid((N, 2), (a_i, 0),
+            #                                           colspan=2)
+            # else:
+            axes[degree]['ax'] = fig.add_subplot(gs[a_i, :])
             axes[degree]['ax'].set_title(r"$s=%i$" % int(degree))
             a_i += 1
 

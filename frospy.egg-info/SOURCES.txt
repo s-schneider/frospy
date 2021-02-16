@@ -33,6 +33,7 @@ frospy/core/splittingfunc/splittingfunc.py
 frospy/core/splittingfunc/write.py
 frospy/data/__init__.py
 frospy/data/AD/__init__.py
+frospy/data/AD/modes-full.json
 frospy/data/SAS/__init__.py
 frospy/data/basemap/__init__.py
 frospy/data/basemap/llsvp/__init__.py

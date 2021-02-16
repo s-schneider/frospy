@@ -35,11 +35,13 @@ Create a new environment:
 ```
 $ conda create -n frospy_env python=3.7
 $ conda activate frospy_env
+(frospy_env) $ conda config --add channels conda-forge
 ```
 
 Install required packages
 ```
+(frospy_env) $ conda install obspy
 (frospy_env) $ conda install basemap
-(frospy_env) $ conda install -c conda-forge cartopy
+(frospy_env) $ conda install cartopy
 (frospy_env) $ pip install frospy
 ```

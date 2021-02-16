@@ -760,7 +760,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
                 if show_colorbar is True:
                     # To do: Have to change the values here to make it centered
-                    ax_cb = fig.add_axes([0.45, 0.1, 0.3, 0.02])
+                    ax_cb = fig.add_axes([0.35, 0.1, 0.3, 0.02])
 
         elif show_colorbar is True:
             # ax_cb = fig.add_axes([0.3, 0.1, 0.3, 0.02])

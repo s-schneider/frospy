@@ -1585,10 +1585,7 @@ def shiftedColorMap(cmap, start=0, midpoint=0.5, stop=1.0, name='shiftedcmap'):
 
 
 def get_iter_colormap(input_list, cmap, random_values=False):
-    if isinstance(cmap, type(iter([]))):
-        colormap = cmap
-
-    elif cmap == 'GreensBlues' and len(input_list) > 3:
+    if cmap == 'GreensBlues' and len(input_list) > 3:
         Greens = cm.get_cmap('Greens', 256)
         Blues = cm.get_cmap('Blues', 256)
         green = Greens(np.linspace(0.25, 0.75, len(input_list)/2))
@@ -1651,9 +1648,6 @@ def get_iter_colormap(input_list, cmap, random_values=False):
                         np.linspace(0, 1, 9))
                         )
 
-    elif cmap.lower() == 'black' and random_values is False:
-        colormap = iter(['k'] * len(input_list))
-
     elif random_values != False and random_values != 'center':
         colormap = iter(getattr(cm, cmap)(
                         np.random.rand(len(input_list)))
@@ -1662,7 +1656,7 @@ def get_iter_colormap(input_list, cmap, random_values=False):
         colormap = iter(getattr(cm, cmap)(
                         np.linspace(0.1, 0.9, len(input_list)))
                         )
-    elif hasattr(cm, cmap):  # len(input_list) > 3:
+    elif len(input_list) > 3:
         colormap = iter(getattr(cm, cmap)(
                         np.linspace(0, 1, len(input_list)))
                         )
@@ -2014,7 +2008,8 @@ def freq_over_l(mtype='T', lmin=2, lmax=40, nmin=0, nmax=None,
         types = ["S", "T"]
         cc_box = {}
         # color = {'S': '#DC143C', 'T': '#20B2AA'}
-        color = {'S': '#616161', 'T': '#515151'}
+        # color = {'S': '#616161', 'T': '#515151'}
+        color = {'S': 'k', 'T': 'k'}
         ls = {'S': '-', 'T': '--'}
         marker = {'S': 'o', 'T': '^'}
     else:
@@ -2109,3 +2104,39 @@ def freq_over_l(mtype='T', lmin=2, lmax=40, nmin=0, nmax=None,
     if show is True:
         plt.show()
     return fig, ax
+
+
+def multicolor_ylabel(ax, list_of_strings, list_of_colors, axis='x',
+                      anchorpad=0, ylabel_anchor=(-0.12, 0.5),
+                      xlabel_anchor=(0.5, -0.10), **kw):
+    """this function creates axes labels with multiple colors
+    ax specifies the axes object where the labels should be drawn
+    list_of_strings is a list of all of the text items
+    list_if_colors is a corresponding list of colors for the strings
+    axis='x', 'y', or 'both' and specifies which label(s) should be drawn"""
+    from matplotlib.offsetbox import AnchoredOffsetbox, TextArea, HPacker, VPacker
+
+    # x-axis label
+    if axis == 'x' or axis == 'both':
+        boxes = [TextArea(text, textprops=dict(color=color, ha='left',va='bottom',**kw))
+                    for text, color in zip(list_of_strings, list_of_colors) ]
+        xbox = HPacker(children=boxes, align="center", pad=0, sep=5)
+        anchored_xbox = AnchoredOffsetbox(loc='lower center', child=xbox,
+                                          pad=anchorpad,
+                                          frameon=False,
+                                          bbox_to_anchor=xlabel_anchor,
+                                          bbox_transform=ax.transAxes,
+                                          borderpad=0.)
+        ax.add_artist(anchored_xbox)
+
+    # y-axis label
+    if axis == 'y' or axis == 'both':
+        boxes = [TextArea(text, textprops=dict(color=color, ha='left', va='bottom', rotation=90, **kw))
+                     for text, color in zip(list_of_strings[::-1], list_of_colors) ]
+        ybox = VPacker(children=boxes, align="center", pad=0, sep=5)
+        anchored_ybox = AnchoredOffsetbox(loc='center left', child=ybox,
+                                          pad=anchorpad, frameon=False,
+                                          bbox_to_anchor=ylabel_anchor,
+                                          bbox_transform=ax.transAxes,
+                                          borderpad=0.)
+        ax.add_artist(anchored_ybox)

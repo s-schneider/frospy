@@ -619,6 +619,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
               meridians_thick=0.5, lon_0=180.0,
               **kwargs):
 
+    bins = Bin()
     fig_config = {'figsize': (3, 1.8)}
     map_config = {'projection': 'kav7', 'lon_0': lon_0,
                   'resolution': 'c'}
@@ -743,7 +744,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
     if '-' not in mode.name:
         if ax is None:
-            try:
+            if os.path.exists(bins.sc_cstkernels):
                 gs = gridspec.GridSpec(1, 2, width_ratios=[0.8, 3.2],
                                        wspace=0.05)
 
@@ -754,7 +755,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
                 if show_colorbar is True:
                     ax_cb = fig.add_axes([0.4, 0.1, 0.4, 0.04])
 
-            except Exception as e:
+            else:
                 msg = 'sens_kernel not plotted, error: %s' % e
                 print(msg)
                 ax = fig.add_subplot()

@@ -1,6 +1,6 @@
 import numpy as np
 # import matplotlib.pyplot as plt
-from mpl.figure import Figure
+from matplotlib.figure import Figure
 import matplotlib as mpl
 from matplotlib.ticker import MaxNLocator
 import matplotlib.gridspec as gridspec
@@ -200,6 +200,9 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
 
     if SF_in is not None:  # prevent input to be overwritten by output
         SF = SF_in.copy()
+
+    if degree == 2:
+        plot_index = [1, 4, 3, 6, 5]
 
     if SF_in is not None and model is not None:
         # creating setup based on input SF
@@ -810,14 +813,16 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                             cst_fQ = {'Q': cst}
                 # Find correct plot row and column here
                 if i > 0:
-                    j = i + 1  # skip subplot (0,1)
+                    j = i + 1 # skip subplot (0,1)
                 else:
                     j = i
+
                 i_row = int(np.ceil((j + 1)/2. - 1))
                 if i_row < 0:
                     i_row = 0
                 i_col = int(abs(np.sin(j*np.pi/2.)))
 
+                j = plot_index[i]
                 if i not in ax_dict:
                     if i == 0:
                         if plot_f_center is True:
@@ -834,7 +839,7 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                             weight = None
                     else:
                         t = int(np.ceil(i/2.))
-                        if i_col == 0:
+                        if j == 1 or j%2 != 0:
                             if kind == 'cst':
                                 title = '$\mathrm{Re}(c_{%s%s})$' % (degree, t)
                                 weight = None
@@ -857,7 +862,7 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                                                 facecolor='w')
                         fig.set_size_inches(fig_size)
                     else:
-                        axt = fig.add_subplot(cols, rows, j)
+                        axt = fig.add_subplot(rows, cols, j)
                         # axt = plt.subplot(gs[i_row, i_col])
 
                     if fig_abc:
@@ -908,7 +913,8 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                     else:
                         label_row = rows - 1
 
-                    if i_row == label_row or order == 0:
+                    # if i_row == label_row or order == 0:
+                    if j == len(coeffs) or j == len(coeffs) + 1:
                         axt.tick_params(labelbottom=True,
                                         bottom=True, top=True,
                                         left=True, right=True)

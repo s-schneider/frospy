@@ -1,6 +1,5 @@
 import pathlib
 from setuptools import setup, find_packages
-import os
 
 """
 :copyright:
@@ -29,7 +28,7 @@ MIN_PYTHON_VERSION = (3, 6)
 
 setup(
     name="frospy",
-    version="0.1.2",
+    version="0.1.3",
     description="Python toolbox for normal mode seismologists",
     long_description=README,
     long_description_content_type="text/markdown",

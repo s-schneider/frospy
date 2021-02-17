@@ -2,46 +2,21 @@ import numpy as np
 # import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import matplotlib as mpl
-from matplotlib.ticker import MaxNLocator
 import matplotlib.gridspec as gridspec
 import matplotlib.markers as mmarkers
 from matplotlib.pyplot import cm
 
-import os
 import re
-from os.path import join
-from obspy.core import AttribDict, Stream
 from collections import OrderedDict
-import time
-import pandas as pd
 
-from nmpy.postprocessing.read import (query_ev_seg_misfits,
-                                      query_inversion_summary,
-                                      read_cst_files)
-from frospy.core.splittingfunc import Set, SplittingFunc
-from frospy.core.splittingfunc.plot import sens_kernel
 from frospy.splitting.load import loadmodel
-from frospy.core.database.query import get_db_tables, db_query
 from frospy.core.modes import format_name
 from frospy.core.modes import read as read_modes
 from frospy.core.modes import Modes, Mode
-from frospy.core.segment import Segment
-from frospy.core.segment import read as read_seg
 
-from frospy.plot.nmplt import freq_over_l
-
-from frospy.util.read import read_std_cat, read_std_inv
-from frospy.util.base import (format_list, update_progress, split_digit_nondigit,
-                            is_number, is_mode, uniq_modes, sort_catalog,
-                            max_cc_degrees, sort_py2, sort_human, convrate)
-from frospy.plot.nmplt import get_iter_colormap, format_exponent, multicolor_ylabel
-
-from frospy.util.read import read_st
-from frospy.spectrum.app import spectrum
-from frospy.core.spectrum.spectrum import Spectrum
-from frospy.core.spectrum.plot import plot_modes, plot_segments
-
-import obspy
+from frospy.util.base import (update_progress, split_digit_nondigit,
+                              max_cc_degrees)
+from frospy.plot.nmplt import get_iter_colormap, multicolor_ylabel
 
 
 def coeffs_per_mode(data_label=None, label1=None, SF_in=None,

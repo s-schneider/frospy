@@ -43,5 +43,13 @@ Install required packages
 (frospy_env) $ conda install obspy
 (frospy_env) $ conda install basemap
 (frospy_env) $ conda install cartopy
+```
+Install via PIP 
+```
 (frospy_env) $ pip install frospy
+```
+
+or install local repo files
+```
+(frospy_env) $ python setup.py install
 ```

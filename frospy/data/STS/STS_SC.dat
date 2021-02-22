@@ -1,0 +1,35 @@
+Self-coupled splitting function coefficients in micro Hz. The first line contains the n, name, l of
+the mode.
+Then there are two lines for each angular order s of the splitting function, starting with s=0.
+The first of these contains the c_st coefficients and the second line the corresponding error values.
+The coefficients are ordered c_s0, Re(c_s1), Im(c_s1), Re(c_s2), Im(c_s2), ... etc.
+0  0
+  1.03  -0.03
+  0.00  -0.01
+1  0
+  0.73  -0.36
+  0.03   0.02
+2  0
+ -7.21   0.00
+  0.28  -0.26
+3  0
+  4.33  -0.61
+  0.22  -0.27
+4  0
+  2.66  -1.22
+  0.42  -0.44
+5  0
+ 14.80  -0.87
+  0.16   0.26
+6  0
+  7.06  -1.77
+  0.33   0.43
+7  0
+ 17.27  -1.96
+  1.90   1.28
+8  0
+ 21.87  -5.36
+  1.42   2.08
+9  0
+ 26.12  -1.72
+  0.38   0.82

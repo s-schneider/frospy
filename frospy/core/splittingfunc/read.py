@@ -106,9 +106,9 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
                 if _sc not in modesin:
                     modesin += [_sc]
         modes_ccin = [x.upper() for x in modes_ccin]
-        modes_ccin[0] = str(len(modes_ccin)-1)
+        modes_ccin[0] = str(len(modes_ccin) - 1)
         modesin = [x.upper() for x in modesin]
-        modesin[0] = str(len(modesin)-1)
+        modesin[0] = str(len(modesin) - 1)
 
         if modes_ccin == ['-']:
             modes_ccin = None
@@ -136,7 +136,16 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
 
     cst, dst, cst_errors, dst_errors = None, None, None, None
     if cfile == 'AD':
-        cst, dst, cst_errors, dst_errors = read_cst_AD(modesin, modes_ccin)
+        file_name = "AD_cst.json"
+        path = "%s/AD/%s" % (frospydata.__path__[0], file_name)
+        cst, dst, cst_errors, dst_errors = read_cst_AD(modesin, modes_ccin,
+                                                       path)
+    elif cfile in ['STS_SC', 'STS_GC_SC', 'STS_GC_CC']:
+        from IPython import embed; embed()
+        file_name = "{}.dat".format(cfile)
+        path = "%s/STS/%s" % (frospydata.__path__[0], file_name)
+        cst, dst, cst_errors, dst_errors = read_cst_AD(modesin, modes_ccin,
+                                                       path)
 
     elif cfile == 'RR':
         cst, dst, cst_errors, dst_errors = read_cst_RR(modesin, modes_ccin,
@@ -167,7 +176,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif cfile in ['MW', 'WZM']:
         cst, dst, cst_errors, dst_errors = read_cst_MW(modesin, modes_ccin,
                                                        folder_name=cfile)
-    
+
     elif cfile.upper() == 'SAS':
         cst, dst, cst_errors, dst_errors = read_cst_SAS(modes, setup)
 
@@ -699,7 +708,16 @@ def read_cst_MW(modesin, modes_ccin, folder_name="MW"):
 
     return  cst, dst, cst_errors, dst_errors
 
-def read_cst_AD(modes, modes_cc, file_name="AD_cst.json"):
+
+def read_cst_AD(modes, modes_cc, file_name):
+    if file_name.endswith('json'):
+        return read_cst_AD_json(modes, modes_cc, file_name)
+    else:
+
+    return
+
+
+def read_cst_AD_json(modes, modes_cc, file_name="AD_cst.json"):
     path = "%s/AD/%s" % (frospydata.__path__[0], file_name)
 
     with open(path, 'r') as fh:

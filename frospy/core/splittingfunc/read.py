@@ -706,15 +706,45 @@ def read_cst_MW(modesin, modes_ccin, folder_name="MW"):
         cst_errors[name]['0'] = get_err([c00[0]])
         dst_errors[name]['0'] = get_err([c00[1]])
 
-    return  cst, dst, cst_errors, dst_errors
+    return cst, dst, cst_errors, dst_errors
 
 
-def read_cst_AD(modes, modes_cc, file_name):
+def read_cst_AD(modesin, modes_ccin, file_name):
     if file_name.endswith('json'):
-        return read_cst_AD_json(modes, modes_cc, file_name)
+        return read_cst_AD_json(modesin, modes_ccin, file_name)
     else:
-
-    return
+        return None
+    # else:
+    #     cst = AttribDict()
+    #     cst_errors = AttribDict()
+    #     dst = AttribDict()
+    #     dst_errors = AttribDict()
+    #     mnames = get_mode_names(modesin, modes_ccin)
+    #
+    #     with open(file_name, 'r') as fh:
+    #         content = fh.readlines()
+    #
+    #     #Skip first 5 lines, they are comments
+    #     content = chunking_list(content[5:], 3)
+    #     for line in content:
+    #
+    #         _cst, _dst = get_cst(modes=[1, modesin[i+1]], modes_cc=None, c=c,
+    #                              noc=False, modes_dst=None)
+    #         cst[mode], dst[mode] = _cst[mode], _dst[mode]
+    #
+    #         _cst_err = c_tmp.transpose()[2]
+    #         _cst_err, _dst_err = get_cst(modes=[1, modesin[i+1]], modes_cc=None,
+    #                                      c=_cst_err, noc=False, modes_dst=None)
+    #
+    #         for deg, _c in _cst_err[mode].items():
+    #             if mode not in cst_errors:
+    #                 cst_errors[mode] = AttribDict()
+    #             if mode not in dst_errors:
+    #                 dst_errors[mode] = AttribDict()
+    #             cst_errors[mode][deg] = get_err(_c)
+    #             dst_errors[mode][deg] = get_err(_c, zeros=True)
+    #
+        # return cst, dst, cst_errors, dst_errors
 
 
 def read_cst_AD_json(modes, modes_cc, file_name="AD_cst.json"):

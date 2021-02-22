@@ -7,21 +7,6 @@ from frospy.core.modes import format_name
 from frospy.core.database.query import db_query
 import os
 
-def update_SF_from_db(dbpath ='/tmp/eejit_simons/splitting/modes/cst_final.sqlite3'):
-    # dbpath = '/quanta1/home/simons/splitting/modes/cst_final.sqlite3'
-    paths = get_paths('all', results='paper2', host='net', checked=True, dictionary=True)
-    SF = Set()
-
-
-    for mode, values in paths.items():
-        damp = float(values[0].split('/')[-1].split('d')[1][:-1])
-        try:
-            SF += loadmodel(ifile=dbpath, modes=format_name(mode).upper(),
-                            name='data', damp='0', db_model='data')
-        except IndexError:
-            continue
-    return SF
-
 
 def loadmodel(modes=None, setup=None, ifile=None, modesin_dir=None,
               format=None, name=None, damp=None, R=-0.2, db_model=None,
@@ -34,7 +19,8 @@ def loadmodel(modes=None, setup=None, ifile=None, modesin_dir=None,
     """
 
     models = ['S20RTS', 'S40RTS', 'REM', 'RR', 'TZ', 'CB', 'TCB', 'AD', 'PREM',
-              'HT', 'QM1', 'DE', 'GLW', 'GD', 'PK', 'MW', 'WZM', 'SAS', 'Sumatra',
+              'HT', 'QM1', 'DE', 'GLW', 'GD', 'PK', 'MW', 'WZM', 'SAS',
+              'STS_SC', 'STS_GC_SC', 'STS_GC_CC''Sumatra',
               'S20RTS+CRUST+BT', 'S20RTS+CRUST+Tr',
               'S20RTS+CRUST+Wh', 'S20RTS+CRUST+Ro',
               'BT', 'Tr', 'Ro', 'Wh',

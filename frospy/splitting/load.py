@@ -8,9 +8,13 @@ from frospy.core.database.query import db_query
 import os
 
 
-def loadmodel(modes=None, setup=None, ifile=None, modesin_dir=None,
-              format=None, name=None, damp=None, R=-0.2, db_model=None,
-              verbose=False):
+def loadmodel(*args):
+    return load(*args)
+
+
+def load(ifile=None, modes=None, setup=None, modesin_dir=None,
+         format=None, name=None, damp=None, R=-0.2, db_model=None,
+         verbose=False):
     """
     param setup: :frospy.core.setup.settings.Setup object:
     param ifile: path to file

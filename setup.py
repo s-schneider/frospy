@@ -1,6 +1,5 @@
 import pathlib
-from setuptools import setup
-import os
+from setuptools import setup, find_packages
 
 """
 :copyright:
@@ -16,39 +15,19 @@ HERE = pathlib.Path(__file__).parent
 # The text of the README file
 README = (HERE / "README.md").read_text()
 
-# This call to setup() does all the work
 INSTALL_REQUIRES = [
-    'pytorch torchvision -c pytorch',
-    'obspy -c conda-forge',
-    'basemap cartopy -c conda-forge',
-    'mechanize',
-    'natsort',
-    'numpy',
-    'pandas',
-    'pandoc',
-    'pip',
+    'obspy>=1.2.2',
+    'natsort>=6.0.0',
+    'numpy>=1.17.2',
     'scipy',
-    'sqlite',
-    'tk=8.6.8']
-EXTRAS_REQUIRE = {}
+    'pyshtools',
+    ]
 
 MIN_PYTHON_VERSION = (3, 6)
 
-def find_packages():
-    """
-    Simple function to find all modules under the current folder.
-    """
-    modules = []
-    for dirpath, _, filenames in os.walk(os.path.join(SETUP_DIRECTORY,
-                                                      "frospy")):
-        if "__init__.py" in filenames:
-            modules.append(os.path.relpath(dirpath, SETUP_DIRECTORY))
-    return [_i.replace(os.sep, ".") for _i in modules]
-
-
 setup(
     name="frospy",
-    version="0.8.0",
+    version="0.1.3",
     description="Python toolbox for normal mode seismologists",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -72,12 +51,7 @@ setup(
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Physics'],
     packages=find_packages(),
+    package_data={'frospy': ['data/*/*json']},
     python_requires=f'>={MIN_PYTHON_VERSION[0]}.{MIN_PYTHON_VERSION[1]}',
-    install_requires=INSTALL_REQUIRES,
-    extras_require=EXTRAS_REQUIRE,
-    # entry_points={
-    #     "console_scripts": [
-    #         "realpython=reader.__main__:main",
-    #     ]
-    }
+    install_requires=INSTALL_REQUIRES
 )

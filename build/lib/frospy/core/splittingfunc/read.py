@@ -167,7 +167,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif cfile in ['MW', 'WZM']:
         cst, dst, cst_errors, dst_errors = read_cst_MW(modesin, modes_ccin,
                                                        folder_name=cfile)
-    
+
     elif cfile.upper() == 'SAS':
         cst, dst, cst_errors, dst_errors = read_cst_SAS(modes, setup)
 

@@ -79,5 +79,5 @@ setup(
     #     "console_scripts": [
     #         "realpython=reader.__main__:main",
     #     ]
-    },
+    }
 )

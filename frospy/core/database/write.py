@@ -76,9 +76,6 @@ def write_cst(SF, db_path, model, author=None, lcut='all', verbose=False):
                          lcut, damp, author, mtype, 0)
                     values.append(v)
 
-
-
-
     db = sqlite3.connect(db_path)
     c = db.cursor()
 

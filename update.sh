@@ -49,4 +49,5 @@ else
 	exit
 fi
 echo '=============== Updating libraries ======================='
-./install.sh
+# ./install.sh
+python setup.py install

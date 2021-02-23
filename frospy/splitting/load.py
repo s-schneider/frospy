@@ -7,25 +7,14 @@ from frospy.core.modes import format_name
 from frospy.core.database.query import db_query
 import os
 
-def update_SF_from_db(dbpath ='/tmp/eejit_simons/splitting/modes/cst_final.sqlite3'):
-    # dbpath = '/quanta1/home/simons/splitting/modes/cst_final.sqlite3'
-    paths = get_paths('all', results='paper2', host='net', checked=True, dictionary=True)
-    SF = Set()
+
+def loadmodel(*args):
+    return load(*args)
 
 
-    for mode, values in paths.items():
-        damp = float(values[0].split('/')[-1].split('d')[1][:-1])
-        try:
-            SF += loadmodel(ifile=dbpath, modes=format_name(mode).upper(),
-                            name='data', damp='0', db_model='data')
-        except IndexError:
-            continue
-    return SF
-
-
-def loadmodel(modes=None, setup=None, ifile=None, modesin_dir=None,
-              format=None, name=None, damp=None, R=-0.2, db_model=None,
-              verbose=False):
+def load(ifile=None, modes=None, setup=None, modesin_dir=None,
+         format=None, name=None, damp=None, R=-0.2, db_model=None,
+         verbose=False):
     """
     param setup: :frospy.core.setup.settings.Setup object:
     param ifile: path to file
@@ -34,7 +23,8 @@ def loadmodel(modes=None, setup=None, ifile=None, modesin_dir=None,
     """
 
     models = ['S20RTS', 'S40RTS', 'REM', 'RR', 'TZ', 'CB', 'TCB', 'AD', 'PREM',
-              'HT', 'QM1', 'DE', 'GLW', 'GD', 'PK', 'MW', 'WZM', 'SAS', 'Sumatra',
+              'HT', 'QM1', 'DE', 'GLW', 'GD', 'PK', 'MW', 'WZM', 'SAS',
+              'STS_SC', 'STS_GC_SC', 'STS_GC_CC''Sumatra',
               'S20RTS+CRUST+BT', 'S20RTS+CRUST+Tr',
               'S20RTS+CRUST+Wh', 'S20RTS+CRUST+Ro',
               'BT', 'Tr', 'Ro', 'Wh',
@@ -125,7 +115,7 @@ def loadmodel(modes=None, setup=None, ifile=None, modesin_dir=None,
         name = format
         model = format
 
-    elif format in models and modes is not None:
+    elif format in models:
         cst_out = read_cst(cfile=format, modes=modes, verbose=verbose)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
         name = format

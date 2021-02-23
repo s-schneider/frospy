@@ -16,7 +16,6 @@ def loadmodel(*args):
 
 def load(ifile=None, modes=None, setup=None, modesin_dir=None,
          format=None, name=None, damp=None, R=-0.2, db_model=None,
-         load_in_set=False,
          verbose=False):
     """
     param setup: :frospy.core.setup.settings.Setup object:
@@ -137,7 +136,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
 
     # if mode is not defined, it will load all modes from the file,
     # in this case we need to loop over them
-    if load_in_set is False:
+    if modes is not None:
         return SplittingFunc(header=header, cst=cst, dst=dst,
                              cst_errors=cst_errors, dst_errors=dst_errors)
     else:

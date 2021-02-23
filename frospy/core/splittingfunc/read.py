@@ -86,46 +86,8 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
                           'sens': None, 'freq': 0, 'Q': 0}
                 modes_cc += Mode(header)
     elif modes is not None:
-        if type(modes) != list:
-            modes = [modes]
-        modes = [x.upper() for x in modes]
-        modesin = ['-']
-        modes_ccin = ['-']
-        for m in modes:
-            if '-' in m:
-                _cc = ''
-                for _m in m.split('-'):
-                    _cc += ' ' + ' '.join(split_digit_nondigit(_m))
-                    _sc = "%s 20 0" % ' '.join(split_digit_nondigit(_m))
-                    if _sc not in modesin:
-                        modesin += [_sc]
-                modes_ccin += [_cc + ' - -']
+        modes_sc, modes_cc, modesin, modes_ccin = get_modes4cst(modes)
 
-            else:
-                _sc = ' '.join(split_digit_nondigit(m)) + ' 20 0'
-                if _sc not in modesin:
-                    modesin += [_sc]
-        modes_ccin = [x.upper() for x in modes_ccin]
-        modes_ccin[0] = str(len(modes_ccin) - 1)
-        modesin = [x.upper() for x in modesin]
-        modesin[0] = str(len(modesin) - 1)
-
-        if modes_ccin == ['-']:
-            modes_ccin = None
-        if modesin == ['-']:
-            modesin = None
-
-        sc, cc = get_mode_names(modesin, modes_ccin)
-        modes_sc = Modes()
-        modes_cc = Modes()
-        modes_all = read_modes()
-        for m in sc:
-            modes_sc += modes_all.select(name=m)
-        if cc is not None:
-            for m in cc:
-                header = {'n': -1, 'type': 'CC', 'l': -1, 'name': m,
-                          'sens': None, 'freq': 0, 'Q': 0}
-                modes_cc += Mode(header)
     else:
         if not cfile.endswith('sqlite3'):
             print('if cfile not "db", setup or modes_dir has to be given')
@@ -209,15 +171,19 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif cfile == 'PK':
         cst, dst, cst_errors, dst_errors = read_cst_PK(modesin, modes_ccin)
     else:
-        c, c_tmp, noc = _read_cst_file(cfile, setup)
+        try:
+            c, c_tmp, noc = _read_cst_file(cfile, setup)
 
-        # Preparing cst and dst files
-        cst, dst = get_cst(modes=modesin, modes_cc=modes_ccin,
-                           modes_dst=modes_scin_dst, c=c, noc=noc)
+            # Preparing cst and dst files
+            cst, dst = get_cst(modes=modesin, modes_cc=modes_ccin,
+                               modes_dst=modes_scin_dst, c=c, noc=noc)
 
-        cst_errors, dst_errors = get_cst_errors(c=c_tmp, modes=modesin,
-                                                modes_cc=modes_ccin,
-                                                modes_dst=modes_scin_dst)
+            cst_errors, dst_errors = get_cst_errors(c=c_tmp, modes=modesin,
+                                                    modes_cc=modes_ccin,
+                                                    modes_dst=modes_scin_dst)
+        except ValueError:
+            cst, dst, cst_errors, dst_errors = read_cst_AD(modesin, modes_ccin,
+                                                           cfile)
 
     if modesin is None:
         modes_sc = Modes()
@@ -564,7 +530,7 @@ def get_cst(modes, modes_cc, c, noc, modes_dst=None):
             for d in ddegs:
                 if d > max_ddeg:
                     break
-                ind_end = ind + 2*d + 1
+                ind_end = ind + 2 * d + 1
                 dst[name][str(d)] = np.array(c[ind:ind_end])
                 ind = ind_end
 
@@ -581,7 +547,7 @@ def get_cst(modes, modes_cc, c, noc, modes_dst=None):
                 for d in ccdegs:
                     if d > max_ddeg:
                         break
-                    ind_end = ind + 2*d + 1
+                    ind_end = ind + 2 * d + 1
                     dst[name][str(d)] = np.array(c[ind:ind_end])
                     ind = ind_end
                 if len(dst[name]) == 0:
@@ -590,20 +556,32 @@ def get_cst(modes, modes_cc, c, noc, modes_dst=None):
     return cst, dst
 
 
-def get_cst_dat(meas, cst, dst, cst_errors, dst_errors):
+def get_cst_dat(meas, cst, dst, cst_errors, dst_errors, mnames):
     mode = meas[0].split()
+    c_type = 'sc'
     if len(mode) == 2:
         _m = format_name("{}S{}".format(mode[0], mode[1]))
-    else:
+    elif len(mode) == 3:
         _m = format_name("{}{}{}".format(mode[0], mode[1], mode[2]))
-
+    elif len(mode) == 6:
+        _m = format_name("{}{}{}".format(mode[0], mode[1], mode[2]))
+        _m += '-'
+        _m += format_name("{}{}{}".format(mode[3], mode[4], mode[5]))
+        c_type = 'cc'
+    if mnames is not None:
+        if _m not in mnames[0]:
+            if _m not in mnames[1]:
+                return cst, dst, cst_errors, dst_errors
     if _m not in cst:
         cst[_m] = {}
         cst_errors[_m] = {}
         dst[_m] = {}
         dst_errors[_m] = {}
 
-    coeffs = chunking_list(meas[1:], 2)
+    if c_type == 'sc':
+        coeffs = chunking_list(meas[1:], 2)
+    else:
+        coeffs = chunking_list(meas[2:], 2)
     for c in coeffs:
         _cst = c[0].split()
         _err = c[1].split()
@@ -776,12 +754,13 @@ def read_cst_AD(modesin, modes_ccin, file_name):
 
         meas = []
         for line in content[istart:]:
-            if line[0].isnumeric():
+            if line[0].isnumeric() and not line[2].isnumeric():
                 if len(meas) != 0:
                     cst, dst, cst_errors, dst_errors = get_cst_dat(meas, cst,
                                                                    dst,
                                                                    cst_errors,
-                                                                   dst_errors)
+                                                                   dst_errors,
+                                                                   mnames)
                 meas = []
             meas.append(line)
 
@@ -821,10 +800,10 @@ def read_cst_PREM(modesin, modes_ccin):
 
     cst = AttribDict()
     for mode, s_max in zip(sc_modes, sc_cdeg):
-        for deg in range(0, int(s_max)+1, 2):
+        for deg in range(0, int(s_max) + 1, 2):
             if mode not in cst:
                 cst[mode] = AttribDict()
-            cst[mode][str(deg)] = np.zeros(2*deg + 1)
+            cst[mode][str(deg)] = np.zeros(2 * deg + 1)
     dst = None
     return cst, dst
 
@@ -901,7 +880,8 @@ def read_cst_TZ(modes, modes_cc, file_name="AB_s2_tromp_zanzerkia.dat",
 
             void, mcst_err = convert_AB_to_cst(A + A_err, B + B_err, int(deg))
             cst_errors[name][deg] = get_err(abs(mcst - mcst_err) * f0)
-            dst_errors[name][deg] = get_err(abs(mcst - mcst_err) * f0, zeros=True)
+            dst_errors[name][deg] = get_err(abs(mcst - mcst_err) * f0,
+                                            zeros=True)
     return cst, dst, cst_errors, dst_errors
 
 
@@ -926,12 +906,12 @@ def read_cst_PK(modesin, modes_ccin, verbose=False):
         if verbose:
             print(mode)
 
-        _cst, _dst = get_cst(modes=[1, modesin[i+1]], modes_cc=None, c=c,
+        _cst, _dst = get_cst(modes=[1, modesin[i + 1]], modes_cc=None, c=c,
                              noc=False, modes_dst=None)
         cst[mode], dst[mode] = _cst[mode], _dst[mode]
 
         _cst_err = c_tmp.transpose()[2]
-        _cst_err, _dst_err = get_cst(modes=[1, modesin[i+1]], modes_cc=None,
+        _cst_err, _dst_err = get_cst(modes=[1, modesin[i + 1]], modes_cc=None,
                                      c=_cst_err, noc=False, modes_dst=None)
 
         for deg, _c in _cst_err[mode].items():
@@ -941,7 +921,6 @@ def read_cst_PK(modesin, modes_ccin, verbose=False):
                 dst_errors[mode] = AttribDict()
             cst_errors[mode][deg] = get_err(_c)
             dst_errors[mode][deg] = get_err(_c, zeros=True)
-
 
     return cst, dst, cst_errors, dst_errors
 
@@ -1583,3 +1562,47 @@ def _read_pickle(filename, **kwargs):
             return pickle.load(fp, **kwargs)
     else:
         return pickle.load(filename, **kwargs)
+
+
+def get_modes4cst(modes):
+    if type(modes) != list:
+        modes = [modes]
+    modes = [x.upper() for x in modes]
+    modesin = ['-']
+    modes_ccin = ['-']
+    for m in modes:
+        if '-' in m:
+            _cc = ''
+            for _m in m.split('-'):
+                _cc += ' ' + ' '.join(split_digit_nondigit(_m))
+                _sc = "%s 20 0" % ' '.join(split_digit_nondigit(_m))
+                if _sc not in modesin:
+                    modesin += [_sc]
+            modes_ccin += [_cc + ' - -']
+
+        else:
+            _sc = ' '.join(split_digit_nondigit(m)) + ' 20 0'
+            if _sc not in modesin:
+                modesin += [_sc]
+    modes_ccin = [x.upper() for x in modes_ccin]
+    modes_ccin[0] = str(len(modes_ccin) - 1)
+    modesin = [x.upper() for x in modesin]
+    modesin[0] = str(len(modesin) - 1)
+
+    if modes_ccin == ['-']:
+        modes_ccin = None
+    if modesin == ['-']:
+        modesin = None
+
+    sc, cc = get_mode_names(modesin, modes_ccin)
+    modes_sc = Modes()
+    modes_cc = Modes()
+    modes_all = read_modes()
+    for m in sc:
+        modes_sc += modes_all.select(name=m)
+    if cc is not None:
+        for m in cc:
+            header = {'n': -1, 'type': 'CC', 'l': -1, 'name': m,
+                      'sens': None, 'freq': 0, 'Q': 0}
+            modes_cc += Mode(header)
+    return modes_sc, modes_cc, modesin, modes_ccin

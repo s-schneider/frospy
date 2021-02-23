@@ -8,14 +8,14 @@ if [ $# -eq 0 ]
 then
     gitBranch=$(git branch | sed -n '/^\* /s///p')
     echo "=============== Updating $gitBranch branch ==================="
-    if [ $gitBranch == 'master' ]; then
+    if [ $gitBranch == 'main' ]; then
         echo "                                __"
         echo "                               / _)"
         echo "                      _.----._/ /"
         echo "                     /         /"
         echo "                  __/ (  | (  |"
         echo "                 /__.-'|_|--|_|"
-    elif [ $gitBranch == 'development' ]; then
+    else
         echo "                       ,''' "
         echo "                      /     \ "
         echo "                     :       :"
@@ -27,14 +27,14 @@ then
 elif [ $# -eq 1 ]
 then
     echo "=============== Updating $1 branch =========================="
-    if [ $1 == 'master' ]; then
+    if [ $1 == 'main' ]; then
         echo "                                __"
         echo "                               / _)"
         echo "                      _.----._/ /"
         echo "                     /         /"
         echo "                  __/ (  | (  |"
         echo "                 /__.-'|_|--|_|"
-    elif [ $1 == 'development' ]; then
+    else
         echo "                       ,''' "
         echo "                      /     \ "
         echo "                     :       :"

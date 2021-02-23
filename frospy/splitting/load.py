@@ -1,6 +1,7 @@
 from __future__ import absolute_import, print_function
 
-# from frospy.core.splittingfunc.read import read_cst, _read_pickle, get_modes4cst
+from frospy.core.splittingfunc.read import (read_cst, _read_pickle,
+                                            get_modes4cst)
 from frospy.core.splittingfunc.splittingfunc import SplittingFunc
 from frospy.core.splittingfunc.splittingfunc import get_header
 from frospy.core.splittingfunc.set import Set

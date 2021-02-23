@@ -129,7 +129,10 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     else:
         if not cfile.endswith('sqlite3'):
             print('if cfile not "db", setup or modes_dir has to be given')
-            return
+            print('trying to load all modes from given cfile')
+            modesin = None
+            modes_ccin = None
+            # return
 
     if verbose is True:
         print(cfile, sc, cc, modesin, modes_ccin)
@@ -141,7 +144,6 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
         cst, dst, cst_errors, dst_errors = read_cst_AD(modesin, modes_ccin,
                                                        path)
     elif cfile in ['STS_SC', 'STS_GC_SC', 'STS_GC_CC']:
-        from IPython import embed; embed()
         file_name = "{}.dat".format(cfile)
         path = "%s/STS/%s" % (frospydata.__path__[0], file_name)
         cst, dst, cst_errors, dst_errors = read_cst_AD(modesin, modes_ccin,
@@ -216,6 +218,13 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
         cst_errors, dst_errors = get_cst_errors(c=c_tmp, modes=modesin,
                                                 modes_cc=modes_ccin,
                                                 modes_dst=modes_scin_dst)
+
+    if modesin is None:
+        modes_sc = Modes()
+        modes_cc = Modes()
+        modes_all = read_modes()
+        for m in cst.keys():
+            modes_sc += modes_all.select(name=m)
 
     return cst, dst, cst_errors, dst_errors, modes_sc, modes_cc
 
@@ -581,6 +590,40 @@ def get_cst(modes, modes_cc, c, noc, modes_dst=None):
     return cst, dst
 
 
+def get_cst_dat(meas, cst, dst, cst_errors, dst_errors):
+    mode = meas[0].split()
+    if len(mode) == 2:
+        _m = format_name("{}S{}".format(mode[0], mode[1]))
+    else:
+        _m = format_name("{}{}{}".format(mode[0], mode[1], mode[2]))
+
+    if _m not in cst:
+        cst[_m] = {}
+        cst_errors[_m] = {}
+        dst[_m] = {}
+        dst_errors[_m] = {}
+
+    coeffs = chunking_list(meas[1:], 2)
+    for c in coeffs:
+        _cst = c[0].split()
+        _err = c[1].split()
+
+        if len(_cst) == 2:
+            deg = '0'
+            cst[_m][deg] = np.array([float(_cst[0])])
+            cst_errors[_m][deg] = get_err(float(_err[0]))
+            dst[_m][deg] = np.array([float(_cst[1])])
+            dst_errors[_m][deg] = get_err(float(_err[1]))
+        else:
+            deg = str(int((len(_cst) - 1) / 2))
+            x = [float(y) for y in _cst]
+            cst[_m][deg] = np.array(x)
+            x = [float(y) for y in _cst]
+            cst_errors[_m][deg] = get_err(x)
+
+    return cst, dst, cst_errors, dst_errors
+
+
 def read_cst_SAS(modes, setup):
     db_file = "%s/SAS/cst.sqlite3" % frospydata.__path__[0]
     cst, dst, cst_errors, dst_errors = read_cst_db(setup=setup, modes=modes,
@@ -713,38 +756,36 @@ def read_cst_AD(modesin, modes_ccin, file_name):
     if file_name.endswith('json'):
         return read_cst_AD_json(modesin, modes_ccin, file_name)
     else:
-        return None
-    # else:
-    #     cst = AttribDict()
-    #     cst_errors = AttribDict()
-    #     dst = AttribDict()
-    #     dst_errors = AttribDict()
-    #     mnames = get_mode_names(modesin, modes_ccin)
-    #
-    #     with open(file_name, 'r') as fh:
-    #         content = fh.readlines()
-    #
-    #     #Skip first 5 lines, they are comments
-    #     content = chunking_list(content[5:], 3)
-    #     for line in content:
-    #
-    #         _cst, _dst = get_cst(modes=[1, modesin[i+1]], modes_cc=None, c=c,
-    #                              noc=False, modes_dst=None)
-    #         cst[mode], dst[mode] = _cst[mode], _dst[mode]
-    #
-    #         _cst_err = c_tmp.transpose()[2]
-    #         _cst_err, _dst_err = get_cst(modes=[1, modesin[i+1]], modes_cc=None,
-    #                                      c=_cst_err, noc=False, modes_dst=None)
-    #
-    #         for deg, _c in _cst_err[mode].items():
-    #             if mode not in cst_errors:
-    #                 cst_errors[mode] = AttribDict()
-    #             if mode not in dst_errors:
-    #                 dst_errors[mode] = AttribDict()
-    #             cst_errors[mode][deg] = get_err(_c)
-    #             dst_errors[mode][deg] = get_err(_c, zeros=True)
-    #
-        # return cst, dst, cst_errors, dst_errors
+        cst = AttribDict()
+        cst_errors = AttribDict()
+        dst = AttribDict()
+        dst_errors = AttribDict()
+        if modesin:
+            mnames = get_mode_names(modesin, modes_ccin)
+        else:
+            mnames = None
+
+        with open(file_name, 'r') as fh:
+            content = fh.readlines()
+
+        # Skip first i lines, they are comments
+        for i, line in enumerate(content):
+            if line[0].isnumeric():
+                istart = i
+                break
+
+        meas = []
+        for line in content[istart:]:
+            if line[0].isnumeric():
+                if len(meas) != 0:
+                    cst, dst, cst_errors, dst_errors = get_cst_dat(meas, cst,
+                                                                   dst,
+                                                                   cst_errors,
+                                                                   dst_errors)
+                meas = []
+            meas.append(line)
+
+        return cst, dst, cst_errors, dst_errors
 
 
 def read_cst_AD_json(modes, modes_cc, file_name="AD_cst.json"):

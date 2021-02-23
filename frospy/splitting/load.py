@@ -111,7 +111,7 @@ def loadmodel(modes=None, setup=None, ifile=None, modesin_dir=None,
         name = format
         model = format
 
-    elif format in models and modes is not None:
+    elif format in models:
         cst_out = read_cst(cfile=format, modes=modes, verbose=verbose)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
         name = format

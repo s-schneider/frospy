@@ -108,9 +108,14 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         header = get_header(setup.rundir, modes_sc, modes_cc, damp=0,
                             name=name, model=format)
 
-    elif format == 'dat' and modesin_dir is not None:
-        cst_out = read_cst(ifile, modesin_dir)
+    elif format == 'dat':
+        if modesin_dir is not None:
+            cst_out = read_cst(ifile, modesin_dir)
+        else:
+            cst_out = read_cst(cfile=ifile, modes=modes)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+        header = get_header(modesin_dir, modes_sc, modes_cc,
+                            name=name, model=model, damp=damp)
 
     elif (format in models and modesin_dir is not None):
         cst_out = read_cst(format, modesin_dir)

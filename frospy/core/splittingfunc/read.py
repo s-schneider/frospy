@@ -171,15 +171,19 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif cfile == 'PK':
         cst, dst, cst_errors, dst_errors = read_cst_PK(modesin, modes_ccin)
     else:
-        c, c_tmp, noc = _read_cst_file(cfile, setup)
+        try:
+            c, c_tmp, noc = _read_cst_file(cfile, setup)
 
-        # Preparing cst and dst files
-        cst, dst = get_cst(modes=modesin, modes_cc=modes_ccin,
-                           modes_dst=modes_scin_dst, c=c, noc=noc)
+            # Preparing cst and dst files
+            cst, dst = get_cst(modes=modesin, modes_cc=modes_ccin,
+                               modes_dst=modes_scin_dst, c=c, noc=noc)
 
-        cst_errors, dst_errors = get_cst_errors(c=c_tmp, modes=modesin,
-                                                modes_cc=modes_ccin,
-                                                modes_dst=modes_scin_dst)
+            cst_errors, dst_errors = get_cst_errors(c=c_tmp, modes=modesin,
+                                                    modes_cc=modes_ccin,
+                                                    modes_dst=modes_scin_dst)
+        except ValueError:
+            cst, dst, cst_errors, dst_errors = read_cst_AD(modesin, modes_ccin,
+                                                           cfile)
 
     if modesin is None:
         modes_sc = Modes()

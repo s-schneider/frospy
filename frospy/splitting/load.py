@@ -1,6 +1,7 @@
 from __future__ import absolute_import, print_function
 
-from frospy.core.splittingfunc.read import read_cst, _read_pickle
+from frospy.core.splittingfunc.read import (read_cst, _read_pickle,
+                                            get_modes4cst)
 from frospy.core.splittingfunc.splittingfunc import SplittingFunc
 from frospy.core.splittingfunc.splittingfunc import get_header
 from frospy.core.splittingfunc.set import Set
@@ -26,7 +27,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
 
     models = ['S20RTS', 'S40RTS', 'REM', 'RR', 'TZ', 'CB', 'TCB', 'AD', 'PREM',
               'HT', 'QM1', 'DE', 'GLW', 'GD', 'PK', 'MW', 'WZM', 'SAS',
-              'STS_SC', 'STS_GC_SC', 'STS_GC_CC''Sumatra',
+              'STS_SC', 'STS_GC_SC', 'STS_GC_CC', 'Sumatra',
               'S20RTS+CRUST+BT', 'S20RTS+CRUST+Tr',
               'S20RTS+CRUST+Wh', 'S20RTS+CRUST+Ro',
               'BT', 'Tr', 'Ro', 'Wh',
@@ -107,9 +108,14 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         header = get_header(setup.rundir, modes_sc, modes_cc, damp=0,
                             name=name, model=format)
 
-    elif format == 'dat' and modesin_dir is not None:
-        cst_out = read_cst(ifile, modesin_dir)
+    elif format == 'dat':
+        if modesin_dir is not None:
+            cst_out = read_cst(ifile, modesin_dir)
+        else:
+            cst_out = read_cst(cfile=ifile, modes=modes)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+        header = get_header(modesin_dir, modes_sc, modes_cc,
+                            name=name, model=model, damp=damp)
 
     elif (format in models and modesin_dir is not None):
         cst_out = read_cst(format, modesin_dir)
@@ -141,7 +147,9 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             c_err = {_m: cst_errors[_m]}
             d = {_m: dst[_m]}
             d_err = {_m: dst_errors[_m]}
-            header = get_header(modesin_dir, modes_sc.select(name=_m),
+            modes_sc, modes_cc, modesin, modes_ccin = get_modes4cst(_m)
+
+            header = get_header(modesin_dir, modes_sc,
                                 modes_cc, name=name, model=model, damp=damp)
             S += SplittingFunc(header=header, cst=c, dst=d,
                                cst_errors=c_err, dst_errors=d_err)

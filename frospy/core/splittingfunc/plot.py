@@ -1079,7 +1079,7 @@ def _plot_coeffs(coeffs, errors, mode_name, label, modes, kind,
         degs = [int(y) for y in coeffslist[Ni:Nf]]
         ax = axes[str(min(degs))].ax
         ax.legend(ehandles, elabels,
-                  bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+                  bbox_to_anchor=bbox, loc=loc, borderaxespad=0.)
 
     if 'fig_size' in kwargs:
         fig.set_size_inches(kwargs['fig_size'])

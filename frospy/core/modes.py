@@ -19,6 +19,7 @@ import json
 import os
 import pickle
 import sys
+import numpy as np
 
 
 def read(ifile=None, format=None, modenames=None):
@@ -534,3 +535,13 @@ def format_name(mode, number_of_digits=1):
         return '-'.join(_name)
     else:
         return name(mode)
+
+
+def calc_Q(mode, fc, cst, err=None):
+    if err is None:
+        _Q = ((mode.freq * 1e3) / (2 * mode.Q)) + \
+              1. / np.sqrt(4. * np.pi) * cst
+    else:
+        _Q = ((mode.freq * 1e3) / (2 * mode.Q)) + \
+              1. / np.sqrt(4. * np.pi) * (cst + err)
+    return 0.5 * fc / _Q

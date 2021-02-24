@@ -16,7 +16,7 @@ def loadmodel(*args):
 
 def load(ifile=None, modes=None, setup=None, modesin_dir=None,
          format=None, name='data', damp=None, R=-0.2, db_model=None,
-         verbose=False):
+         verbose=False, name_overide=False):
     """
     param setup: :frospy.core.setup.settings.Setup object:
     param ifile: path to file
@@ -71,6 +71,10 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         pass
 
     if ifile.endswith('.sqlite3'):
+        if name_overide is True:
+            name = name
+        else:
+            name = db_model
         cst_out = read_cst(setup=setup, modes=modes, cfile=ifile,
                            model=db_model)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
@@ -81,7 +85,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
 
         if setup is not None:
             header = get_header(setup.rundir, modes_sc, modes_cc,
-                                name=db_model, damp=None)
+                                name=name, damp=None)
         else:
             if type(modes) is not list:
                 modes = [modes]
@@ -93,7 +97,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             if verbose is True:
                 print('damping found: ', damp)
             header = get_header(None, modes_sc, modes_cc,
-                                name=db_model, damp=damp[0][0])
+                                name=name, damp=damp[0][0])
 
     elif setup is not None and ifile is not None:
         cst_out = read_cst(setup=setup, cfile=ifile)

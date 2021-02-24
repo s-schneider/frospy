@@ -454,7 +454,7 @@ class SplittingFunc(object):
 
             modes_dst = _plot_coeffs(
                         plot_coeffs, plot_errors, mode, label, modes_dst,
-                        'dst', smin=smin_in, smax=smax, colormap='red',
+                        'dst', smin=smin_in, smax=smax, colormap=colormap,
                         **kwargs
                         )
 

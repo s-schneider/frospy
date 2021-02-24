@@ -70,7 +70,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         cst, dst = _read_pickle(ifile)
         pass
 
-    if ifile is not None and ifile.endswith('.sqlite3'):
+    if ifile.endswith('.sqlite3'):
         cst_out = read_cst(setup=setup, modes=modes, cfile=ifile,
                            model=db_model)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
@@ -94,14 +94,15 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
                 print('damping found: ', damp)
             header = get_header(None, modes_sc, modes_cc,
                                 name=db_model, damp=damp[0][0])
+            print(damp)
 
-    if setup is not None and ifile is not None:
+    elif setup is not None and ifile is not None:
         cst_out = read_cst(setup=setup, cfile=ifile)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
         header = get_header(setup.rundir, modes_sc, modes_cc, name=name,
                             damp=damp)
 
-    if format in models and setup is not None:
+    elif format in models and setup is not None:
         cst_out = read_cst(setup=setup, cfile=format, R=R)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
         header = get_header(setup.rundir, modes_sc, modes_cc, damp=0,
@@ -121,17 +122,14 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
         name = format
         model = format
-
+        header = get_header(modesin_dir, modes_sc, modes_cc,
+                            name=name, model=model, damp=damp)
     elif format in models:
         cst_out = read_cst(cfile=format, modes=modes, verbose=verbose)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
         name = format
         model = format
         header = get_header(None, modes_sc, modes_cc,
-                            name=name, model=model, damp=damp)
-
-    else:
-        header = get_header(modesin_dir, modes_sc, modes_cc,
                             name=name, model=model, damp=damp)
 
     # if mode is not defined, it will load all modes from the file,

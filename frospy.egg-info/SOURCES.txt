@@ -22,6 +22,8 @@ frospy/core/database/__init__.py
 frospy/core/database/postgresql.py
 frospy/core/database/query.py
 frospy/core/database/write.py
+frospy/core/setup/__init__.py
+frospy/core/setup/settings.py
 frospy/core/spectrum/__init__.py
 frospy/core/spectrum/plot.py
 frospy/core/spectrum/spectrum.py

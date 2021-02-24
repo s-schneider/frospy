@@ -39,3 +39,6 @@ frospy/data/TCB
 frospy/data/TZ
 frospy/data/WZM
 frospy/data/cnn
+
+frospy/build/*
+frospy/dist/*

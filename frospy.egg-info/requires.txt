@@ -1,6 +1,5 @@
 obspy>=1.2.2
 natsort>=6.0.0
 numpy>=1.17.2
-pandas>=0.25.1
 scipy
 pyshtools

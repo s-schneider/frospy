@@ -1065,6 +1065,14 @@ def _plot_coeffs(coeffs, errors, mode_name, label, modes, kind,
         ax.errorbar(x, cval, yerr=eval, capsize=3, marker=marker,
                     linestyle=ls, color=c, linewidth=0.8, label=label)
     if 'label' in kwargs:
+        if 'bbox_to_anchor' in kwargs:
+            bbox = kwargs['bbox_to_anchor']
+        else:
+            bbox = (1.05, 1)
+        if 'loc' in kwargs:
+            loc = kwargs['loc']
+        else:
+            loc = 2
         # removing whiskers from legend
         ehandles, elabels = ax.get_legend_handles_labels()
         ehandles = [h[0] for h in ehandles]

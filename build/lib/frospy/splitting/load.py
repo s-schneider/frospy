@@ -1,31 +1,22 @@
 from __future__ import absolute_import, print_function
 
-from frospy.core.splittingfunc.read import read_cst, _read_pickle
+from frospy.core.splittingfunc.read import (read_cst, _read_pickle,
+                                            get_modes4cst)
 from frospy.core.splittingfunc.splittingfunc import SplittingFunc
 from frospy.core.splittingfunc.splittingfunc import get_header
+from frospy.core.splittingfunc.set import Set
 from frospy.core.modes import format_name
 from frospy.core.database.query import db_query
 import os
 
-def update_SF_from_db(dbpath ='/tmp/eejit_simons/splitting/modes/cst_final.sqlite3'):
-    # dbpath = '/quanta1/home/simons/splitting/modes/cst_final.sqlite3'
-    paths = get_paths('all', results='paper2', host='net', checked=True, dictionary=True)
-    SF = Set()
+
+def loadmodel(*args):
+    return load(*args)
 
 
-    for mode, values in paths.items():
-        damp = float(values[0].split('/')[-1].split('d')[1][:-1])
-        try:
-            SF += loadmodel(ifile=dbpath, modes=format_name(mode).upper(),
-                            name='data', damp='0', db_model='data')
-        except IndexError:
-            continue
-    return SF
-
-
-def loadmodel(modes=None, setup=None, ifile=None, modesin_dir=None,
-              format=None, name=None, damp=None, R=-0.2, db_model=None,
-              verbose=False):
+def load(ifile=None, modes=None, setup=None, modesin_dir=None,
+         format=None, name='data', damp=None, R=-0.2, db_model=None,
+         verbose=False):
     """
     param setup: :frospy.core.setup.settings.Setup object:
     param ifile: path to file
@@ -34,7 +25,8 @@ def loadmodel(modes=None, setup=None, ifile=None, modesin_dir=None,
     """
 
     models = ['S20RTS', 'S40RTS', 'REM', 'RR', 'TZ', 'CB', 'TCB', 'AD', 'PREM',
-              'HT', 'QM1', 'DE', 'GLW', 'GD', 'PK', 'MW', 'WZM', 'SAS', 'Sumatra',
+              'HT', 'QM1', 'DE', 'GLW', 'GD', 'PK', 'MW', 'WZM', 'SAS',
+              'STS_SC', 'STS_GC_SC', 'STS_GC_CC', 'Sumatra',
               'S20RTS+CRUST+BT', 'S20RTS+CRUST+Tr',
               'S20RTS+CRUST+Wh', 'S20RTS+CRUST+Ro',
               'BT', 'Tr', 'Ro', 'Wh',
@@ -51,10 +43,10 @@ def loadmodel(modes=None, setup=None, ifile=None, modesin_dir=None,
 
     # WE HAVE TO COMMENT ON THE IF CONDITIONS HERE!!!
 
-    if setup is None and ifile is not None:
-        if not ifile.endswith('.sqlite3'):
-            msg = "Error in setup: Give setup object or path to setup.pickle"
-            raise IOError(msg)
+    # if setup is None and ifile is not None:
+    #     if not ifile.endswith('.sqlite3'):
+    #         msg = "Error in setup: Give setup object or path to setup.pickle"
+    #         raise IOError(msg)
 
     if ifile is None and format is None:
         msg = "Error in ifile: Give path to cst-file (mcst.dat)\n"
@@ -78,7 +70,7 @@ def loadmodel(modes=None, setup=None, ifile=None, modesin_dir=None,
         cst, dst = _read_pickle(ifile)
         pass
 
-    if ifile is not None and ifile.endswith('.sqlite3'):
+    if ifile.endswith('.sqlite3'):
         cst_out = read_cst(setup=setup, modes=modes, cfile=ifile,
                            model=db_model)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
@@ -103,29 +95,35 @@ def loadmodel(modes=None, setup=None, ifile=None, modesin_dir=None,
             header = get_header(None, modes_sc, modes_cc,
                                 name=db_model, damp=damp[0][0])
 
-    if setup is not None and ifile is not None:
+    elif setup is not None and ifile is not None:
         cst_out = read_cst(setup=setup, cfile=ifile)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
         header = get_header(setup.rundir, modes_sc, modes_cc, name=name,
                             damp=damp)
 
-    if format in models and setup is not None:
+    elif format in models and setup is not None:
         cst_out = read_cst(setup=setup, cfile=format, R=R)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
         header = get_header(setup.rundir, modes_sc, modes_cc, damp=0,
                             name=name, model=format)
 
-    elif format == 'dat' and modesin_dir is not None:
-        cst_out = read_cst(ifile, modesin_dir)
+    elif format == 'dat':
+        if modesin_dir is not None:
+            cst_out = read_cst(ifile, modesin_dir)
+        else:
+            cst_out = read_cst(cfile=ifile, modes=modes)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+        header = get_header(modesin_dir, modes_sc, modes_cc,
+                            name=name, model=model, damp=damp)
 
     elif (format in models and modesin_dir is not None):
         cst_out = read_cst(format, modesin_dir)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
         name = format
         model = format
-
-    elif format in models and modes is not None:
+        header = get_header(modesin_dir, modes_sc, modes_cc,
+                            name=name, model=model, damp=damp)
+    elif format in models:
         cst_out = read_cst(cfile=format, modes=modes, verbose=verbose)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
         name = format
@@ -133,11 +131,22 @@ def loadmodel(modes=None, setup=None, ifile=None, modesin_dir=None,
         header = get_header(None, modes_sc, modes_cc,
                             name=name, model=model, damp=damp)
 
+    # if mode is not defined, it will load all modes from the file,
+    # in this case we need to loop over them
+    if modes is not None:
+        return SplittingFunc(header=header, cst=cst, dst=dst,
+                             cst_errors=cst_errors, dst_errors=dst_errors)
     else:
-        header = get_header(modesin_dir, modes_sc, modes_cc,
-                            name=name, model=model, damp=damp)
+        S = Set()
+        for _m, _cst in cst.items():
+            c = {_m: _cst}
+            c_err = {_m: cst_errors[_m]}
+            d = {_m: dst[_m]}
+            d_err = {_m: dst_errors[_m]}
+            modes_sc, modes_cc, modesin, modes_ccin = get_modes4cst(_m)
 
-    splitf = SplittingFunc(header=header, cst=cst, dst=dst,
-                           cst_errors=cst_errors, dst_errors=dst_errors)
-
-    return splitf
+            header = get_header(modesin_dir, modes_sc,
+                                modes_cc, name=name, model=model, damp=damp)
+            S += SplittingFunc(header=header, cst=c, dst=d,
+                               cst_errors=c_err, dst_errors=d_err)
+        return S

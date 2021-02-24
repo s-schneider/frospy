@@ -15,7 +15,7 @@ def loadmodel(*args):
 
 
 def load(ifile=None, modes=None, setup=None, modesin_dir=None,
-         format=None, name=None, damp=None, R=-0.2, db_model=None,
+         format=None, name='data', damp=None, R=-0.2, db_model=None,
          verbose=False):
     """
     param setup: :frospy.core.setup.settings.Setup object:
@@ -94,7 +94,6 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
                 print('damping found: ', damp)
             header = get_header(None, modes_sc, modes_cc,
                                 name=db_model, damp=damp[0][0])
-            print(damp)
 
     elif setup is not None and ifile is not None:
         cst_out = read_cst(setup=setup, cfile=ifile)
@@ -131,7 +130,6 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         model = format
         header = get_header(None, modes_sc, modes_cc,
                             name=name, model=model, damp=damp)
-
 
     # if mode is not defined, it will load all modes from the file,
     # in this case we need to loop over them

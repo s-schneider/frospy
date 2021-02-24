@@ -37,6 +37,7 @@ frospy/data/basemap/__init__.py
 frospy/data/basemap/llsvp/__init__.py
 frospy/data/basemap/plates/__init__.py
 frospy/plot/__init__.py
+frospy/plot/branch.py
 frospy/plot/maps.py
 frospy/plot/nmplt.py
 frospy/spectrum/__init__.py

@@ -55,7 +55,7 @@ def write_cst(SF, db_path, model, author=None, lcut='all', verbose=False):
                         cst_str = []
 
                         if verbose:
-                            print(mode, kind, deg)
+                            print(mode, kind, deg, damp)
                         for c, ce in zip(cst, cst_errors):
                             if verbose:
                                 msg = "cst, err, upper, lower, conf:", c, ce

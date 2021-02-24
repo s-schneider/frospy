@@ -400,7 +400,8 @@ class SplittingFunc(object):
             plt.show()
         return im_cst, im_dst, figs
 
-    def plot(self, savefig=False, smin=None, smax=None, **kwargs):
+    def plot(self, savefig=False, smin=None, smax=None, colormap='red',
+             **kwargs):
 
         modes_cst = AttribDict()
         modes_dst = AttribDict()
@@ -431,7 +432,7 @@ class SplittingFunc(object):
             modes_cst = _plot_coeffs(
                         coeffs, errors, mode, label, modes_cst, 'cst',
                         d00=d00, d00_err=d00_err, smin=smin, smax=smax_in,
-                        colormap='red', **kwargs
+                        colormap=colormap, **kwargs
                         )
 
         for mode, coeffs in self.dst.items():

@@ -804,17 +804,23 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
     else: # CC splitting func
         if ax is None:
-            #ax = fig.add_axes([0.1, 0.2, 0.7, 0.75])
-            gs = gridspec.GridSpec(1, 2, width_ratios=[0.8, 3.2],
+            if os.path.exists(bins.sc_cstkernels):
+                gs = gridspec.GridSpec(1, 2, width_ratios=[0.8, 3.2],
                                        wspace=0.05)
-            ax0 = fig.add_subplot(gs[0])
-            ax = fig.add_subplot(gs[1])
 
-            sensC_kernel(mode, title=False, ax=ax0, **kwargs)
+                ax0 = fig.add_subplot(gs[0])
+                ax = fig.add_subplot(gs[1])
+                sensC_kernel(mode, title=False, ax=ax0, **kwargs)
 
-            if show_colorbar is True:
-                #ax_cb = fig.add_axes([0.25, 0.1, 0.4, 0.04])
-                ax_cb = fig.add_axes([0.4, 0.1, 0.4, 0.04])
+                if show_colorbar is True:
+                    ax_cb = fig.add_axes([0.4, 0.1, 0.4, 0.04])
+
+            else:
+                ax = fig.add_subplot()
+
+                if show_colorbar is True:
+                    # To do: Have to change the values here to make it centered
+                    ax_cb = fig.add_axes([0.35, 0.1, 0.3, 0.02])
 
         m = Basemap(ax=ax, **map_config)
         ccn = split_digit_nondigit(mode.name)

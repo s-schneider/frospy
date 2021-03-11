@@ -70,7 +70,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         cst, dst = _read_pickle(ifile)
         pass
 
-    if ifile.endswith('.sqlite3'):
+    if ifile is not None and ifile.endswith('.sqlite3'):
         if name_overide is True:
             name = name
         else:

@@ -87,7 +87,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
                 modes_cc += Mode(header)
     elif modes is not None:
         modes_sc, modes_cc, modesin, modes_ccin = get_modes4cst(modes)
-
+        modes_scin_dst = None
     else:
         if not cfile.endswith('sqlite3'):
             print('if cfile not "db", setup or modes_dir has to be given')

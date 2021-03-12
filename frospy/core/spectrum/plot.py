@@ -258,7 +258,6 @@ def plot_spectrum(main, gui=False):
         _ax.xaxis.label.set_size(main.fs)
         _ax.yaxis.label.set_size(main.fs)
 
-    from IPython import embed; embed()
     if main.ylim is not None:
         ax.amp.set_ylim(main.ylim)
     main.rfig = fig

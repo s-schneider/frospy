@@ -20,7 +20,6 @@ tmp_*
 
 frospy/data/AD/*dat
 frospy/data/AD/omega*
-frospy/data/AD/*xml
 frospy/data/AD/noise*
 frospy/data/AD/cmt*
 frospy/data/AD/AD*

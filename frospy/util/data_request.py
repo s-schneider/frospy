@@ -46,6 +46,7 @@ def enablePrint():
 
 def downloader(cat, components, sampling_rate, localfolder,
                length_in_days, inv=None, do_process_data=False,
+               file_format='mseed',
                verbose=False):
     """
     param inv:
@@ -153,7 +154,7 @@ def downloader(cat, components, sampling_rate, localfolder,
         out = data_request('IRIS', inv=inv, cat=cat, channels=components,
                            savefile='station', normal_mode_data=True,
                            record_startt=start, record_endt=end,
-                           file_format='pickle')
+                           file_format=file_format)
         streamall, inv, cat = out[:]
         print(streamall)
         inv.write('inv.xml', format='STATIONXML')

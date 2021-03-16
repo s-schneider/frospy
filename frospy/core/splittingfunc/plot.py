@@ -91,23 +91,15 @@ def sens_kernel_branch(modes, colormap='rainbow', kernel='vs', savefig=False,
 
 def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
                 legend_show=True, color='auto', kernel='all',
-                kind="cst", **kwargs):
+                lw_boundaries=0.1, linewidth=1, fontsize=8,
+                ticks=True, kind="cst", bbox_to_anchor=(0.6, 1.2),
+                **kwargs):
     """
     :params mode: frospy.core.modes.Mode
     """
     bins = Bin()
     if not os.path.exists(bins.sc_cstkernels):
         raise OSError('senskernel bin not found!')
-
-    if 'fontsize' in kwargs:
-        fontsize = float(kwargs['fontsize'])
-    else:
-        fontsize = 8
-
-    if 'linewidth' in kwargs:
-        linewidth = float(kwargs['linewidth'])
-    else:
-        linewidth = 1
 
     if glob.glob('*-kernel.dat'):
         os.system('rm *-kernel.dat')
@@ -246,10 +238,10 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
     ax.set_ylim(0, 6400)
     ax.set_xlim(-1.1*intmax, 1.1*intmax)
 
-    ax.axhline(5700, color='k', lw=0.1)  # TZ
-    ax.axhline(3480, color='k', lw=0.1)  # CMB
-    ax.axhline(1220, color='k', lw=0.1)  # ICB
-    ax.axvline(0, color='k', lw=0.1)
+    ax.axhline(5700, color='k', lw=lw_boundaries)  # TZ
+    ax.axhline(3480, color='k', lw=lw_boundaries)  # CMB
+    ax.axhline(1220, color='k', lw=lw_boundaries)  # ICB
+    ax.axvline(0, color='k', lw=lw_boundaries)
 
     if color == 'auto':
         rho_clr = 'grey'
@@ -293,13 +285,6 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
             legend_ax.append(han3)
             legend.append(r'$q_\kappa$')
 
-    if 'ticks' in kwargs:
-        ticks = kwargs['ticks']
-    else:
-        ticks = True
-
-
-
     if legend_show and ticks:
         if 'bbox_to_anchor' in kwargs:
             _bbox = kwargs['bbox_to_anchor']
@@ -311,28 +296,27 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
                   fontsize=fontsize)
 
     if legend_show and not ticks:
-        if 'bbox_to_anchor' in kwargs:
-            _bbox = kwargs['bbox_to_anchor']
-        else:
-            _bbox = (0.6, 1.2)
         ax.legend(legend_ax, legend, ncol=3,
                   handlelength=0.3, handletextpad=0.1, columnspacing=0.25,
-                  loc='upper center', bbox_to_anchor=_bbox, frameon=False,
+                  loc='upper center', bbox_to_anchor=bbox_to_anchor,
+                  frameon=False,
                   fontsize=fontsize, borderpad=0)
-
 
     if not ticks:
         ax.axes.get_xaxis().set_ticks([])
         ax.axes.get_yaxis().set_ticks([])
         ax.axes.xaxis.set_ticklabels([])
         ax.axes.yaxis.set_ticklabels([])
-        ax.text(-intmax, 5700, "TZ",  fontsize=fontsize*0.8, va="bottom")
-        ax.text(-intmax, 3480, "CMB", fontsize=fontsize*0.8, va="bottom")
-        ax.text(-intmax, 1220, "ICB", fontsize=fontsize*0.8, va="bottom")
+        ax.text(-intmax, 5700, "TZ", fontsize=fontsize * 0.8, va="bottom")
+        ax.text(-intmax, 3480, "CMB", fontsize=fontsize * 0.8, va="bottom")
+        ax.text(-intmax, 1220, "ICB", fontsize=fontsize * 0.8, va="bottom")
+    else:
+        ax.tick_params(axis='x', labelsize=fontsize * 0.8)
+        ax.tick_params(axis='y', labelsize=fontsize * 0.8)
 
     if title:
-        title = r"$_{%s}%s_{%s}$" % (mode.n,  mode.type,  mode.l)
-        ax.set_title(title, fontsize=fontsize*1.5, va="center")
+        title = r"$_{%s}%s_{%s}$" % (mode.n, mode.type, mode.l)
+        ax.set_title(title, fontsize=fontsize * 1.5, va="center")
     if show:
         plt.show()
     if savefig and ax is None:

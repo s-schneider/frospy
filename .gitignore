@@ -40,3 +40,5 @@ frospy/data/WZM
 frospy/data/cnn
 
 build_commands.sh
+build
+dist

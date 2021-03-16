@@ -8,6 +8,7 @@ Author-email: s.a.schneider@mailbox.org
 License: GNU Lesser General Public License, Version 3 (LGPLv3)
 Description: # Free Oscillation Toolbox - FrosPy
         Small toolbox to help with visualization of spectra and data-handling for splitting function measurements.
+        
         ## Content
          * [Wiki](https://github.com/s-schneider/frospy/wiki/Home:-Free-Oscillation-Toolbox---FrosPy)
          * [Toroidal Mode Splittingfunctions](#toroidal-mode-splittingfunctions)
@@ -17,18 +18,8 @@ Description: # Free Oscillation Toolbox - FrosPy
         
         ## Splittingfunction Coefficients
         
-        The splitting functions of [Schneider & Deuss, 2020](https://doi.org/10.1093/gji/ggaa567) can be found here:
-             
-        [cst-coef-T.dat](https://github.com/s-schneider/frospy/tree/main/frospy/data/SAS/cst-coef-T.dat)
-        
-        The splitting functions of [Talavera-Soza & Deuss, 2020](https://doi.org/10.1093/gji/ggaa499) can be found here:
-        
-        
-        [STS_SC.dat](https://github.com/s-schneider/frospy/blob/main/frospy/data/STS/STS_SC.dat): file containing the Radial Modes observations using the self-coupling approximation
-        
-        [STS_GC_SC.dat](https://github.com/s-schneider/frospy/blob/main/frospy/data/STS/STS_GC_SC.dat): file containing the self-coupling splitting functions of Radial Modes and their corresponding l=2 modes using the group-coupling approximation
-         
-        [STS_GC_CC.dat](https://github.com/s-schneider/frospy/blob/main/frospy/data/STS/STS_GC_CC.dat): file containing the cross-coupling splitting functions of Radial Modes and their corresponding l=2 modes using the group-coupling approximation
+        The splitting functions of [Schneider & Deuss, 2020](https://doi.org/10.1093/gji/ggaa567) and [Talavera-Soza & Deuss, 2020](https://doi.org/10.1093/gji/ggaa499) can be found here:
+        http://www.frospy.org
         
         
         

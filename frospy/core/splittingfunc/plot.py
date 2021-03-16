@@ -113,10 +113,10 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
         os.system('rm *-kernel.dat')
 
     if ax is None:
-        fig = Figure()
-        ax  = fig.add_subplot(111)
+        fig, ax = plt.subplots()
         fig.set_size_inches(4, 11)
         ax.lines = []
+
 
     ## get the kernel.dat files with modeplotqt
     #os.system('echo "j" > input')

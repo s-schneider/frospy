@@ -12,7 +12,7 @@ from __future__ import absolute_import, print_function
 from obspy.core.util import AttribDict
 
 import numpy as np
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import matplotlib as mpl
 from mpl_toolkits.basemap import Basemap
@@ -896,14 +896,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
     if show_colorbar is True:
         cb = fig.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
                           orientation='horizontal', extend='both')
-        if html is True:
-            pass
-            # cb = plt.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
-            #                   orientation='horizontal', extend='both')
-            # cb.clim(s.min(), s.max())
-        else:
-
-            cb.set_clim(s.min(), s.max())
+        cb.clim(s.min(), s.max())
 
         cb.ax.set_title(r'$\mu$Hz', x=1.2, y=-0.7)
 
@@ -958,10 +951,8 @@ def _plot_coeffs(coeffs, errors, mode_name, label, modes, kind,
 
     if mode_name not in modes:
         modes[mode_name] = AttribDict()
-        # if html is False:
-        #     fig = plt.figure()
-        # else:
-        fig = mpl.figure.Figure()
+        fig = plt.figure()
+
         gs = gridspec.GridSpec(N, 1)
 
         # Try to get mode name
@@ -1000,11 +991,9 @@ def _plot_coeffs(coeffs, errors, mode_name, label, modes, kind,
             axes[degree] = AttribDict()
             axes[degree]['xmax'] = 0
             axes[degree]['ymax'] = 0
-            # if html is False:
-            #     axes[degree]['ax'] = plt.subplot2grid((N, 2), (a_i, 0),
-            #                                           colspan=2)
-            # else:
-            axes[degree]['ax'] = fig.add_subplot(gs[a_i, :])
+            axes[degree]['ax'] = plt.subplot2grid((N, 2), (a_i, 0),
+                                                  colspan=2)
+            # axes[degree]['ax'] = fig.add_subplot(gs[a_i, :])
             axes[degree]['ax'].set_title(r"$s=%i$" % int(degree))
             a_i += 1
 

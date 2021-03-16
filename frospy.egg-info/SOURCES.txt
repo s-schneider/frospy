@@ -35,8 +35,12 @@ frospy/core/splittingfunc/splittingfunc.py
 frospy/core/splittingfunc/write.py
 frospy/data/__init__.py
 frospy/data/AD/__init__.py
+frospy/data/AD/earthquakes_extended.xml
 frospy/data/AD/modes-full.json
 frospy/data/SAS/__init__.py
+frospy/data/SAS/new_cat.xml
+frospy/data/SAS/old_cat.xml
+frospy/data/SAS/stations_latlon.xml
 frospy/data/basemap/__init__.py
 frospy/data/basemap/llsvp/__init__.py
 frospy/data/basemap/plates/__init__.py
@@ -44,6 +48,9 @@ frospy/plot/__init__.py
 frospy/plot/branch.py
 frospy/plot/maps.py
 frospy/plot/nmplt.py
+frospy/preprocessing/__init__.py
+frospy/preprocessing/data_correction.py
+frospy/preprocessing/inspect.py
 frospy/spectrum/__init__.py
 frospy/spectrum/app.py
 frospy/spectrum/controllers.py

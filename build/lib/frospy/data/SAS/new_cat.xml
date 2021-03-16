@@ -1,0 +1,1111 @@
+<?xml version='1.0' encoding='utf-8'?>
+<q:quakeml xmlns:q="http://quakeml.org/xmlns/quakeml/1.2" xmlns="http://quakeml.org/xmlns/bed/1.2">
+  <eventParameters publicID="smi:local/594ab816-66ce-4228-8811-0688516beff9">
+    <event publicID="smi:local/104154d1-a49c-4755-bc59-f9306ddf6e10">
+      <description>
+        <text>201808190019A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>FIJI ISLANDS REGION</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>081918A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/db64d4e9-9509-4d81-869d-860266e02b1d">
+        <time>
+          <value>2018-08-19T00:19:59.010000Z</value>
+        </time>
+        <latitude>
+          <value>-17.86</value>
+        </latitude>
+        <longitude>
+          <value>-177.85</value>
+        </longitude>
+        <depth>
+          <value>555000.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/87ec94d2-8ddb-4012-9557-8aa02158c1d4">
+        <mag>
+          <value>8.2</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/a341d249-5bfa-499a-a59a-43f0e8f70a6d">
+        <mag>
+          <value>8.2</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/9601d4ce-44f6-457a-a72f-b7a88b59b837">
+        <mag>
+          <value>0.0</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/57d4a3a8-d538-4fef-8b6d-dcc69dd93629">
+        <momentTensor publicID="smi:local/d1fe9fef-fbff-4dd1-815d-c1c25eba6821">
+          <scalarMoment>
+            <value>2.52e+28</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>-1.46e+28</value>
+              <uncertainty>5e+25</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>-1.16e+27</value>
+              <uncertainty>6e+25</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>1.58e+28</value>
+              <uncertainty>7e+25</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>-4e+27</value>
+              <uncertainty>4e+25</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>-1.86e+28</value>
+              <uncertainty>5e+25</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>7.19e+27</value>
+              <uncertainty>6e+25</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+    <event publicID="smi:local/994cbcd9-3962-4ccf-a632-733f5d99f6ac">
+      <description>
+        <text>201709080449A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>NEAR COAST OF CHIAPAS, M</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>090817A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/b685792e-629a-4941-ab4b-902c90f4d274">
+        <time>
+          <value>2017-09-08T04:49:44.160000Z</value>
+        </time>
+        <latitude>
+          <value>15.34</value>
+        </latitude>
+        <longitude>
+          <value>-94.62</value>
+        </longitude>
+        <depth>
+          <value>50200.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/88e44b4b-879f-4b24-bcea-6c06e40ceb87">
+        <mag>
+          <value>8.2</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/b0193e99-be08-47f0-ab36-68f6c5941d54">
+        <mag>
+          <value>8.1</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/3a6305d1-fd92-44d0-95a1-852c66900369">
+        <mag>
+          <value>0.0</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/dbbb5fba-dd78-470b-ae83-cf73747d1f4c">
+        <momentTensor publicID="smi:local/1639dabd-ff19-44c4-91b0-d4f3195c9593">
+          <scalarMoment>
+            <value>2.65e+28</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>-1.09e+28</value>
+              <uncertainty>5e+25</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>3.46e+27</value>
+              <uncertainty>3e+25</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>7.46e+27</value>
+              <uncertainty>3e+25</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>1.53e+28</value>
+              <uncertainty>1.9e+26</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>-1.82e+28</value>
+              <uncertainty>2.2e+26</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>-6.61e+27</value>
+              <uncertainty>2e+25</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+    <event publicID="smi:local/0e20d98e-10a7-4bc3-86d7-a9276bc56070">
+      <description>
+        <text>201612251422A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>SOUTHERN CHILE</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>122516A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/a0ac8a4a-9f25-4db4-b25e-b69557805512">
+        <time>
+          <value>2016-12-25T14:22:38.030000Z</value>
+        </time>
+        <latitude>
+          <value>-43.41</value>
+        </latitude>
+        <longitude>
+          <value>-74.43</value>
+        </longitude>
+        <depth>
+          <value>32800.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/2d758db3-ad81-455a-83ca-10db44779cc4">
+        <mag>
+          <value>7.6</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/d59feb61-5f2a-405c-b554-ec366ee02b9b">
+        <mag>
+          <value>7.6</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/b1310aca-d82f-4712-b74a-26361e3b666c">
+        <mag>
+          <value>0.0</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/223d79cc-f469-4696-b5ae-ffa0aee09dac">
+        <momentTensor publicID="smi:local/14ea08a8-b2b8-484d-8912-0c67e230d2dd">
+          <scalarMoment>
+            <value>2.84e+27</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>1.75e+27</value>
+              <uncertainty>6e+24</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>-2.9e+25</value>
+              <uncertainty>4e+24</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>-1.73e+27</value>
+              <uncertainty>4e+24</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>1.06e+26</value>
+              <uncertainty>3e+25</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>-2.24e+27</value>
+              <uncertainty>3.2e+25</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>-3.4e+25</value>
+              <uncertainty>3e+24</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+    <event publicID="smi:local/76fdf3ab-4a6a-4901-a41b-53731f954b6c">
+      <description>
+        <text>201607292118A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>MARIANA ISLANDS</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>072916A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/76dbe152-a2cb-4d58-8832-9b3f0b6f7a03">
+        <time>
+          <value>2016-07-29T21:18:33.590000Z</value>
+        </time>
+        <latitude>
+          <value>18.5</value>
+        </latitude>
+        <longitude>
+          <value>145.7</value>
+        </longitude>
+        <depth>
+          <value>208900.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/87e2f4bb-e2bc-42a7-9855-94749e41a5ee">
+        <mag>
+          <value>7.7</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/b6c37a12-4e68-41b1-913a-2357e03943a2">
+        <mag>
+          <value>7.7</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/f44d9581-5d4e-4063-8ad2-34a24d27ace7">
+        <mag>
+          <value>0.0</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/db5a30f9-50ee-4621-bf5e-58bb2244c313">
+        <momentTensor publicID="smi:local/93aec9fe-b170-48e0-8e76-2cf62caba7c3">
+          <scalarMoment>
+            <value>4.74e+27</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>3.36e+27</value>
+              <uncertainty>1e+25</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>4.05e+26</value>
+              <uncertainty>9e+24</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>-3.77e+27</value>
+              <uncertainty>8e+24</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>-2.41e+27</value>
+              <uncertainty>7e+24</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>1.8e+27</value>
+              <uncertainty>8e+24</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>7.85e+26</value>
+              <uncertainty>7e+24</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+    <event publicID="smi:local/07ff2c34-c06c-464c-8c2a-18e5854d378b">
+      <description>
+        <text>201510260909A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>HINDU KUSH REGION, AFGHA</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>102615A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/94bd4252-86bf-42bc-9a18-d82b5b51bb72">
+        <time>
+          <value>2015-10-26T09:09:46.590000Z</value>
+        </time>
+        <latitude>
+          <value>36.55</value>
+        </latitude>
+        <longitude>
+          <value>70.42</value>
+        </longitude>
+        <depth>
+          <value>209400.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/9f68e3c5-3716-4594-a604-d281457d3d02">
+        <mag>
+          <value>7.5</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/8b98a495-0319-43db-b71c-41497624a7b6">
+        <mag>
+          <value>7.5</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/7a893379-8e13-41f0-a5c6-3ae81bb8a2df">
+        <mag>
+          <value>0.0</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/43f11dd6-ace5-4ac9-8d00-d7fe70b72c82">
+        <momentTensor publicID="smi:local/f03e7b4e-5a40-4b69-9c40-c7a5805a55df">
+          <scalarMoment>
+            <value>2.24e+27</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>1.53e+27</value>
+              <uncertainty>6e+24</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>-1.43e+27</value>
+              <uncertainty>5e+24</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>-1.01e+26</value>
+              <uncertainty>5e+24</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>1.6e+27</value>
+              <uncertainty>5e+24</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>-4.37e+26</value>
+              <uncertainty>4e+24</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>2.77e+26</value>
+              <uncertainty>4e+24</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+    <event publicID="smi:local/304a717d-d4c9-4fb0-928b-7257a65dd06b">
+      <description>
+        <text>201509162254A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>NEAR COAST OF CENTRAL CH</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>091615A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/18cf5d01-3558-486a-8018-e4705851582a">
+        <time>
+          <value>2015-09-16T22:55:22.880000Z</value>
+        </time>
+        <latitude>
+          <value>-31.13</value>
+        </latitude>
+        <longitude>
+          <value>-72.09</value>
+        </longitude>
+        <depth>
+          <value>17400.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/e73e763b-37fc-427d-bea5-98c3171d5018">
+        <mag>
+          <value>8.3</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/1e6737e9-f921-4050-abe1-eae4307a0a1f">
+        <mag>
+          <value>8.3</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/cc4783fe-18d3-4f0b-b42a-10160d67a61c">
+        <mag>
+          <value>0.0</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/6ec73205-8d6a-48ea-98ab-5e1f6f6e589f">
+        <momentTensor publicID="smi:local/f9b3bfeb-571b-43f0-82f9-1d32d7078caa">
+          <scalarMoment>
+            <value>3.23e+28</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>1.95e+28</value>
+              <uncertainty>8e+25</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>-4.4e+26</value>
+              <uncertainty>4e+25</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>-1.91e+28</value>
+              <uncertainty>5e+25</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>7.42e+27</value>
+              <uncertainty>5.5e+26</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>-2.48e+28</value>
+              <uncertainty>7.9e+26</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>9.4e+26</value>
+              <uncertainty>3e+25</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+    <event publicID="smi:local/6cc9c17c-9710-4e31-aafc-f0d8d29a944f">
+      <description>
+        <text>201505301123A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>BONIN ISLANDS, JAPAN REG</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>053015A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/6d0d0f7e-c0f7-4191-85fe-ae2381152617">
+        <time>
+          <value>2015-05-30T11:23:11.040000Z</value>
+        </time>
+        <latitude>
+          <value>27.94</value>
+        </latitude>
+        <longitude>
+          <value>140.56</value>
+        </longitude>
+        <depth>
+          <value>680700.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/4cde9d75-04a7-4840-a46a-753b65e3feaf">
+        <mag>
+          <value>7.9</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/45aa4726-f853-44a7-b99d-0f4eca7e85c1">
+        <mag>
+          <value>7.8</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/dab040cf-b1f6-43c5-b57d-9cec5cf00ccb">
+        <mag>
+          <value>0.0</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/10e67b8a-6c79-4475-b525-87286a8233bb">
+        <momentTensor publicID="smi:local/e15c5da0-1812-441b-a9f6-ee0540b397df">
+          <scalarMoment>
+            <value>7.65e+27</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>-3.86e+27</value>
+              <uncertainty>1.7e+25</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>-6.57e+26</value>
+              <uncertainty>1.9e+25</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>4.52e+27</value>
+              <uncertainty>2.1e+25</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>-2.87e+27</value>
+              <uncertainty>1.5e+25</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>5.61e+27</value>
+              <uncertainty>1.7e+25</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>1.1e+27</value>
+              <uncertainty>1.9e+25</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+    <event publicID="smi:local/83db8419-1d1b-4c51-83b2-db9b85bebb1b">
+      <description>
+        <text>201505050144A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>NEW BRITAIN REGION, P.N.</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>050515A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/d08e0291-9e23-4bb3-b10e-ec6b39e154af">
+        <time>
+          <value>2015-05-05T01:44:26.560000Z</value>
+        </time>
+        <latitude>
+          <value>-5.32</value>
+        </latitude>
+        <longitude>
+          <value>152.1</value>
+        </longitude>
+        <depth>
+          <value>38300.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/e75c06bc-fe87-4ea7-a3a3-aadf218c3e05">
+        <mag>
+          <value>7.5</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/be0a9365-88d4-4487-a96f-1c617ec18c9f">
+        <mag>
+          <value>7.5</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/4a13fddb-5cb0-4072-a1be-1c0081ff8e76">
+        <mag>
+          <value>0.0</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/0c061478-3812-4c74-a070-3c7be49c4270">
+        <momentTensor publicID="smi:local/eabddd64-d946-41df-b134-168fe68a531f">
+          <scalarMoment>
+            <value>1.94e+27</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>1.7e+27</value>
+              <uncertainty>6e+24</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>-1.63e+27</value>
+              <uncertainty>4e+24</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>-6.7e+25</value>
+              <uncertainty>4e+24</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>8.24e+26</value>
+              <uncertainty>1.8e+25</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>1.2e+25</value>
+              <uncertainty>2e+25</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>-5.48e+26</value>
+              <uncertainty>3e+24</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+    <event publicID="smi:local/23750e16-5b2b-4fd1-beaa-935712506852">
+      <description>
+        <text>201311170904A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>SCOTIA SEA</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>111713A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/e18edc64-867f-4a8d-9a04-0f26a24bc0b4">
+        <time>
+          <value>2013-11-17T09:05:40.980000Z</value>
+        </time>
+        <latitude>
+          <value>-60.49</value>
+        </latitude>
+        <longitude>
+          <value>-45.32</value>
+        </longitude>
+        <depth>
+          <value>23800.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/fd4acfa5-4a5d-4244-9c18-6983d9448bb1">
+        <mag>
+          <value>7.8</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/13203f3e-7d29-4183-afb4-0b8552a4329a">
+        <mag>
+          <value>7.7</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/6c829841-b8f0-454e-84fa-3368e10ad4c5">
+        <mag>
+          <value>0.0</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/454e5506-c3f5-463e-9327-4f653b1bf04f">
+        <momentTensor publicID="smi:local/b5ac1506-ee3b-404d-a57c-96a6b8765e11">
+          <scalarMoment>
+            <value>5.82e+27</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>5.9e+25</value>
+              <uncertainty>1.7e+25</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>1.21e+27</value>
+              <uncertainty>1.5e+25</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>-1.27e+27</value>
+              <uncertainty>1.5e+25</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>1.56e+27</value>
+              <uncertainty>1.15e+26</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>3.95e+27</value>
+              <uncertainty>1.57e+26</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>3.86e+27</value>
+              <uncertainty>1.3e+25</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+    <event publicID="smi:local/2d0d2c6c-bedc-41a0-89e1-878eaf7c5aba">
+      <description>
+        <text>201305240544A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>SEA OF OKHOTSK</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>052413A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/c418cf3e-1d78-4b18-b922-f4167e622983">
+        <time>
+          <value>2013-05-24T05:45:08.350000Z</value>
+        </time>
+        <latitude>
+          <value>54.61</value>
+        </latitude>
+        <longitude>
+          <value>153.77</value>
+        </longitude>
+        <depth>
+          <value>611000.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/1a9b48b5-a74b-4ce2-9086-f12b7a53a009">
+        <mag>
+          <value>8.3</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/3e829430-760f-4e2b-ad5e-379df153c054">
+        <mag>
+          <value>8.4</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/0ca10760-01d0-4056-9f7e-cc9906c82d66">
+        <mag>
+          <value>7.5</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/360a059c-43c6-4689-8c59-e3cb580b54cf">
+        <momentTensor publicID="smi:local/d319d58d-b706-4128-9dad-45627f5f6819">
+          <scalarMoment>
+            <value>3.95e+28</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>-1.67e+28</value>
+              <uncertainty>9e+25</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>3.82e+27</value>
+              <uncertainty>1e+26</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>1.28e+28</value>
+              <uncertainty>1.2e+26</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>-7.84e+27</value>
+              <uncertainty>6e+25</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>-3.57e+28</value>
+              <uncertainty>8e+25</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>1.55e+27</value>
+              <uncertainty>1.2e+26</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+    <event publicID="smi:local/5a1e0e67-5ffc-4bf0-85a4-373c976d2f69">
+      <description>
+        <text>201209051442A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>COSTA RICA</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>090512A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/c8c86fb7-9fab-4d39-b616-1ac5cf635b05">
+        <time>
+          <value>2012-09-05T14:42:23.270000Z</value>
+        </time>
+        <latitude>
+          <value>10.0</value>
+        </latitude>
+        <longitude>
+          <value>-85.64</value>
+        </longitude>
+        <depth>
+          <value>29700.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/6df144e4-b8f7-4d53-8c4f-624ec48ec74e">
+        <mag>
+          <value>7.6</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/6e677f15-2afe-4a43-b0c8-24351afdd266">
+        <mag>
+          <value>7.7</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/acbb5bca-206a-4ba8-b028-2f2592dedaa7">
+        <mag>
+          <value>6.8</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/4de9372b-476e-43fa-9854-c9a4f3a3cbf7">
+        <momentTensor publicID="smi:local/c92e1465-339a-481d-9237-0ee8bda408aa">
+          <scalarMoment>
+            <value>3.42e+27</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>1.85e+27</value>
+              <uncertainty>9e+24</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>-1.37e+27</value>
+              <uncertainty>6e+24</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>-4.83e+26</value>
+              <uncertainty>6e+24</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>2.61e+27</value>
+              <uncertainty>5.6e+25</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>-1.16e+27</value>
+              <uncertainty>5e+25</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>8.6e+26</value>
+              <uncertainty>4e+24</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+    <event publicID="smi:local/323a444f-1475-4d81-9759-b374245a520b">
+      <description>
+        <text>201208311247A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>PHILIPPINE ISLANDS REGIO</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>083112A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/3c126b20-57ed-4d2c-885b-0b89068b3ec2">
+        <time>
+          <value>2012-08-31T12:47:43.800000Z</value>
+        </time>
+        <latitude>
+          <value>10.85</value>
+        </latitude>
+        <longitude>
+          <value>126.97</value>
+        </longitude>
+        <depth>
+          <value>45200.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/8748beb4-9ac8-456b-85df-523622e73880">
+        <mag>
+          <value>7.6</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/5d938d2e-b8c1-428d-886f-9c30d91540fc">
+        <mag>
+          <value>7.6</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/26e4b240-4bbe-4919-86fe-1f1bf93a2215">
+        <mag>
+          <value>7.2</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/6ddb4c7b-5e36-44da-b21f-626d3d369a5f">
+        <momentTensor publicID="smi:local/3afa42aa-374b-4227-bf0a-3fc160445b72">
+          <scalarMoment>
+            <value>3.37e+27</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>2.97e+27</value>
+              <uncertainty>1.2e+25</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>5.31e+26</value>
+              <uncertainty>7e+24</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>-3.5e+27</value>
+              <uncertainty>8e+24</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>-7.51e+26</value>
+              <uncertainty>3e+25</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>-4.27e+26</value>
+              <uncertainty>2.6e+25</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>-1.47e+26</value>
+              <uncertainty>5e+24</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+    <event publicID="smi:local/c085a7d2-121a-4baf-8c1a-6a3d117181b8">
+      <description>
+        <text>201208270437A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>OFF COAST OF CENTRAL AME</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>082712A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/480154e8-7219-41e4-b2f8-4862dce216f9">
+        <time>
+          <value>2012-08-27T04:37:39.500000Z</value>
+        </time>
+        <latitude>
+          <value>12.02</value>
+        </latitude>
+        <longitude>
+          <value>-89.17</value>
+        </longitude>
+        <depth>
+          <value>12000.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/d57be099-1239-42b5-a684-9c242040c174">
+        <mag>
+          <value>7.3</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/627301a6-33fe-4d1e-9c33-a5680ddf6c1f">
+        <mag>
+          <value>7.4</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/bad22b4b-5e43-4c47-8e77-8a994ee0b3b0">
+        <mag>
+          <value>6.0</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/e4c494e1-724d-46e6-afd9-f2b97e886a13">
+        <momentTensor publicID="smi:local/193e7049-e728-4ff4-985a-8d889ae23296">
+          <scalarMoment>
+            <value>1.27e+27</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>6.25e+26</value>
+              <uncertainty>2e+24</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>-5.34e+26</value>
+              <uncertainty>2e+24</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>-9.2e+25</value>
+              <uncertainty>2e+24</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>9.82e+26</value>
+              <uncertainty>1.9e+25</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>-5.17e+26</value>
+              <uncertainty>2.1e+25</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>1.8e+26</value>
+              <uncertainty>2e+24</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+    <event publicID="smi:local/8e76fa87-20b0-410a-98f5-035d60b96504">
+      <description>
+        <text>201208140259A</text>
+        <type>earthquake name</type>
+      </description>
+      <description>
+        <text>SEA OF OKHOTSK</text>
+        <type>region name</type>
+      </description>
+      <description>
+        <text>081412A</text>
+        <type>earthquake name</type>
+      </description>
+      <origin publicID="smi:local/c331cb1e-50bb-4eb8-8212-900486058836">
+        <time>
+          <value>2012-08-14T02:59:50.900000Z</value>
+        </time>
+        <latitude>
+          <value>49.97</value>
+        </latitude>
+        <longitude>
+          <value>145.7</value>
+        </longitude>
+        <depth>
+          <value>598200.0</value>
+        </depth>
+      </origin>
+      <magnitude publicID="smi:local/cdf71acd-c6a2-40fe-808c-96b922dc16d0">
+        <mag>
+          <value>7.7</value>
+        </mag>
+        <type>Mw</type>
+      </magnitude>
+      <magnitude publicID="smi:local/d6a02034-1b4d-4507-9f25-769ee6b64175">
+        <mag>
+          <value>7.7</value>
+        </mag>
+        <type>Ms</type>
+      </magnitude>
+      <magnitude publicID="smi:local/43c7b6e1-e255-428e-87db-2dfe4801c987">
+        <mag>
+          <value>6.9</value>
+        </mag>
+        <type>Mb</type>
+      </magnitude>
+      <focalMechanism publicID="smi:local/286f293f-6542-4508-9f9a-d9ccef9d356c">
+        <momentTensor publicID="smi:local/56ff47d9-16f9-4fc8-9a9a-ea4fbe6bb93a">
+          <scalarMoment>
+            <value>4.84e+27</value>
+          </scalarMoment>
+          <tensor>
+            <Mrr>
+              <value>3.84e+27</value>
+              <uncertainty>1.4e+25</uncertainty>
+            </Mrr>
+            <Mtt>
+              <value>-1.87e+27</value>
+              <uncertainty>1.7e+25</uncertainty>
+            </Mtt>
+            <Mpp>
+              <value>-1.97e+27</value>
+              <uncertainty>1.5e+25</uncertainty>
+            </Mpp>
+            <Mrt>
+              <value>-2.74e+27</value>
+              <uncertainty>1.3e+25</uncertainty>
+            </Mrt>
+            <Mrp>
+              <value>-5.08e+26</value>
+              <uncertainty>1.2e+25</uncertainty>
+            </Mrp>
+            <Mtp>
+              <value>-2.15e+27</value>
+              <uncertainty>1.6e+25</uncertainty>
+            </Mtp>
+          </tensor>
+        </momentTensor>
+      </focalMechanism>
+    </event>
+  </eventParameters>
+</q:quakeml>

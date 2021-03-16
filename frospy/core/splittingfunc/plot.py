@@ -92,7 +92,7 @@ def sens_kernel_branch(modes, colormap='rainbow', kernel='vs', savefig=False,
 def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
                 legend_show=True, color='auto', kernel='all',
                 lw_boundaries=0.1, linewidth=1, fontsize=8,
-                ticks=True, kind="cst", bbox_to_anchor=(0.6, 1.2),
+                ticks=True, kind="cst", _bbox=None,
                 **kwargs):
     """
     :params mode: frospy.core.modes.Mode
@@ -286,9 +286,7 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
             legend.append(r'$q_\kappa$')
 
     if legend_show and ticks:
-        if 'bbox_to_anchor' in kwargs:
-            _bbox = kwargs['bbox_to_anchor']
-        else:
+        if _bbox is None:
             _bbox = (-0.08, -0.03)
         ax.legend(legend_ax, legend, frameon=False,
                   bbox_to_anchor=_bbox,
@@ -296,10 +294,11 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
                   fontsize=fontsize)
 
     if legend_show and not ticks:
+        if _bbox is None:
+            _bbox = (0.6, 1.2)
         ax.legend(legend_ax, legend, ncol=3,
                   handlelength=0.3, handletextpad=0.1, columnspacing=0.25,
-                  loc='upper center', bbox_to_anchor=bbox_to_anchor,
-                  frameon=False,
+                  loc='upper center', bbox_to_anchor=_bbox, frameon=False,
                   fontsize=fontsize, borderpad=0)
 
     if not ticks:

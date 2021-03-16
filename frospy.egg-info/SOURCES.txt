@@ -38,6 +38,7 @@ frospy/data/AD/__init__.py
 frospy/data/AD/earthquakes_extended.xml
 frospy/data/AD/modes-full.json
 frospy/data/SAS/__init__.py
+frospy/data/SAS/cst.sqlite3
 frospy/data/SAS/new_cat.xml
 frospy/data/SAS/old_cat.xml
 frospy/data/SAS/stations_latlon.xml

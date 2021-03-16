@@ -258,6 +258,8 @@ def plot_spectrum(main, gui=False):
         _ax.xaxis.label.set_size(main.fs)
         _ax.yaxis.label.set_size(main.fs)
 
+    if main.ylim is not None:
+        ax.amp.set_ylim(main.ylim)
     main.rfig = fig
     main.rax = ax
     main.seg_ax = seg_ax
@@ -659,8 +661,8 @@ def plot_gcp_map(slat, slon, elat, elon, cmt, cmt_id, prox, ax,
 
 def plot_magnitude(cmt, ax):
     ax.axis('off')
-    if cmt and len(cmt) > 6:
-        ax.set_title('Magnitudes')
+    if cmt and len(cmt) >= 6:
+        ax.set_title('Centroid Moment Tensor')
         ax.annotate(r"$M_W$: %.1f" % cmt[6], xy=(0.1, 0.8))
         ax.annotate(r"$M_0$: %.2E dyne-cm" % cmt[7], xy=(0.1, 0.4))
         ax.annotate(r"Depth: %.2f km" % cmt[8], xy=(0.1, 0.0))

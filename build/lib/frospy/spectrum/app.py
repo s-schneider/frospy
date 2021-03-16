@@ -159,7 +159,8 @@ def get_defaults(args):
                 'line_width': 0.825,
                 'border_width': 1,
                 'tick_width': 1,
-                'fig_abc': False
+                'fig_abc': False,
+                'ylim': None
                 }
 
     fs = 10

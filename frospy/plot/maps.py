@@ -493,35 +493,15 @@ def gcpmap_c2py(slat, slon, elat, elon, axis=None, cmt=None,
     ax.plot(slon, slat, transform=ccrs.PlateCarree(), marker='v', color=scolor,
             zorder=10, mew=marker_size)
 
-    # Plotting event
-    # if cmt:
-    # axins = inset_axes(ax, .8, .8)
-    # # xmax = axis.get_xlim()[1]
-    # # ymax = axis.get_ylim()[1]
-    # # xpt, ypt = m(elon, elat)
-    # h = .17
-    # w = .075
-    # # xpt = xpt/xmax - w/2.
-    # # ypt = ypt/ymax - h/2.
-    # ip = InsetPosition(axis, [elon, elat, w, h])
-    # axins.set_axes_locator(ip)
-    # xpt = elon
-    # ypt = elat
-    # xmax = axis.get_xlim()[1]
-    # ymax = axis.get_ylim()[1]
-    # h = .17
-    # w = .075
-    # xpt = xpt/xmax - w/2.
-    # ypt = ypt/ymax - h/2.
-
     # Currently plotted as part of the main plot, [0.88, 0.05, 0.1, 0.1] refers
     # to the the coordinate system of the main figure
 
-    sub_ax = plt.axes([0.55, 0.23, 0.1, 0.1], projection=ccrs.PlateCarree())
-    sub_ax.outline_patch.set_alpha(0.0)
-    sub_ax.background_patch.set_fill(False)
-    if cmt:
-        beachball(cmt, axis=sub_ax)
+    # The Beachball is slightly too big, needs fixing
+    # sub_ax = plt.axes([0.55, 0.23, 0.1, 0.1], projection=ccrs.PlateCarree())
+    # sub_ax.outline_patch.set_alpha(0.0)
+    # sub_ax.background_patch.set_fill(False)
+    # if cmt:
+    #     beachball(cmt, axis=sub_ax)
 
     # else:
     ax.plot(elon, elat, transform=ccrs.PlateCarree(), marker='*',

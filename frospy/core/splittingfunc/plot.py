@@ -879,7 +879,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
     if show_colorbar is True:
         cb = fig.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
                           orientation='horizontal', extend='both')
-        cb.clim(s.min(), s.max())
+        cb.set_clim(s.min(), s.max())
 
         cb.ax.set_title(r'$\mu$Hz', x=1.2, y=-0.7)
 

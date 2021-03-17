@@ -18,10 +18,36 @@ frospy/docs/*synctex.gz
 frospy/docs/*toc
 tmp_*
 
+<<<<<<< HEAD
 frospy/data/cnn
 frospy/AD/stations.xml
+=======
+frospy/data/AD/*dat
+frospy/data/AD/omega*
+frospy/data/AD/noise*
+frospy/data/AD/cmt*
+frospy/data/AD/AD*
+
+frospy/data/CB
+frospy/data/DE
+frospy/data/HT
+frospy/data/MW
+frospy/data/PK
+frospy/data/QM1
+frospy/data/REM
+frospy/data/RR
+frospy/data/S20RTS
+frospy/data/S40RTS
+frospy/data/TCB
+frospy/data/TZ
+frospy/data/WZM
+frospy/data/cnn
+>>>>>>> 5b3908056136718c063f379cfecd1ae3ab5a0e90
 
 build_commands.sh
 build
 dist
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5b3908056136718c063f379cfecd1ae3ab5a0e90

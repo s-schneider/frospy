@@ -19,6 +19,7 @@ frospy/docs/*toc
 tmp_*
 
 frospy/data/cnn
+frospy/AD/stations.xml
 
 build_commands.sh
 build

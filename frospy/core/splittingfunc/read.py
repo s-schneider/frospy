@@ -1605,4 +1605,7 @@ def get_modes4cst(modes):
             header = {'n': -1, 'type': 'CC', 'l': -1, 'name': m,
                       'sens': None, 'freq': 0, 'Q': 0}
             modes_cc += Mode(header)
+    else:
+        modes_cc = None
+        modes_ccin = None
     return modes_sc, modes_cc, modesin, modes_ccin

@@ -618,9 +618,8 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
         fig.set_size_inches(8, 4)
     else:
         if html is False:
-            fig = Figure(**fig_config)
+            fig = plt.figure(**fig_config)
         else:
-            # print("html is ", html)
             fig = mpl.figure.Figure(**fig_config)
 
     if 'ax' in kwargs:
@@ -879,7 +878,8 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
     if show_colorbar is True:
         cb = fig.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
                           orientation='horizontal', extend='both')
-        cb.clim(s.min(), s.max())
+        cb.vmin = s.min()
+        cb.vmax = s.max()
 
         cb.ax.set_title(r'$\mu$Hz', x=1.2, y=-0.7)
 
@@ -894,8 +894,10 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
             fname = '%s_%s' % (mode.name, kind)
             fig.savefig('%s.png' % fname, orientation='landscape', dpi=400,
                         bbox_inches="tight", pad_inches=0.01, transparent=True)
-
-    return im, fig
+    if html is True:
+        return im, fig
+    else:
+        return
 
 
 def _plot_coeffs(coeffs, errors, mode_name, label, modes, kind,

@@ -529,7 +529,6 @@ class Set(object):
                 axes = np.hstack([np.array([None]), axes])
 
             for ax, sf in zip(axes.flat[1:-1], self.splitf):
-                from IPython import embed; embed()
                 if (
                     kind == "cst" or
                     kind == "dst" and sf.stats.name != "AD"

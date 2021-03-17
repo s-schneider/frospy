@@ -16,9 +16,13 @@ frospy/docs/*fls
 frospy/docs/*log
 frospy/docs/*synctex.gz
 frospy/docs/*toc
+<<<<<<< HEAD
 tmp_*
 
+=======
+>>>>>>> b9e96548a66cd2ccc34424d81836749bb339e08d
 frospy/data/cnn
+tmp_*
 
 build_commands.sh
 build

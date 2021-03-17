@@ -16,6 +16,7 @@ frospy/docs/*fls
 frospy/docs/*log
 frospy/docs/*synctex.gz
 frospy/docs/*toc
+frospy/data/cnn
 tmp_*
 
 build_commands.sh

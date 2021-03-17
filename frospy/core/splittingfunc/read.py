@@ -1600,12 +1600,16 @@ def get_modes4cst(modes):
     modes_all = read_modes()
     for m in sc:
         modes_sc += modes_all.select(name=m)
+
+    if len(modes) == 1:
+        cc = None
+        modes_cc = None
+        modes_ccin = None
+
     if cc is not None:
         for m in cc:
             header = {'n': -1, 'type': 'CC', 'l': -1, 'name': m,
                       'sens': None, 'freq': 0, 'Q': 0}
             modes_cc += Mode(header)
-    else:
-        modes_cc = None
-        modes_ccin = None
+
     return modes_sc, modes_cc, modesin, modes_ccin

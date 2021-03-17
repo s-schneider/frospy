@@ -97,7 +97,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
             # return
 
     if verbose is True:
-        print(cfile, sc, cc, modesin, modes_ccin)
+        print(cfile, modesin, modes_ccin)
 
     cst, dst, cst_errors, dst_errors = None, None, None, None
     if cfile == 'AD':

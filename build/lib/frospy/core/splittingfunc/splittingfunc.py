@@ -401,6 +401,7 @@ class SplittingFunc(object):
         return im_cst, im_dst, figs
 
     def plot(self, savefig=False, smin=None, smax=None, colormap='red',
+             return_ax=False,
              **kwargs):
 
         modes_cst = AttribDict()
@@ -466,8 +467,13 @@ class SplittingFunc(object):
                 fig.set_size_inches(12, 8)
                 fig.savefig('%s.ps' % fname, orientation='landscape',
                             bbox_inches='tight')
+        else:
+            plt.show()
 
-        return modes_cst, modes_dst
+        if return_ax is True:
+            return modes_cst, modes_dst
+        else:
+            return
 
 
 def _calc_SH_matrix(coeffs, smin, smax):

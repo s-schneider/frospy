@@ -31,7 +31,7 @@ from frospy.util.base import (chunking_list, split_digit_nondigit,
 from frospy import data as frospydata
 
 from frospy.core.modes import read as read_modes
-from frospy.core.modes import Modes, Mode, format_name
+from frospy.core.modes import Modesde, format_name
 from frospy.core.database.query import cst_query
 from frospy.core.database.write import _write_cst_coeffs
 
@@ -768,9 +768,9 @@ def read_cst_AD(modesin, modes_ccin, file_name):
 
 
 def read_cst_AD_json(modes, modes_cc, file_name="AD_cst.json"):
-    path = "%s/AD/%s" % (frospydata.__path__[0], file_name)
+    # path = "%s/AD/%s" % (frospydata.__path__[0], file_name)
 
-    with open(path, 'r') as fh:
+    with open(file_name, 'r') as fh:
         data = json.load(fh)
 
     mnames = get_mode_names(modes, modes_cc)

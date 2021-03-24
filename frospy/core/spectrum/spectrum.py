@@ -454,9 +454,29 @@ class Spectrum(object):
             ax.yaxis.set_ticks([0])
         if ticks:
             ax.yaxis.set_ticks(ticks)
-        ax.set_xlim(f[startlabel], f[endlabel+1])
+        ax.set_xlim(f[startlabel], f[endlabel + 1])
 
         return ax
+
+    def get_spectrum(self, fw1, fw2, part='Amplitude',
+                     normalize=False):
+
+        startlabel = freq_index(fw1, self.stats.delomeg)
+        endlabel = freq_index(fw2, self.stats.delomeg)
+
+        # Set freq axis
+        f = self.stats.freq
+
+        # Plot data
+        Fxx = list(self.data.fft.values())[0]
+        y = get_part(Fxx[startlabel:endlabel + 1], part)
+        if normalize is True:
+            ynorm = max(y)
+        else:
+            ynorm = 1
+
+        y = y / ynorm
+        return f[startlabel:endlabel + 1], y
 
     def flabel(self, f):
         return freq_index(f, self.stats.delomeg)

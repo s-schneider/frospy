@@ -31,7 +31,7 @@ from frospy.util.base import (chunking_list, split_digit_nondigit,
 from frospy import data as frospydata
 
 from frospy.core.modes import read as read_modes
-from frospy.core.modes import Modes, format_name
+from frospy.core.modes import Modes, Mode, format_name
 from frospy.core.database.query import cst_query
 from frospy.core.database.write import _write_cst_coeffs
 

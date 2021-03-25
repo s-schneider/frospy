@@ -394,6 +394,7 @@ class Spectrum(object):
     def plot(self, fw1, fw2, part='Amplitude', ax=None, width=0.825,
              cmap='rainbow', xlabel=None, ylabel=None, dlabel=None,
              normalize=False, ticks=None, cmap_highlight=None,
+             color='k',
              **plotargs):
 
         if ax is None:
@@ -417,7 +418,7 @@ class Spectrum(object):
             ynorm = 1
 
         y = y / ynorm
-        ax.plot(f[startlabel:endlabel+1], y, linestyle='solid', color='black',
+        ax.plot(f[startlabel:endlabel+1], y, linestyle='solid', color=color,
                 linewidth=width, label=dlabel, **plotargs)
 
         # Plot synthetics

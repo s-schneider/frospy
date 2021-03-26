@@ -217,9 +217,9 @@ def _read_cst_file(cfile, setup=None):
 
 def read_setup_stats(setup, modes_dir):
     # Read mode files
+    modes_scin_dst = None
     if setup is not None:
         modesin, modes_ccin = setup.get_modes_in()
-        modes_scin_dst = None
         if hasattr(setup, 'get_modes_in_dst'):
             if setup.get_modes_in_dst() is not None:
                 modes_scin_dst = setup.get_modes_in_dst()

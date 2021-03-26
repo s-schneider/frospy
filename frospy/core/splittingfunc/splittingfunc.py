@@ -913,11 +913,11 @@ def build_deg_dependent_damp(setup, modes='all', degs='all', function='linear',
     return mdamp
 
 
-def calc_Q(mode, fc, cst, err=None):
+def calc_Q(mode, fc, ImC00, err=None):
     if err is None:
         _Q = ((mode.freq * 1e3) / (2 * mode.Q)) + \
-            1. / np.sqrt(4. * np.pi) * cst
+            1. / np.sqrt(4. * np.pi) * ImC00
     else:
         _Q = ((mode.freq * 1e3) / (2 * mode.Q)) + \
-            1. / np.sqrt(4. * np.pi) * (cst + err)
+            1. / np.sqrt(4. * np.pi) * (ImC00 + err)
     return 0.5 * fc / _Q

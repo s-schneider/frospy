@@ -1856,3 +1856,7 @@ def convrate(x, L=None, i=-1):
     else:
         c = abs(x[i-1] - L) / abs(x[i-2] - L)
     return c
+
+
+def split2chars(word):
+    return [char for char in word]

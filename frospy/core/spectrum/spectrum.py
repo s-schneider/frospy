@@ -505,7 +505,7 @@ def create_header(trace, tw_start, tw_end, taper):
     if power < 16:
         power = 16
     maxdata = np.power(2, power)  # len(trace.data)
-    indvec = np.arange(1, maxdata+1)
+    indvec = np.arange(maxdata)
     delomeg = 2. * np.pi / (maxdata * trace.stats.delta)
     f = 1000. * indvec * delomeg / (2. * np.pi)
 

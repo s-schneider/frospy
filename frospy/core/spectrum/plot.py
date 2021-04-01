@@ -387,13 +387,14 @@ def init_gcpmap(gs, lon1, lon2):
     return ax
 
 
-def plot_modes(spectrum, fw1, fw2, modes, ax, l_height, l_width, fontsize=10):
+def plot_modes(spectrum, fw1, fw2, modes, ax, l_height, l_width, fontsize=10,
+               linewidth=1):
 
     startlabel = spectrum.flabel(fw1)
     endlabel = spectrum.flabel(fw2)
     f = spectrum.stats.freq
-    mode_lines(ax, f[startlabel:endlabel+1], modes, label_height=l_height,
-               label_width=l_width, fontsize=fontsize)
+    mode_lines(ax, f[startlabel:endlabel + 1], modes, label_height=l_height,
+               label_width=l_width, fontsize=fontsize, linewidth=linewidth)
 
 
 def plot_segments(spectrum, segments, fw1, fw2, ax, alpha=0.05,
@@ -603,7 +604,7 @@ def spectrum_label(spectrum):
 
 def mode_lines(ax, xrange, modes, overlap=True,
                label_height=None, label_width=None, print_labels=True,
-               fontsize=10):
+               fontsize=10, linewidth=1):
     xtrans = ax.get_xaxis_transform()
     mode_freqs = []
     mode_labels = []
@@ -613,7 +614,7 @@ def mode_lines(ax, xrange, modes, overlap=True,
             name = r"$_{%s}%s_{%s}$" % (mode.n, mode.type, mode.l)
             mode_labels.append([mode.freq, name])
             mode_freqs.append(mode.freq)
-    axvlines(mode_freqs, ax=ax, linestyle=':', linewidth=1,
+    axvlines(mode_freqs, ax=ax, linestyle=':', linewidth=linewidth,
              color='grey')
     if mode_labels and print_labels is True:
         mode_labels = np.array(mode_labels, dtype=object)

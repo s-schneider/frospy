@@ -474,7 +474,9 @@ class Set(object):
         if 'fig_abc' in kwargs:
             fig_abc = str(kwargs['fig_abc'])
             abc = ['-c', '-b', '-a', 'a', 'b', 'c',
-                   'd', 'e', 'f', 'g', 'h', 'i']
+                   'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+                   'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+                   't', 'u', 'v', 'w', 'x', 'y', 'z']
             abc = iter(abc[abc.index(fig_abc)::])
             fig_abc = True
         else:

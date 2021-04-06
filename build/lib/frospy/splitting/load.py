@@ -7,6 +7,7 @@ from frospy.core.splittingfunc.splittingfunc import get_header
 from frospy.core.splittingfunc.set import Set
 from frospy.core.modes import format_name
 from frospy.core.database.query import db_query
+from frospy.core.setup.settings import read as read_setup
 import os
 
 
@@ -59,7 +60,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
     #     raise IOError(msg)
 
     if type(setup) == str:
-        raise IOError('setup, must be object, not file')
+        setup = read_setup(setup)
         # setup = read_setup(setup)
 
     if format is None and ifile is not None:
@@ -114,7 +115,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
 
     elif format == 'dat':
         if modesin_dir is not None:
-            cst_out = read_cst(ifile, modesin_dir)
+            cst_out = read_cst(cfile=ifile, modes_dir=modesin_dir)
         else:
             cst_out = read_cst(cfile=ifile, modes=modes)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]

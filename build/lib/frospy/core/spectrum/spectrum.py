@@ -394,6 +394,7 @@ class Spectrum(object):
     def plot(self, fw1, fw2, part='Amplitude', ax=None, width=0.825,
              cmap='rainbow', xlabel=None, ylabel=None, dlabel=None,
              normalize=False, ticks=None, cmap_highlight=None,
+             color='k',
              **plotargs):
 
         if ax is None:
@@ -417,7 +418,7 @@ class Spectrum(object):
             ynorm = 1
 
         y = y / ynorm
-        ax.plot(f[startlabel:endlabel+1], y, linestyle='solid', color='black',
+        ax.plot(f[startlabel:endlabel+1], y, linestyle='solid', color=color,
                 linewidth=width, label=dlabel, **plotargs)
 
         # Plot synthetics
@@ -454,9 +455,29 @@ class Spectrum(object):
             ax.yaxis.set_ticks([0])
         if ticks:
             ax.yaxis.set_ticks(ticks)
-        ax.set_xlim(f[startlabel], f[endlabel+1])
+        ax.set_xlim(f[startlabel], f[endlabel + 1])
 
         return ax
+
+    def get_spectrum(self, fw1, fw2, part='Amplitude',
+                     normalize=False):
+
+        startlabel = freq_index(fw1, self.stats.delomeg)
+        endlabel = freq_index(fw2, self.stats.delomeg)
+
+        # Set freq axis
+        f = self.stats.freq
+
+        # Plot data
+        Fxx = list(self.data.fft.values())[0]
+        y = get_part(Fxx[startlabel:endlabel + 1], part)
+        if normalize is True:
+            ynorm = max(y)
+        else:
+            ynorm = 1
+
+        y = y / ynorm
+        return f[startlabel:endlabel + 1], y
 
     def flabel(self, f):
         return freq_index(f, self.stats.delomeg)
@@ -484,7 +505,7 @@ def create_header(trace, tw_start, tw_end, taper):
     if power < 16:
         power = 16
     maxdata = np.power(2, power)  # len(trace.data)
-    indvec = np.arange(1, maxdata+1)
+    indvec = np.arange(maxdata)
     delomeg = 2. * np.pi / (maxdata * trace.stats.delta)
     f = 1000. * indvec * delomeg / (2. * np.pi)
 

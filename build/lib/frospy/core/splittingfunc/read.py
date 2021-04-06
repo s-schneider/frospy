@@ -217,9 +217,9 @@ def _read_cst_file(cfile, setup=None):
 
 def read_setup_stats(setup, modes_dir):
     # Read mode files
+    modes_scin_dst = None
     if setup is not None:
         modesin, modes_ccin = setup.get_modes_in()
-        modes_scin_dst = None
         if hasattr(setup, 'get_modes_in_dst'):
             if setup.get_modes_in_dst() is not None:
                 modes_scin_dst = setup.get_modes_in_dst()
@@ -768,9 +768,9 @@ def read_cst_AD(modesin, modes_ccin, file_name):
 
 
 def read_cst_AD_json(modes, modes_cc, file_name="AD_cst.json"):
-    path = "%s/AD/%s" % (frospydata.__path__[0], file_name)
+    # path = "%s/AD/%s" % (frospydata.__path__[0], file_name)
 
-    with open(path, 'r') as fh:
+    with open(file_name, 'r') as fh:
         data = json.load(fh)
 
     mnames = get_mode_names(modes, modes_cc)
@@ -1600,9 +1600,16 @@ def get_modes4cst(modes):
     modes_all = read_modes()
     for m in sc:
         modes_sc += modes_all.select(name=m)
+
+    if len(modes) == 1:
+        cc = None
+        modes_cc = None
+        modes_ccin = None
+
     if cc is not None:
         for m in cc:
             header = {'n': -1, 'type': 'CC', 'l': -1, 'name': m,
                       'sens': None, 'freq': 0, 'Q': 0}
             modes_cc += Mode(header)
+
     return modes_sc, modes_cc, modesin, modes_ccin

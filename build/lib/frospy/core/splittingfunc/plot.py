@@ -894,10 +894,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
             fname = '%s_%s' % (mode.name, kind)
             fig.savefig('%s.png' % fname, orientation='landscape', dpi=400,
                         bbox_inches="tight", pad_inches=0.01, transparent=True)
-    if html is True:
-        return im, fig
-    else:
-        return
+    return im, fig
 
 
 def _plot_coeffs(coeffs, errors, mode_name, label, modes, kind,

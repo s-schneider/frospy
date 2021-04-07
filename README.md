@@ -38,9 +38,7 @@ Install nmpy
 clone this repo
 ```
 (frospy_env) $ cd into frospy
-(frospy_env) $ chmod 755 install.sh
-(frospy_env) $ chmod 755 update.sh
-(frospy_env) $ ./install.sh
+(frospy_env) $ python3 setup.py install
 ```
 
 start ipython

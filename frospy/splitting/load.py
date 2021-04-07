@@ -19,6 +19,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
          format=None, name='data', damp=None, R=-0.2, db_model=None,
          return_set=False,
          verbose=False, name_overide=False):
+
     """
     param setup: :frospy.core.setup.settings.Setup object:
     param ifile: path to file
@@ -77,6 +78,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             name = name
         else:
             name = db_model
+
         cst_out = read_cst(setup=setup, modes=modes, cfile=ifile,
                            model=db_model)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
@@ -116,6 +118,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
     elif format == 'dat':
         if modesin_dir is not None:
             cst_out = read_cst(cfile=ifile, modes_dir=modesin_dir)
+
         else:
             cst_out = read_cst(cfile=ifile, modes=modes)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
@@ -140,6 +143,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
     # if mode is not defined, it will load all modes from the file,
     # in this case we need to loop over them
     if modes is not None or return_set is False:
+
         return SplittingFunc(header=header, cst=cst, dst=dst,
                              cst_errors=cst_errors, dst_errors=dst_errors)
     else:

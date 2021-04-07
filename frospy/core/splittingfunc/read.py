@@ -88,6 +88,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif modes is not None:
         modes_sc, modes_cc, modesin, modes_ccin = get_modes4cst(modes)
         modes_scin_dst = None
+
     else:
         if not cfile.endswith('sqlite3'):
             print('if cfile not "db", setup or modes_dir has to be given')
@@ -173,7 +174,6 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     else:
         try:
             c, c_tmp, noc = _read_cst_file(cfile, setup)
-
             # Preparing cst and dst files
             cst, dst = get_cst(modes=modesin, modes_cc=modes_ccin,
                                modes_dst=modes_scin_dst, c=c, noc=noc)
@@ -769,6 +769,7 @@ def read_cst_AD(modesin, modes_ccin, file_name):
 
 def read_cst_AD_json(modes, modes_cc, file_name="AD_cst.json"):
     # path = "%s/AD/%s" % (frospydata.__path__[0], file_name)
+
 
     with open(file_name, 'r') as fh:
         data = json.load(fh)

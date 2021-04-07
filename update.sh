@@ -51,4 +51,5 @@ fi
 echo '=============== Updating libraries ======================='
 # ./install.sh
 rm -rf build dist
+
 python setup.py install

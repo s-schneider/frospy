@@ -258,6 +258,8 @@ def plot_spectrum(main, gui=False):
         _ax.xaxis.label.set_size(main.fs)
         _ax.yaxis.label.set_size(main.fs)
 
+    if main.ylim is not None:
+        ax.amp.set_ylim(main.ylim)
     main.rfig = fig
     main.rax = ax
     main.seg_ax = seg_ax
@@ -385,13 +387,14 @@ def init_gcpmap(gs, lon1, lon2):
     return ax
 
 
-def plot_modes(spectrum, fw1, fw2, modes, ax, l_height, l_width, fontsize=10):
+def plot_modes(spectrum, fw1, fw2, modes, ax, l_height, l_width, fontsize=10,
+               linewidth=1):
 
     startlabel = spectrum.flabel(fw1)
     endlabel = spectrum.flabel(fw2)
     f = spectrum.stats.freq
-    mode_lines(ax, f[startlabel:endlabel+1], modes, label_height=l_height,
-               label_width=l_width, fontsize=fontsize)
+    mode_lines(ax, f[startlabel:endlabel + 1], modes, label_height=l_height,
+               label_width=l_width, fontsize=fontsize, linewidth=linewidth)
 
 
 def plot_segments(spectrum, segments, fw1, fw2, ax, alpha=0.05,
@@ -601,7 +604,7 @@ def spectrum_label(spectrum):
 
 def mode_lines(ax, xrange, modes, overlap=True,
                label_height=None, label_width=None, print_labels=True,
-               fontsize=10):
+               fontsize=10, linewidth=1):
     xtrans = ax.get_xaxis_transform()
     mode_freqs = []
     mode_labels = []
@@ -611,7 +614,7 @@ def mode_lines(ax, xrange, modes, overlap=True,
             name = r"$_{%s}%s_{%s}$" % (mode.n, mode.type, mode.l)
             mode_labels.append([mode.freq, name])
             mode_freqs.append(mode.freq)
-    axvlines(mode_freqs, ax=ax, linestyle=':', linewidth=1,
+    axvlines(mode_freqs, ax=ax, linestyle=':', linewidth=linewidth,
              color='grey')
     if mode_labels and print_labels is True:
         mode_labels = np.array(mode_labels, dtype=object)
@@ -659,8 +662,8 @@ def plot_gcp_map(slat, slon, elat, elon, cmt, cmt_id, prox, ax,
 
 def plot_magnitude(cmt, ax):
     ax.axis('off')
-    if cmt and len(cmt) > 6:
-        ax.set_title('Magnitudes')
+    if cmt and len(cmt) >= 6:
+        ax.set_title('Centroid Moment Tensor')
         ax.annotate(r"$M_W$: %.1f" % cmt[6], xy=(0.1, 0.8))
         ax.annotate(r"$M_0$: %.2E dyne-cm" % cmt[7], xy=(0.1, 0.4))
         ax.annotate(r"Depth: %.2f km" % cmt[8], xy=(0.1, 0.0))

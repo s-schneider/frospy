@@ -401,6 +401,7 @@ class SplittingFunc(object):
         return im_cst, im_dst, figs
 
     def plot(self, savefig=False, smin=None, smax=None, colormap='red',
+             return_ax=False,
              **kwargs):
 
         modes_cst = AttribDict()
@@ -466,8 +467,62 @@ class SplittingFunc(object):
                 fig.set_size_inches(12, 8)
                 fig.savefig('%s.ps' % fname, orientation='landscape',
                             bbox_inches='tight')
+        else:
+            plt.show()
 
-        return modes_cst, modes_dst
+        if return_ax is True:
+            return modes_cst, modes_dst
+        else:
+            return
+
+    def get_fQ(self, mode_name):
+        """
+        Calculates center frequency and Q value of a mode in
+        splitting function / self.
+
+        return: (f_center, f err, f upper error, f lower error)
+                (Q, Q error, Q upper error, Q lower error)
+        """
+        c00 = self.cst[mode_name]['0']
+        err = self.cst_errors[mode_name]['0']['uncertainty']
+        erru = self.cst_errors[mode_name]['0']['upper_uncertainty']
+        errl = self.cst_errors[mode_name]['0']['lower_uncertainty']
+
+        d00 = self.dst[mode_name]['0']
+        derr = self.cst_errors[mode_name]['0']['uncertainty']
+        derru = self.cst_errors[mode_name]['0']['upper_uncertainty']
+        derrl = self.cst_errors[mode_name]['0']['lower_uncertainty']
+
+        mode = self.stats.modes_in.select(name=mode_name)[0]
+        fc = mode.freq * 1e3 + 1. / np.sqrt(4. * np.pi) * c00
+        if err is not None:
+            err = 1. / np.sqrt(4. * np.pi) * err
+
+        if erru is not None:
+            erru = 1. / np.sqrt(4. * np.pi) * abs(erru)
+            errl = 1. / np.sqrt(4. * np.pi) * abs(errl)
+
+        Qc = calc_Q(mode, fc, d00)
+
+        if derr is not None:
+            Qe = calc_Q(mode, fc, c00, err)
+            derr = Qc - Qe
+
+        if derru is not None:
+            # err in d00 translates to opposite sign error in Q
+            if derrl > 0:
+                # if its positive only upper uncsrt exist
+                derrl = 0
+            if derru < 0:
+                # if its negative only lower uncsrt exist
+                derru = 0
+
+            Qe = calc_Q(mode, fc, d00, derru)
+            derru = abs(Qc - Qe)
+            Qe = calc_Q(mode, fc, d00, derrl)
+            derrl = abs(Qc - Qe)
+
+        return (fc, err, erru, errl), (Qc, derr, derru, derrl)
 
 
 def _calc_SH_matrix(coeffs, smin, smax):
@@ -674,7 +729,7 @@ def calc_cst_indices(modes_dir):
                 c = cc_degrees(mode_in)
                 ind = 0
                 for _c in c:
-                    ind += 2*_c + 1
+                    ind += 2 * _c + 1
 
             else:
                 ind = sc_degrees(i)
@@ -714,7 +769,7 @@ def calc_cst_indices(modes_dir):
 
     if m_cc is not None:
         no_cc = int(m_cc[0])
-        for m in m_cc[1:no_cc+1]:
+        for m in m_cc[1:no_cc + 1]:
             mode = m.split()
             names_cc.append(''.join(mode[0:3]) + '-' + ''.join(mode[3:6]))
 
@@ -786,7 +841,7 @@ def get_covariances(covmatrix, modes_dir):
 
 def build_deg_dependent_damp(setup, modes='all', degs='all', function='linear',
                              smag_diff=10):
-    def get_m(x_min, x_max, function, x, y_max=smag_diff-1):
+    def get_m(x_min, x_max, function, x, y_max=smag_diff - 1):
         if x_max == x_min:
             return 0.
         if function == 'linear':
@@ -799,7 +854,7 @@ def build_deg_dependent_damp(setup, modes='all', degs='all', function='linear',
             a = y_max / np.sqrt(x_max)
             return 1. + a * np.sqrt(x)
         elif function == 'exp':
-            a = y_max / np.log(x_max+1)
+            a = y_max / np.log(x_max + 1)
             return 1. + a * np.log(x + 1)
         else:
             return function
@@ -856,3 +911,13 @@ def build_deg_dependent_damp(setup, modes='all', degs='all', function='linear',
                         count += 1
 
     return mdamp
+
+
+def calc_Q(mode, fc, ImC00, err=None):
+    if err is None:
+        _Q = ((mode.freq * 1e3) / (2 * mode.Q)) + \
+            1. / np.sqrt(4. * np.pi) * ImC00
+    else:
+        _Q = ((mode.freq * 1e3) / (2 * mode.Q)) + \
+            1. / np.sqrt(4. * np.pi) * (ImC00 + err)
+    return 0.5 * fc / _Q

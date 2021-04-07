@@ -7,6 +7,7 @@ from frospy.core.splittingfunc.splittingfunc import get_header
 from frospy.core.splittingfunc.set import Set
 from frospy.core.modes import format_name
 from frospy.core.database.query import db_query
+from frospy.core.setup.settings import read as read_setup
 import os
 
 
@@ -16,7 +17,9 @@ def loadmodel(*args):
 
 def load(ifile=None, modes=None, setup=None, modesin_dir=None,
          format=None, name='data', damp=None, R=-0.2, db_model=None,
-         verbose=False):
+         return_set=False,
+         verbose=False, name_overide=False):
+
     """
     param setup: :frospy.core.setup.settings.Setup object:
     param ifile: path to file
@@ -58,7 +61,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
     #     raise IOError(msg)
 
     if type(setup) == str:
-        raise IOError('setup, must be object, not file')
+        setup = read_setup(setup)
         # setup = read_setup(setup)
 
     if format is None and ifile is not None:
@@ -70,7 +73,12 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         cst, dst = _read_pickle(ifile)
         pass
 
-    if ifile.endswith('.sqlite3'):
+    if ifile is not None and ifile.endswith('.sqlite3'):
+        if name_overide is True:
+            name = name
+        else:
+            name = db_model
+
         cst_out = read_cst(setup=setup, modes=modes, cfile=ifile,
                            model=db_model)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
@@ -81,7 +89,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
 
         if setup is not None:
             header = get_header(setup.rundir, modes_sc, modes_cc,
-                                name=db_model, damp=None)
+                                name=name, damp=None)
         else:
             if type(modes) is not list:
                 modes = [modes]
@@ -93,7 +101,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             if verbose is True:
                 print('damping found: ', damp)
             header = get_header(None, modes_sc, modes_cc,
-                                name=db_model, damp=damp[0][0])
+                                name=name, damp=damp[0][0])
 
     elif setup is not None and ifile is not None:
         cst_out = read_cst(setup=setup, cfile=ifile)
@@ -109,7 +117,8 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
 
     elif format == 'dat':
         if modesin_dir is not None:
-            cst_out = read_cst(ifile, modesin_dir)
+            cst_out = read_cst(cfile=ifile, modes_dir=modesin_dir)
+
         else:
             cst_out = read_cst(cfile=ifile, modes=modes)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
@@ -133,7 +142,8 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
 
     # if mode is not defined, it will load all modes from the file,
     # in this case we need to loop over them
-    if modes is not None:
+    if modes is not None or return_set is False:
+
         return SplittingFunc(header=header, cst=cst, dst=dst,
                              cst_errors=cst_errors, dst_errors=dst_errors)
     else:

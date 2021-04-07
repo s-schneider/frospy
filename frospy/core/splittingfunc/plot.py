@@ -13,6 +13,7 @@ from obspy.core.util import AttribDict
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 import matplotlib as mpl
 from mpl_toolkits.basemap import Basemap
 from matplotlib.pyplot import cm
@@ -39,6 +40,8 @@ class Bin(object):
 
 
 def plot_cst_partial(path, labels=None, weights=None):
+    fig = Figure()
+    ax  = fig.add_subplot(111)
 
     if labels is None:
         # num = np.arange(1, len(path)+1).astype(str)
@@ -54,9 +57,10 @@ def plot_cst_partial(path, labels=None, weights=None):
         y = weights[i] * y.diagonal()
         x = range(y.size)
 
-        plt.plot(x, y, label=labels[i])
-    plt.legend()
-    plt.show()
+
+        ax.plot(x, y, label=labels[i])
+    ax.legend()
+    # plt.show()
 
     return
 
@@ -87,23 +91,15 @@ def sens_kernel_branch(modes, colormap='rainbow', kernel='vs', savefig=False,
 
 def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
                 legend_show=True, color='auto', kernel='all',
-                kind="cst", **kwargs):
+                lw_boundaries=0.1, linewidth=1, fontsize=8,
+                ticks=True, kind="cst", _bbox=None,
+                **kwargs):
     """
     :params mode: frospy.core.modes.Mode
     """
     bins = Bin()
     if not os.path.exists(bins.sc_cstkernels):
         raise OSError('senskernel bin not found!')
-
-    if 'fontsize' in kwargs:
-        fontsize = float(kwargs['fontsize'])
-    else:
-        fontsize = 8
-
-    if 'linewidth' in kwargs:
-        linewidth = float(kwargs['linewidth'])
-    else:
-        linewidth = 1
 
     if glob.glob('*-kernel.dat'):
         os.system('rm *-kernel.dat')
@@ -112,6 +108,7 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
         fig, ax = plt.subplots()
         fig.set_size_inches(4, 11)
         ax.lines = []
+
 
     ## get the kernel.dat files with modeplotqt
     #os.system('echo "j" > input')
@@ -241,10 +238,10 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
     ax.set_ylim(0, 6400)
     ax.set_xlim(-1.1*intmax, 1.1*intmax)
 
-    ax.axhline(5700, color='k', lw=0.1)  # TZ
-    ax.axhline(3480, color='k', lw=0.1)  # CMB
-    ax.axhline(1220, color='k', lw=0.1)  # ICB
-    ax.axvline(0, color='k', lw=0.1)
+    ax.axhline(5700, color='k', lw=lw_boundaries)  # TZ
+    ax.axhline(3480, color='k', lw=lw_boundaries)  # CMB
+    ax.axhline(1220, color='k', lw=lw_boundaries)  # ICB
+    ax.axvline(0, color='k', lw=lw_boundaries)
 
     if color == 'auto':
         rho_clr = 'grey'
@@ -288,17 +285,8 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
             legend_ax.append(han3)
             legend.append(r'$q_\kappa$')
 
-    if 'ticks' in kwargs:
-        ticks = kwargs['ticks']
-    else:
-        ticks = True
-
-
-
     if legend_show and ticks:
-        if 'bbox_to_anchor' in kwargs:
-            _bbox = kwargs['bbox_to_anchor']
-        else:
+        if _bbox is None:
             _bbox = (-0.08, -0.03)
         ax.legend(legend_ax, legend, frameon=False,
                   bbox_to_anchor=_bbox,
@@ -306,28 +294,28 @@ def sens_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
                   fontsize=fontsize)
 
     if legend_show and not ticks:
-        if 'bbox_to_anchor' in kwargs:
-            _bbox = kwargs['bbox_to_anchor']
-        else:
+        if _bbox is None:
             _bbox = (0.6, 1.2)
         ax.legend(legend_ax, legend, ncol=3,
                   handlelength=0.3, handletextpad=0.1, columnspacing=0.25,
                   loc='upper center', bbox_to_anchor=_bbox, frameon=False,
                   fontsize=fontsize, borderpad=0)
 
-
     if not ticks:
         ax.axes.get_xaxis().set_ticks([])
         ax.axes.get_yaxis().set_ticks([])
         ax.axes.xaxis.set_ticklabels([])
         ax.axes.yaxis.set_ticklabels([])
-        ax.text(-intmax, 5700, "TZ",  fontsize=fontsize*0.8, va="bottom")
-        ax.text(-intmax, 3480, "CMB", fontsize=fontsize*0.8, va="bottom")
-        ax.text(-intmax, 1220, "ICB", fontsize=fontsize*0.8, va="bottom")
+        ax.text(-intmax, 5700, "TZ", fontsize=fontsize * 0.8, va="bottom")
+        ax.text(-intmax, 3480, "CMB", fontsize=fontsize * 0.8, va="bottom")
+        ax.text(-intmax, 1220, "ICB", fontsize=fontsize * 0.8, va="bottom")
+    else:
+        ax.tick_params(axis='x', labelsize=fontsize * 0.8)
+        ax.tick_params(axis='y', labelsize=fontsize * 0.8)
 
     if title:
-        title = r"$_{%s}%s_{%s}$" % (mode.n,  mode.type,  mode.l)
-        ax.set_title(title, fontsize=fontsize*1.5, va="center")
+        title = r"$_{%s}%s_{%s}$" % (mode.n, mode.type, mode.l)
+        ax.set_title(title, fontsize=fontsize * 1.5, va="center")
     if show:
         plt.show()
     if savefig and ax is None:
@@ -364,7 +352,8 @@ def sensC_kernel(mode, ax=None, fig=None, title=True, show=False, savefig=False,
         os.system('rm *-kernel.dat')
 
     if ax is None:
-        fig, ax = plt.subplots()
+        fig = Figure()
+        ax  = fig.add_subplot(111)
         fig.set_size_inches(4, 11)
         ax.lines = []
 
@@ -613,6 +602,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
               meridians_thick=0.5, lon_0=180.0,
               **kwargs):
 
+    bins = Bin()
     fig_config = {'figsize': (3, 1.8)}
     map_config = {'projection': 'kav7', 'lon_0': lon_0,
                   'resolution': 'c'}
@@ -630,7 +620,6 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
         if html is False:
             fig = plt.figure(**fig_config)
         else:
-            # print("html is ", html)
             fig = mpl.figure.Figure(**fig_config)
 
     if 'ax' in kwargs:
@@ -737,31 +726,23 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
     if '-' not in mode.name:
         if ax is None:
-            try:
+            if os.path.exists(bins.sc_cstkernels):
                 gs = gridspec.GridSpec(1, 2, width_ratios=[0.8, 3.2],
                                        wspace=0.05)
-                if html is False:
-                    ax0 = plt.subplot(gs[0])
-                    ax = plt.subplot(gs[1])
-                else:
-                    ax0 = fig.add_subplot(gs[0])
-                    ax = fig.add_subplot(gs[1])
+
+                ax0 = fig.add_subplot(gs[0])
+                ax = fig.add_subplot(gs[1])
                 sens_kernel(mode, title=False, ax=ax0, kind=kind, **kwargs)
 
                 if show_colorbar is True:
                     ax_cb = fig.add_axes([0.4, 0.1, 0.4, 0.04])
 
-            except Exception as e:
-                msg = 'sens_kernel not plotted, error: %s' % e
-                print(msg)
-                if html is False:
-                    ax = plt.subplot()
-                else:
-                    ax = fig.add_subplot()
+            else:
+                ax = fig.add_subplot()
 
                 if show_colorbar is True:
                     # To do: Have to change the values here to make it centered
-                    ax_cb = fig.add_axes([0.45, 0.1, 0.3, 0.02])
+                    ax_cb = fig.add_axes([0.35, 0.1, 0.3, 0.02])
 
         elif show_colorbar is True:
             # ax_cb = fig.add_axes([0.3, 0.1, 0.3, 0.02])
@@ -805,21 +786,23 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
     else: # CC splitting func
         if ax is None:
-            #ax = fig.add_axes([0.1, 0.2, 0.7, 0.75])
-            gs = gridspec.GridSpec(1, 2, width_ratios=[0.8, 3.2],
+            if os.path.exists(bins.sc_cstkernels):
+                gs = gridspec.GridSpec(1, 2, width_ratios=[0.8, 3.2],
                                        wspace=0.05)
-            if html is False:
-                ax0 = plt.subplot(gs[0])
-                ax = plt.subplot(gs[1])
-            else:
+
                 ax0 = fig.add_subplot(gs[0])
                 ax = fig.add_subplot(gs[1])
+                sensC_kernel(mode, title=False, ax=ax0, **kwargs)
 
-            sensC_kernel(mode, title=False, ax=ax0, **kwargs)
+                if show_colorbar is True:
+                    ax_cb = fig.add_axes([0.4, 0.1, 0.4, 0.04])
 
-            if show_colorbar is True:
-                #ax_cb = fig.add_axes([0.25, 0.1, 0.4, 0.04])
-                ax_cb = fig.add_axes([0.4, 0.1, 0.4, 0.04])
+            else:
+                ax = fig.add_subplot()
+
+                if show_colorbar is True:
+                    # To do: Have to change the values here to make it centered
+                    ax_cb = fig.add_axes([0.35, 0.1, 0.3, 0.02])
 
         m = Basemap(ax=ax, **map_config)
         ccn = split_digit_nondigit(mode.name)
@@ -893,14 +876,10 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
     # plot it and set up / format labels
     if show_colorbar is True:
-        if html is True:
-            cb = plt.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
-                              orientation='horizontal', extend='both')
-            # cb.clim(s.min(), s.max())
-        else:
-            cb = fig.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
-                              orientation='horizontal', extend='both')
-            cb.set_clim(s.min(), s.max())
+        cb = fig.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
+                          orientation='horizontal', extend='both')
+        cb.vmin = s.min()
+        cb.vmax = s.max()
 
         cb.ax.set_title(r'$\mu$Hz', x=1.2, y=-0.7)
 
@@ -915,7 +894,6 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
             fname = '%s_%s' % (mode.name, kind)
             fig.savefig('%s.png' % fname, orientation='landscape', dpi=400,
                         bbox_inches="tight", pad_inches=0.01, transparent=True)
-
     return im, fig
 
 
@@ -955,11 +933,9 @@ def _plot_coeffs(coeffs, errors, mode_name, label, modes, kind,
 
     if mode_name not in modes:
         modes[mode_name] = AttribDict()
-        if html is False:
-            fig = plt.figure()
-        else:
-            fig = mpl.figure.Figure()
-            gs = gridspec.GridSpec(N, 1)
+        fig = plt.figure()
+
+        gs = gridspec.GridSpec(N, 1)
 
         # Try to get mode name
         try:
@@ -997,11 +973,9 @@ def _plot_coeffs(coeffs, errors, mode_name, label, modes, kind,
             axes[degree] = AttribDict()
             axes[degree]['xmax'] = 0
             axes[degree]['ymax'] = 0
-            if html is False:
-                axes[degree]['ax'] = plt.subplot2grid((N, 2), (a_i, 0),
-                                                      colspan=2)
-            else:
-                axes[degree]['ax'] = fig.add_subplot(gs[a_i, :])
+            axes[degree]['ax'] = plt.subplot2grid((N, 2), (a_i, 0),
+                                                  colspan=2)
+            # axes[degree]['ax'] = fig.add_subplot(gs[a_i, :])
             axes[degree]['ax'].set_title(r"$s=%i$" % int(degree))
             a_i += 1
 

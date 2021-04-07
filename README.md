@@ -15,6 +15,7 @@ http://www.frospy.org
 
 
 
+
 ## Installation
 I recommend to run this toolbox using anaconda.
 
@@ -23,32 +24,22 @@ I recommend to run this toolbox using anaconda.
 [How to manage your environments](https://conda.io/docs/user-guide/tasks/manage-environments.html)
 
 Create a new environment:
+Either create an environment using the .yml file, this installs everything:
+```
+$ conda env create -f /tmp/environment.yml
+```
+or you can do it manually:
 ```
 $ conda create -n frospy_env python=3.7
 $ conda activate frospy_env
-(frospy_env) $
+(frospy_env) $ conda config --add channels conda-forge
 ```
 
 Install required packages
 ```
-(frospy_env) $ ./install_requirements
+(frospy_env) $ conda install obspy
+(frospy_env) $ conda install basemap
+(frospy_env) $ conda install cartopy
+(frospy_env) $ conda install pyshtools
+(frospy_env) $ python setup.py install
 ```
-
-Install nmpy
-clone this repo
-```
-(frospy_env) $ cd into frospy
-(frospy_env) $ python3 setup.py install
-```
-
-start ipython
-
-voilá
-
-## Update
-
-To update the current branch, run  
-`./update.sh`
-
-To update other branches, run  
-`./update.sh Branch_Name`

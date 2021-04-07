@@ -36,8 +36,8 @@ Either create an environment using the .yml file, this installs everything:
 ```
 $ conda env create -f /tmp/environment.yml
 ```
-```
 or you can do it manually:
+```
 $ conda create -n frospy_env python=3.7
 $ conda activate frospy_env
 (frospy_env) $ conda config --add channels conda-forge

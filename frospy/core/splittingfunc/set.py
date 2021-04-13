@@ -516,7 +516,7 @@ class Set(object):
                                     vlim[0] = vminp
                                 if vmaxp > vlim[1]:
                                     vlim[1] = vmaxp
-                        except KeyError:
+                        except Exception:
                             continue
                         if verbose:
                             print("vmin, vmax", vlim)

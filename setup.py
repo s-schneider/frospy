@@ -52,7 +52,7 @@ setup(
         'Topic :: Scientific/Engineering :: Physics'],
     packages=find_packages(),
 
-    package_data={'frospy': ['data/*/*']},
+    package_data={'frospy': ['data/*/*/*']},
 
     python_requires=f'>={MIN_PYTHON_VERSION[0]}.{MIN_PYTHON_VERSION[1]}',
     install_requires=INSTALL_REQUIRES

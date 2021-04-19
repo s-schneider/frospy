@@ -142,11 +142,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
 
     # if mode is not defined, it will load all modes from the file,
     # in this case we need to loop over them
-    if modes is not None or return_set is False:
-
-        return SplittingFunc(header=header, cst=cst, dst=dst,
-                             cst_errors=cst_errors, dst_errors=dst_errors)
-    else:
+    if return_set is True:
         S = Set()
         for _m, _cst in cst.items():
             c = {_m: _cst}
@@ -160,3 +156,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             S += SplittingFunc(header=header, cst=c, dst=d,
                                cst_errors=c_err, dst_errors=d_err)
         return S
+
+    elif modes is not None or return_set is False:
+        return SplittingFunc(header=header, cst=cst, dst=dst,
+                             cst_errors=cst_errors, dst_errors=dst_errors)

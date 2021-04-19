@@ -1284,7 +1284,6 @@ def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3"):
     else:
         model = file_name.split('.')[0]
         path = "{}/data/{}/{}".format(path, model, file_name)
-    from IPython import embed; embed()
     _write_cst_coeffs(cst, dst, path, model=model, author=None, lcut='all')
 
     return

@@ -1,5 +1,5 @@
 import numpy as np
-from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.gridspec as gridspec
 import matplotlib.markers as mmarkers
@@ -8,7 +8,7 @@ from matplotlib.pyplot import cm
 import re
 from collections import OrderedDict
 
-from frospy.splitting.load import loadmodel
+from frospy.splitting.load import load
 from frospy.core.modes import read as read_modes
 from frospy.core.modes import Modes, Mode, format_name, calc_Q
 from frospy.core.setup.settings import Setup
@@ -17,18 +17,19 @@ from frospy.util.base import (update_progress, split_digit_nondigit,
 from frospy.plot.nmplt import get_iter_colormap, multicolor_ylabel
 
 
-def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
+def coeffs_per_mode(ifiles=None, data_label=None, label1=None, SF_in=None,
                     color1='red',
                     mode='sc', degree=2, order='all', l='all', n='all',
-                    model=None, label2=None, color2='b',
+                    model=None, ifiles2=None, label2=None, color2='b',
                     plot_f_center=False, plot_Q=False, kind='cst',
-                    fig_size=None, rot=90, ylim='auto', cmap='Dark2',
+                    fig_size=(12, 5), rot=90, ylim='auto', cmap='Dark2',
                     cmap_random_values='center',
+                    model_colors=None,
                     ordering=['n', 'l'], legend_show=True, fig_abc=None,
                     marker='o', markersize=8, spacing=None,
-                    borderwidth=1.7, labeltop=False, R=-0.2,
-                    yaxs_split=False, fs=10, savefig=False,
-                    border_width=1, tick_width=1,
+                    labeltop=False, R=-0.2,
+                    yaxs_split=False, fs=22, savefig=False,
+                    border_width=3, tick_width=1, format_yticks=None,
                     errorbars='asymmetrical', linestyle=None,
                     elinewidth=2, wspace=0.1,
                     verbose=False, loadingbar=False, damping_label=None,
@@ -40,6 +41,11 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                     colorbarlabel=None,
                     colorbar_multicolor=['blue', 'k', 'red'],
                     colorbarlabel_anchor=(0.5, -.8),
+                    subtitle=None,
+                    dpi=400,
+                    exclude=None,
+                    parts='all',
+                    skip2=-True,
                     **savefigargs):
     """
     ATTENTION: This is the WIP version of plot_coeffs_per_mode,
@@ -112,7 +118,7 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
 
     param fig_abc: set the a), b) ... z) in the Fig title
 
-    param borderwidth: sets the line width of the frame of the plot
+    param border_width: sets the line width of the frame of the plot
 
     param labeltop: bool, if True modelabels are printed on the top side too.
 
@@ -171,11 +177,21 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
     if data_label is None:
         data_label = ['Data']
 
+    # check if data is in SF
     if SF_in is not None:  # prevent input to be overwritten by output
         SF = SF_in.copy()
 
-    if degree == 2:
-        plot_index = [1, 4, 3, 6, 5]
+    # If no data is found, the first model is set to data
+    data_found = False
+    for S in SF:
+        if S.stats.name == 'data':
+            data_found = True
+    if data_found is not True:
+        ref_name = SF[0].stats.name
+        data_label = [ref_name]
+        for _i, S in enumerate(SF):
+            if S.stats.name == ref_name:
+                SF[_i].stats.name = 'data'
 
     if SF_in is not None and model is not None:
         # creating setup based on input SF
@@ -239,7 +255,7 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                 else:
                     if verbose is True:
                         print('Calculating model / modes: %s / %s' % (m, sf))
-                SF += loadmodel(setup=setup, ifile=None, format=m, damp=1,
+                SF += load(setup=setup, ifile=None, format=m, damp=1,
                                 name="%s_%s" % (m, name), R=R)
 
     if model is None:
@@ -301,11 +317,15 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
     # Prepare Figures and Plot
     # use first splitting function to check the amount of plots
     # we need 2 * degree + 1 figures
-    N = 2 * degree + 1
+    if parts == 'all':
+        N = 2 * degree + 1
+    else:
+        N = 1
     rows = int(np.ceil(N/2.0))
     if add_colorbar == 'bottom':
         rows += 1
-    if order == 'all' and plot_Q is False and plot_f_center is False:
+
+    if order == 'all' and plot_Q is False and plot_f_center is False and parts == 'all':
         # cst: plot all t orders of a certain degree
         cols = 2
         if add_colorbar == 'side':
@@ -324,23 +344,23 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
             wr += [0.05]
             gs = gridspec.GridSpec(rows, cols,  wspace=wspace,
                                    width_ratios=wr)
-        fig = Figure()
+        fig = plt.figure()
         fig.set_size_inches(fig_size)
 
-    elif order == 0 or plot_Q is True or plot_f_center is True:
+    elif order == 0 or plot_Q is True or plot_f_center is True or parts != 'all':
         cols = 1
         if mode == 'sc' and fig_size is None:
             fig_size = (7, 2)
         elif mode == 'cc' and fig_size is None:
             fig_size = (7, 2.5)
         gs = gridspec.GridSpec(1, 1)
-        fig = Figure()
+        fig = plt.figure()
         fig.set_size_inches(fig_size)
 
     elif plot_Q is True or plot_f_center is True:
         cols = 1
         gs = gridspec.GridSpec(1, 2)
-        fig = Figure()
+        fig = plt.figure()
         fig.set_size_inches(fig_size)
 
     # Prepare markers and ticks
@@ -402,6 +422,15 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
     if verbose is True:
         print('\nPreparing labels for: ')
     for s in SF:
+        if exclude is not None:
+            if type(exclude) == str:
+                exclude = [exclude]
+            SKIP = False
+            for _mode in s.cst.keys():
+                if _mode in exclude:
+                    SKIP = True
+            if SKIP is True:
+                continue
         if verbose is True:
             print(s)
         name = s.stats.name.split('_')[0]
@@ -485,7 +514,7 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                 # print("Model:", s, mlabel)
                 # Sometimes data sneaks into the model plot? have to check
                 # if the s.stats.model is not None here, else continue
-                if mlabel is None:
+                if mlabel == None:
                     continue
                 if (
                      s.stats.model not in label_model_set and
@@ -511,6 +540,9 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                                                     model, cmap,
                                                     random_values='center')
                             colors[mlabel] = next(colormap)
+                if model_colors is not None:
+                    if mlabel in model_colors:
+                        colors[mlabel] = model_colors[mlabel]
     # Ordering modes
     mode_list = Modes()
     labels = []
@@ -700,13 +732,16 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                     errors_up = [None]
                     errors_lw = [None]
 
+            if parts != 'all':
+                coeffs = [sf[key][str(parts[1])][parts[2]]]
+
             for i, (cst, err, erru, errl) in enumerate(zip(coeffs, errors,
                                                            errors_up,
                                                            errors_lw)):
                 # eval = err
                 # Check if degree is 0, then plot fc/Q
                 if (degree == 0 and (plot_f_center is True or plot_Q is True)):
-                    # cst_fQ = None
+                    cst_fQ = None
                     if verbose:
                         print(key, type(key))
                     _mode = read_modes(modenames=str(key))[0]
@@ -733,8 +768,8 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                                 print('f=%.2f -%.2f/ +%.2f\n' % (fc,
                                                                  errl, erru))
                             # eval = np.array([errl, erru]).reshape((2, 1))
-                        # if plot_Q is True:
-                        #     cst_fQ = {'f': cst}
+                        if plot_Q is True:
+                            cst_fQ = {'f': cst}
                     if plot_Q is True:
                         # Q = fc / (2 * (f0/(2*Q0)+(4pi)**-1/2 * Im(c00)))
                         c00 = s.cst[key]['0']
@@ -782,20 +817,18 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                                                                  erru, errl))
                             # eval = np.array([erru, errl]).reshape((2, 1))
                         cst = Qc - _mode.Q
-                        # if plot_f_center is True:
-                        #     cst_fQ = {'Q': cst}
+                        if plot_f_center is True:
+                            cst_fQ = {'Q': cst}
+
                 # Find correct plot row and column here
                 if i > 0:
-                    j = i + 1 # skip subplot (0,1)
+                    j = i + 1  # skip subplot (0,1)
                 else:
                     j = i
-
                 i_row = int(np.ceil((j + 1)/2. - 1))
                 if i_row < 0:
                     i_row = 0
                 i_col = int(abs(np.sin(j*np.pi/2.)))
-
-                j = plot_index[i]
                 if i not in ax_dict:
                     if i == 0:
                         if plot_f_center is True:
@@ -810,9 +843,14 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                         elif kind == 'dst':
                             title = '$\mathrm{Re}(d_{%s0})$' % (degree)
                             weight = None
+                        elif parts != 'all':
+                            title = '$\mathrm{%s}(c_{%s%s})$' % (parts[0], parts[1], parts[2])
+                            weight = None
+                        if subtitle is not None:
+                            title += '\n{}'.format(subtitle)
                     else:
                         t = int(np.ceil(i/2.))
-                        if j == 1 or j%2 != 0:
+                        if i_col == 0:
                             if kind == 'cst':
                                 title = '$\mathrm{Re}(c_{%s%s})$' % (degree, t)
                                 weight = None
@@ -828,7 +866,6 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                                 weight = None
 
                     if isinstance(yaxs_split, list):
-                        import matplotlib.pyplot as plt
                         gridspec_kw = {'height_ratios': [1, 0.3]}
                         fig, (axt2, axt) = plt.subplots(
                                                 2, 1, sharex=True,
@@ -836,8 +873,7 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                                                 facecolor='w')
                         fig.set_size_inches(fig_size)
                     else:
-                        axt = fig.add_subplot(rows, cols, j)
-                        # axt = plt.subplot(gs[i_row, i_col])
+                        axt = plt.subplot(gs[i_row, i_col])
 
                     if fig_abc:
                         if isinstance(yaxs_split, list):
@@ -857,14 +893,19 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                             axt2.set_ylabel('$\delta f$ ($\mu$Hz)')
                         else:
                             axt.set_ylabel('$\delta f$ ($\mu$Hz)')
-                    if plot_Q is True:
+                    elif plot_Q is True:
                         if isinstance(yaxs_split, list):
                             axt2.set_ylabel('$\delta Q$')
                         else:
                             axt.set_ylabel('$\delta Q$')
-
+                    else:
+                        if i_col == 0:
+                            if isinstance(yaxs_split, list):
+                                axt2.set_ylabel('$f$ ($\mu$Hz)')
+                            else:
+                                axt.set_ylabel('$f$ ($\mu$Hz)')
                     # axt.grid()
-                    [i.set_linewidth(borderwidth) for i in axt.spines.values()]
+                    [i.set_linewidth(border_width) for i in axt.spines.values()]
                     axt.hlines(0, -1, len(s_nums), color='lightgray')
                     axt.set_xlim(-0.5, len(s_nums)-0.5)
                     axt.set_xticks(x_init)
@@ -876,19 +917,19 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                     # from IPythone import embed; embed()
                     # from matplotlib.ticker import StrMethodFormatter
                     # FMT = StrMethodFormatter("{:>4}")
-                    from matplotlib.ticker import FormatStrFormatter
-                    FMT = FormatStrFormatter('%4.0f')
-                    axt.yaxis.set_major_formatter(FMT)
-                    if isinstance(yaxs_split, list):
-                        axt2.yaxis.set_major_formatter(FMT)
+                    if format_yticks is not None:
+                        from matplotlib.ticker import FormatStrFormatter
+                        FMT = FormatStrFormatter(format_yticks)
+                        axt.yaxis.set_major_formatter(FMT)
+                        if isinstance(yaxs_split, list):
+                            axt2.yaxis.set_major_formatter(FMT)
 
-                    # if add_colorbar == 'bottom':
-                    #     label_row = rows - 3
-                    # else:
-                    #     label_row = rows - 1
+                    if add_colorbar == 'bottom':
+                        label_row = rows - 3
+                    else:
+                        label_row = rows - 1
 
-                    # if i_row == label_row or order == 0:
-                    if j == len(coeffs) or j == len(coeffs) + 1:
+                    if i_row == label_row or order == 0:
                         axt.tick_params(labelbottom=True,
                                         bottom=True, top=True,
                                         left=True, right=True)
@@ -931,7 +972,6 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                         axt2.plot((-d, +d), (-d, +d), **kwargs)  # top/left
 
                         # axt = [axt, axt2]
-
                     ax_dict[i] = axt
                     plot_dict[axt] = {}
 
@@ -1009,11 +1049,14 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
         x = [float(y.split()[1]) for y in _label_damping]
         x.sort()
         _label_damping = ["data %s" % str(y) for y in x]
-
         _cmap = getattr(cm, cmap_all_damping)
         _N = len(_label_damping)
-        cmap_damping = _cmap(np.linspace(0, 1, _N + 2))
-        cmap_damping = cmap_damping[2:]
+        # had something to do with the dmapings?
+        if skip2 is True:
+            cmap_damping = _cmap(np.linspace(0, 1, _N + 2))
+            cmap_damping = cmap_damping[2:]
+        else:
+            cmap_damping = _cmap(np.linspace(0, 1, _N))
 
         _cmap_damping = {}
         zorder_damping = {}
@@ -1088,10 +1131,10 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                             capsize=3, zorder=_zorder, label=_label)
                 if isinstance(yaxs_split, list):
                     axt2.errorbar(x, cst, yerr=eval,
-                                  marker=_marker,
-                                  markersize=_markersize, color=_color,
-                                  linestyle=_linestyle, elinewidth=elinewidth,
-                                  capsize=3, zorder=_zorder, label=_label)
+                                marker=_marker,
+                                markersize=_markersize, color=_color,
+                                linestyle=_linestyle, elinewidth=elinewidth,
+                                capsize=3, zorder=_zorder, label=_label)
             else:
                 ax.plot(x, cst,
                         marker=_marker,
@@ -1100,10 +1143,10 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
                         zorder=_zorder, label=_label)
                 if isinstance(yaxs_split, list):
                     axt2.plot(x, cst,
-                              marker=_marker,
-                              markersize=_markersize, color=_color,
-                              linestyle=_linestyle, linewidth=_linewidth,
-                              zorder=_zorder, label=_label)
+                            marker=_marker,
+                            markersize=_markersize, color=_color,
+                            linestyle=_linestyle, linewidth=_linewidth,
+                            zorder=_zorder, label=_label)
         # removing whiskers from legend
         ehandles, elabels = ax.get_legend_handles_labels()
         # ehandles = [h[0] for h in ehandles]
@@ -1169,10 +1212,10 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
         # plt.colorbar(_im, cax=cax, orientation='horizontal',
         #              label=right_y_label)
 
-        # norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
-        # cb1 = mpl.colorbar.ColorbarBase(cax, cmap=_cmap,
-        #                         norm=norm,
-        #                         orientation='vertical')
+        norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+        cb1 = mpl.colorbar.ColorbarBase(cax, cmap=_cmap,
+                                norm=norm,
+                                orientation='vertical')
 
         if type(colorbarlabel) is not str:
             multicolor_ylabel(cax, colorbarlabel,
@@ -1188,11 +1231,11 @@ def coeffs_per_mode(data_label=None, label1=None, SF_in=None,
         # plt.tight_layout()
         if savefig is True and type(savefig) is bool:
             fig.savefig('cbranch_%s.png' % fname, orientation='landscape',
-                        dpi=400, bbox_inches=bbox_inches, pad_inches=pad_inches,
+                        dpi=dpi, bbox_inches=bbox_inches, pad_inches=pad_inches,
                         transparent=True)
         else:
             fig.savefig(**savefigargs, orientation='landscape',
-                        dpi=400, bbox_inches=bbox_inches, pad_inches=pad_inches,
+                        dpi=dpi, bbox_inches=bbox_inches, pad_inches=pad_inches,
                         transparent=True)
 
-    return SF, fig
+    return SF

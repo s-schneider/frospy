@@ -1268,10 +1268,10 @@ def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3"):
         raise IOError('Bin_path not valid')
 
     if bin_path.startswith('/quanta'):
-        path = "/quanta1/home/simons/dev/nmPy/nmpy"
+        path = "/quanta1/home/simons/dev/python/frospy/frospy"
     else:
         if getpass.getuser() == 'simons':
-            path = "/net/home/simons/dev/DeepEarthUU/nmpy/nmpy"
+            path = "/net/home/simons/dev/python/frospy/frospy"
         else:
             path = "/net/home/talavera/codes/nmPy/nmpy"
 

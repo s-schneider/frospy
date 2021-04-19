@@ -1206,7 +1206,8 @@ def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3"):
 
 
 def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
-                    keep_mcst=False, modes_dst=None, R=-0.2, model='S20RTS'):
+                    keep_mcst=False, modes_dst=None, modes_cc_dst=None,
+                    R=-0.2, model='S20RTS'):
     """
     Calculates S20RTS coefficients using the program defined in
     S20RTS_path for given self-coupling modes in 'modes' and cross-coupling
@@ -1214,35 +1215,64 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
 
     8.6.18: Currently only self-coupling
     """
-
     # Try to read coefficients from database, if mode is not yet in there or
     # higher degree than in db is requested it will be calculated
-    try:
-        if model == 'S20RTS':
-            file_name = "S20RTS_CRUST.sqlite3"
-        elif model == 'S40RTS':
-            file_name = "S40RTS_CRUST.sqlite3"
-        cst, dst = _read_cst_S20RTS_db(setup, file_name=file_name)
-        if len(cst) == 0:
-            raise IOError
-
-        for mode, smax in setup.modes_sc.items():
-            if smax == 0:
-                continue
-            degs = list(cst[format_name(mode)].keys())
-            if str(smax) not in degs:
+    # calculate R dst predictions if not R=-2. Only R=-0.2 saved in database
+    if R == -0.2:
+        try:
+            if model == 'S20RTS':
+                file_name = "S20RTS_CRUST.sqlite3"
+            elif model == 'S40RTS':
+                file_name = "S40RTS_CRUST.sqlite3"
+            else:
+                file_name = "{}.sqlite3".format(model)
+            cst, dst = _read_cst_S20RTS_db(setup, file_name=file_name)
+            if len(cst) == 0:
                 raise IOError
 
-        for mode, smm in setup.modes_cc.items():
-            if smm[1] == 0:
-                continue
-            degs = list(cst[format_name(mode)].keys())
-            if str(smm[1]) not in degs:
-                raise IOError
-        return cst, dst
+            for mode, smax in setup.modes_sc.items():
+                if smax == 0:
+                    continue
+                degs = list(cst[format_name(mode)].keys())
+                if str(smax) not in degs:
+                    raise IOError
+                degs = [int(d) for d in degs]
+                if max(degs) != smax:
+                    raise IOError
 
-    except Exception:
-        pass
+            for mode, smm in setup.modes_cc.items():
+                if smm[1] == 0:
+                    continue
+                degs = list(cst[format_name(mode)].keys())
+                if str(smm[1]) not in degs:
+                    raise IOError
+                degs = [int(d) for d in degs]
+                if max(degs) != smm[1]:
+                    raise IOError
+
+            for mode, smax in setup.modes_sc_dst.items():
+                if smax == 0:
+                    continue
+                degs = list(dst[format_name(mode)].keys())
+                if str(smax) not in degs:
+                    raise IOError
+                degs = [int(d) for d in degs]
+                if max(degs) != smax:
+                    raise IOError
+
+            for mode, smm in setup.modes_cc_dst.items():
+                if smm[1] == 0:
+                    continue
+                degs = list(dst[format_name(mode)].keys())
+                if str(smm[1]) not in degs:
+                    raise IOError
+                degs = [int(d) for d in degs]
+                if max(degs) != smm[1]:
+                    raise IOError
+            return cst, dst
+
+        except Exception:
+            pass
 
     if bin_path is None:
         bins = ['/quanta1/home', '/net/home']
@@ -1255,26 +1285,37 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
 
     cstCRUST = "%s/simons/bin/mdcplmrho_all_cstCRUST" % bin_path
     cc_cstCRUST = "%s/simons/bin/mdcplmrho_allC_cstCRUST" % bin_path
-    dstS20RTS = "%s/talavera/bin/mdcplmrho_all_dstS20RTS" % bin_path
 
     if model == 'S20RTS':
-        cstS20RTS = "%s/simons/bin/mdcplmrho_all_cstS20RTS" % bin_path
-        cc_cstS20RTS = "%s/simons/bin/mdcplmrho_allC_cstS20RTS" % bin_path
-        _maxmdeg = 20
+        cstS20RTS = "%s/talavera/bin/mdcplmrho_all_cstS20RTS" % bin_path
+        cc_cstS20RTS = "%s/talavera/bin/mdcplmrho_allC_cstS20RTS" % bin_path
+        dstS20RTS = "%s/talavera/bin/mdcplmrho_all_dstS20RTS" % bin_path
+        cc_dstS20RTS = "%s/talavera/bin/mdcplmrho_allC_dstS20RTS" % bin_path
+        _maxmdeg = 20 # cst model
+        _maxcdeg = 20 # crust model
+        _maxddeg = 20 # dst model
 
-    if model == 'S40RTS':
-        cstS20RTS = "%s/simons/bin/mdcplmrho_all_cstS40RTS" % bin_path
-        cc_cstS20RTS = "%s/simons/bin/mdcplmrho_allC_cstS40RTS" % bin_path
-        _maxmdeg = 40
+    if model == 'S40RTS' or model == 'QRFSI12':
+        cstS20RTS = "%s/talavera/bin/mdcplmrho_all_cstS40RTS" % bin_path
+        cc_cstS20RTS = "%s/talavera/bin/mdcplmrho_allC_cstS40RTS" % bin_path
+        sphm = "%s/talavera/dta/QRFSI12_l9.in" % bin_path
+        dstS20RTS = "%s/talavera/bin/mdcplmrho_all_dstQRFSI12" % bin_path
+        cc_dstS20RTS = "%s/talavera/bin/mdcplmrho_allC_dstQRFSI12" % bin_path
+        _maxmdeg = 40 # cst model
+        _maxcdeg = 20 # crust model
+        _maxddeg = 12 # dst model
+
+    if model == 'SP12RTS':
+        cstS20RTS = "%s/talavera/bin/mdcplmrho_all_cstSP12RTS_E" % bin_path
+        cc_cstS20RTS = "%s/talavera/bin/mdcplmrho_allC_cstSP12RTS_E" % bin_path
+        dstS20RTS = "%s/talavera/bin/mdcplmrho_all_dstS20RTS" % bin_path
+        cc_dstS20RTS = "%s/talavera/bin/mdcplmrho_allC_dstS20RTS" % bin_path
+        _maxmdeg = 12 # cst model
+        _maxcdeg = 12 # crust model
+        _maxddeg = 12 # dst model
 
     sc_modes, cc_modes = get_mode_names(modesin, modes_ccin)
     sc_cdeg, sc_ddeg, cc_cdeg, cc_ddeg = get_mode_deg(modesin, modes_ccin)
-    # if modesin is empty, try to fill information from modes_ccin
-    if modesin[0] == '0':
-        for _mcc in cc_modes:
-            for _m in _mcc.split('-'):
-                sc_modes.append(_m)
-                sc_cdeg.append('20')
 
     """
     To do:
@@ -1296,44 +1337,94 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         cc_coeff = {}
 
     count = 0
+
     for mode, s_max in zip(sc_modes, sc_cdeg):
-        if int(s_max) == 0:
+        m = split_digit_nondigit(mode)
+        if int(s_max) == 0 and int(m[2]) > 0:
             continue
         count += 1
-        m = split_digit_nondigit(mode)
 
         if (int(s_max) > 0 and int(m[2]) > 0) or (int(m[2]) == 0):
             os.system('echo "1" > modes.in')
             os.system('echo "%03d %s %03d" >> modes.in' % (int(m[0]),
                                                            m[1].lower(),
                                                            int(m[2])))
-            # S20RTS prediction
-            for s in np.arange(0, int(s_max)+1, 2):
-                # only input coupling degrees, No degree higher then 20
-                if s not in max_sc_degrees(int(m[2])) or s > _maxmdeg:
-                    continue
-                os.system('echo "%s" > input' % s)
-                res = subprocess.Popen('%s < input' % cstS20RTS, shell=True,
-                                       stdout=subprocess.PIPE,
-                                       stderr=subprocess.PIPE)
+            if model != 'SP12RTS':
+                # S20RTS prediction
+                for s in np.arange(0, int(s_max)+1, 2):
+                    # only input coupling degrees, No degree higher then 20
+                    if s not in max_sc_degrees(int(m[2])) or s > _maxmdeg:
+                        continue
+                    os.system('echo "%s" > input' % s)
+                    res = subprocess.Popen('%s < input' % cstS20RTS, shell=True,
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE)
 
-                output, error = res.communicate()
-                os.system('cat mcst.dat >> mcst-S20RTS.dat')
-                os.remove('mcst.dat')
-            with open('mcst-S20RTS.dat', 'r') as fh_s20rts:
-                c_s20rts_tmp = np.genfromtxt(fh_s20rts)
-            if int(s_max) > _maxmdeg:
-                # Fill everything bigger than 20 with PREM values
-                for _s in range(22, int(s_max)+2, 2):
-                    sdiff = (2*_s)+1
-                    c_s20rts_tmp = np.hstack((c_s20rts_tmp, np.zeros(sdiff)))
-            os.remove('mcst-S20RTS.dat')
+                    output, error = res.communicate()
+                    os.system('cat mcst.dat >> mcst-S20RTS.dat')
+                    os.remove('mcst.dat')
+                with open('mcst-S20RTS.dat', 'r') as fh_s20rts:
+                    c_s20rts_tmp = np.genfromtxt(fh_s20rts)
+                if int(s_max) > _maxmdeg:
+                    # Fill everything bigger than 20 with PREM values
+                    for _s in range(_maxmdeg+2, int(s_max)+2, 2):
+                        sdiff = (2*_s)+1
+                        c_s20rts_tmp = np.hstack((c_s20rts_tmp, np.zeros(sdiff)))
+                os.remove('mcst-S20RTS.dat')
+            else:
+                # SP12RTS vs prediction
+                for s in np.arange(0, int(s_max)+1, 2):
+                    # only input coupling degrees, No degree higher then 20
+                    if s not in max_sc_degrees(int(m[2])) or s > _maxmdeg:
+                        continue
+                    os.system('echo "%s" > input' % s)
+                    res = subprocess.Popen('%s%s < input' % (cstS20RTS, "S"),
+                                           shell=True,
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE)
+
+                    output, error = res.communicate()
+                    os.system('cat mcst.dat >> mcst-S20RTS.dat')
+                    os.remove('mcst.dat')
+                with open('mcst-S20RTS.dat', 'r') as fh_s20rts:
+                    c_vs_tmp = np.genfromtxt(fh_s20rts)
+                    #c_s20rts_tmp = np.genfromtxt(fh_s20rts)
+                os.remove('mcst-S20RTS.dat')
+
+                # SP12RTS vp prediction
+                for s in np.arange(0, int(s_max)+1, 2):
+                    # only input coupling degrees, No degree higher then 20
+                    if s not in max_sc_degrees(int(m[2])) or s > _maxmdeg:
+                        continue
+                    os.system('echo "%s" > input' % s)
+                    res = subprocess.Popen('%s%s < input' % (cstS20RTS, "P"),
+                                           shell=True,
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE)
+
+                    output, error = res.communicate()
+                    os.system('cat mcst.dat >> mcst-S20RTS.dat')
+                    os.remove('mcst.dat')
+                with open('mcst-S20RTS.dat', 'r') as fh_s20rts:
+                    c_vp_tmp = np.genfromtxt(fh_s20rts)
+                    #c_s20rts_tmp = np.genfromtxt(fh_s20rts)
+                os.remove('mcst-S20RTS.dat')
+
+                if int(s_max) > _maxmdeg:
+                    # Fill everything bigger than 20 with PREM values
+                    for _s in range(_maxmdeg+2, int(s_max)+2, 2):
+                        sdiff = (2*_s)+1
+                        c_vs_tmp = np.hstack((c_vs_tmp, np.zeros(sdiff)))
+                        c_vp_tmp = np.hstack((c_vp_tmp, np.zeros(sdiff)))
+                        #c_s20rts_tmp = np.hstack((c_s20rts_tmp, np.zeros(sdiff)))
+
+                c_s20rts_tmp = np.add(c_vs_tmp, c_vp_tmp)
 
             # CRUST prediction
             for s in np.arange(0, int(s_max)+1, 2):
 
                 # only input coupling degrees, No degree higher then 20
-                if s not in max_sc_degrees(int(m[2])) or s > _maxmdeg:
+                if s not in max_sc_degrees(int(m[2])) or s > _maxcdeg:
                     continue
                 os.system('echo "%s" > input' % s)
                 res = subprocess.Popen('%s < input' % cstCRUST, shell=True,
@@ -1345,9 +1436,9 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                 os.remove('mcst.dat')
             with open('mcst-CRUST.dat', 'r') as fh_crust:
                 c_crust_tmp = np.genfromtxt(fh_crust)
-            if int(s_max) > _maxmdeg:
+            if int(s_max) > _maxcdeg:
                 # Fill everything bigger than 20 with PREM values
-                for _s in range(_maxmdeg+2, int(s_max)+2, 2):
+                for _s in range(_maxcdeg+2, int(s_max)+2, 2):
                     sdiff = (2*_s)+1
                     c_crust_tmp = np.hstack((c_crust_tmp, np.zeros(sdiff)))
 
@@ -1438,40 +1529,135 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                                                   c_crust_tmp).transpose()
                         # os.system('cat mcst.dat >> cst.dat')
                         # os.remove('mcst.dat')
-
+            else:
+                cc_modesin = None
     if modes_dst is None:
         dst = None
         sc_coeff_dst = None
     else:
         sc_ddeg = get_mode_deg_dst(modes_dst)
-        sc_modes_dst, cc_modes_dst = get_mode_names(modes_dst, None)
+        sc_modes_dst, cc_modes_dst = get_mode_names(modes_dst, modes_cc_dst)
         sc_coeff_dst = {}
+        cc_coeff_dst = {}
+        count = 0
         for mode, s_max in zip(sc_modes_dst, sc_ddeg):
             m = split_digit_nondigit(mode)
-            if s_max >= 2:
+            count += 1
+            if int(s_max) >= 2:
                 os.system('echo "1" > modes.in')
                 os.system('echo "%03d %s %03d" >> modes.in' % (int(m[0]),
                                                                m[1].lower(),
                                                                int(m[2])))
-                # S20RTS prediction
                 for s in np.arange(2, int(s_max)+1, 2):
                     # only input coupling degrees
-                    if s not in max_sc_degrees(int(m[2]))[1:]:
+                    if s not in max_sc_degrees(int(m[2]))[1:] or s > _maxddeg:
                         continue
-                    os.system('echo %s > input' % R)  # R=-0.2 wrt vs
-                    os.system('echo "%s" >> input' % s)
-                    res = subprocess.Popen('%s < input' % dstS20RTS,
-                                           shell=True,
-                                           stdout=subprocess.PIPE,
-                                           stderr=subprocess.PIPE)
-
+                    # S20RTS prediction
+                    if model == "S20RTS" or model == 'SP12RTS':
+                        os.system('echo %s > input' % R)  # R=-0.2 wrt vs
+                        os.system('echo "%s" >> input' % s)
+                        res = subprocess.Popen('%s < input' % dstS20RTS,
+                                               shell=True,
+                                               stdout=subprocess.PIPE,
+                                               stderr=subprocess.PIPE)
+                    elif model == 'S40RTS' or model == 'QRFSI12':
+                        os.system('echo %s > input' % s)
+                        res = subprocess.Popen('%s -m %s < input' % (dstS20RTS, sphm),
+                                               shell=True,
+                                               stdout=subprocess.PIPE,
+                                               stderr=subprocess.PIPE)
                     output, error = res.communicate()
                 os.system('cat dst.dat >> mcst-S20RTS.dat')
                 os.remove('dst.dat')
                 with open('mcst-S20RTS.dat', 'r') as fh_s20rts:
                     c_s20rts_tmp = np.genfromtxt(fh_s20rts)
                     os.remove('mcst-S20RTS.dat')
+
+                if int(s_max) > _maxddeg:
+                    # Fill everything bigger than model max with PREM values
+                    for _s in range(_maxddeg+2, int(s_max)+2, 2):
+                        sdiff = (2*_s)+1
+                        c_s20rts_tmp = np.hstack((c_s20rts_tmp, np.zeros(sdiff)))
+
                 sc_coeff_dst[mode] = c_s20rts_tmp.transpose()
+
+                # Cross coupling coefficients
+                # CC after each mode in Self
+                # 1-1  ->  1-2  ->  1-3
+                #          2-2  ->  2-3
+                #                   3-3
+                if modes_cc_dst is not None:
+                    # Workaround for cross-coupling
+                    if setup is not None:
+                        cc_cdeg = list(setup.modes_cc_dst.values())
+                    else:
+                        # ??????
+                        x = [list(setup.modes_cc_dst.values())[0][0]]
+                        cc_cdeg = x + [int(cc_cdeg[0])]
+                        cc_cdeg = [cc_cdeg]
+
+                    # reading for 2 and 3 modes
+                    if count == 1 and len(cc_modes_dst) >= 1:
+                        # 1-2  ->  1-3
+                        cc_modesin = cc_modes_dst[0:2]
+                        cc_cdegin = cc_cdeg[0:2]
+
+                    elif count == 2 and len(cc_modes_dst) == 3:
+                        # ->  2-3
+                        cc_modesin = cc_modes_dst[-1:]
+                        cc_cdegin = cc_cdeg[-1:]
+                    else:
+                        cc_modesin = []
+                        cc_cdegin = []
+
+                    for modecc, sdeg in zip(cc_modesin, cc_cdegin):
+                        if sdeg[1] > 0:
+                            cc = modecc.split('-')
+                            max_cc_input = []  # only calculate cpl s degrees
+
+                            # number of cpl modes is always 2
+                            os.system('echo "%s" > modes.in' % 2)
+                            for i, m in enumerate(cc):
+                                m = split_digit_nondigit(m)
+                                os.system('echo "%03d %s %03d" >> modes.in'
+                                          % (int(m[0]), m[1].lower(), int(m[2])))
+                                for _m in m:
+                                    max_cc_input += [_m]
+
+                            ccdegs = max_cc_degrees(max_cc_input)
+
+                            # S20RTS cc prediction
+                            for s in np.arange(sdeg[0], int(sdeg[1])+1, 2):
+                                # only input coupling degrees
+                                if s not in ccdegs:
+                                    continue
+
+                                # S20RTS prediction
+                                if model == "S20RTS" or model == 'SP12RTS':
+                                    os.system('echo %s > input' % R)  # R=-0.2 wrt vs
+                                    os.system('echo "%s" >> input' % s)
+                                    res = subprocess.Popen('%s < input' % cc_dstS20RTS,
+                                                           shell=True,
+                                                           stdout=subprocess.PIPE,
+                                                           stderr=subprocess.PIPE)
+                                elif model == 'S40RTS' or model == 'QRFSI12':
+                                    os.system('echo %s > input' % s)
+                                    res = subprocess.Popen('%s -m %s < input' % (cc_dstS20RTS, sphm),
+                                                           shell=True,
+                                                           stdout=subprocess.PIPE,
+                                                           stderr=subprocess.PIPE)
+
+                                output, error = res.communicate()
+                                os.system('cat dst.dat >> mcst-S20RTS.dat')
+                                os.remove('dst.dat')
+                            with open('mcst-S20RTS.dat', 'r') as fh:
+                                c_s20rts_tmp = np.genfromtxt(fh)
+                            os.remove('mcst-S20RTS.dat')
+                            cc_coeff_dst[modecc] = c_s20rts_tmp.transpose()
+                            # os.system('cat mcst.dat >> cst.dat')
+                            # os.remove('mcst.dat')
+                else:
+                    cc_coeff_dst = None
 
     try:
         # os.system('cp mcst.dat cst.dat')
@@ -1480,7 +1666,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         os.remove('mdcpl.out')
         os.remove('raw.dat')
         os.remove('input')
-    except FileNotFoundError:
+    except IndexError:
         pass
 
     cT = sc_coeff[sc_modes[0]]
@@ -1508,19 +1694,44 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             cT = np.hstack((cT, sc_coeff[mode]))
         count += 1
 
+    # Only works for 2 modes, 1 measured and 1 as PREM
+    # when the CC between them is also measured
+    if not sc_modes[1:] and cc_modesin:
+        for modecc, sdeg in zip(cc_modesin, cc_cdegin):
+            if sdeg[1] > 0:
+                cT = np.hstack((cT, cc_coeff[modecc]))
+
+    count = 0
     if sc_coeff_dst:
         for mode, s_max in zip(sc_modes_dst, sc_ddeg):
+            count += 1
             cT = np.hstack((cT, sc_coeff_dst[mode]))
 
+            if modes_cc_dst is not None:
+                # reading for 2 and 3 modes
+                if count == 1 and len(cc_modes_dst) >= 1:
+                    # 1-2  ->  1-3
+                    cc_modesin = cc_modes_dst[0:2]
+                    cc_cdegin = cc_cdeg[0:2]
+                elif count == 2 and len(cc_modes_dst) == 3:
+                    # ->  2-3
+                    cc_modesin = cc_modes_dst[-1:]
+                    cc_cdegin = [cc_cdeg[-1]]
+                else:
+                    cc_modesin = []
+                    cc_cdegin = []
+                for modecc, sdeg in zip(cc_modesin, cc_cdegin):
+                    if sdeg[1] > 0:
+                        cT = np.hstack((cT, cc_coeff_dst[modecc]))
     # Preparing cst and dst files
     if keep_mcst:
         # d00 needs to be converted to haydars format
         with open('mcst_zero.dat', 'w') as f:
             for c in cT:
                 f.write("%s\n" % c)
-
     cst, dst = get_cst(modes=modesin, modes_cc=modes_ccin, c=cT, noc=False,
-                       modes_dst=modes_dst)
+                       modes_dst=modes_dst, modes_cc_dst=modes_cc_dst,)
+    #print(modes_ccin)
     # scfiles = glob.glob("mcst-*_sc_*.dat")
     # ccfiles = glob.glob("mcst-*_cc_*.dat")
     # for f in scfiles:
@@ -1533,12 +1744,15 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     os.removedirs(tmp_path)
 
     # Only write the default setting to db
-    if R == -0.2:
-        if model == 'S20RTS':
-            file_name = "S20RTS_CRUST.sqlite3"
-        elif model == 'S40RTS':
-            file_name = "S40RTS_CRUST.sqlite3"
+    # if R == -0.2 and model != 'QRFSI12':
+    WRITE2DB = False
 
+    if model != 'S20RTS':
+        WRITE2DB = True
+    elif R == -0.2:
+        WRITE2DB = True
+
+    if WRITE2DB is True:
         _write_cst_S20RTS_db(cst, dst, file_name)
     return cst, dst
 

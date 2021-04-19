@@ -4,6 +4,7 @@ import glob
 from os.path import basename
 
 from obspy.core import AttribDict
+import numpy as np
 from collections import OrderedDict
 from abc import ABCMeta, abstractmethod
 import json
@@ -485,8 +486,8 @@ def get_events(setup):
 def modes_sanity_check(key, value_dict):
     if key == 'modes':
         for k, v in value_dict.items():
-            if type(v) is not int:
-                print(key, v)
+            if type(v) not in (int, np.int64):
+                print(key, k, v)
                 raise IOError('modes must have integer smax')
     elif key == 'modes_cc':
         for k, v in value_dict.items():

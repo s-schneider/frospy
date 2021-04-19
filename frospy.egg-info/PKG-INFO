@@ -1,0 +1,69 @@
+Metadata-Version: 2.1
+Name: frospy
+Version: 0.1.3
+Summary: Python toolbox for normal mode seismologists
+Home-page: https://github.com/s-schneider/frospy
+Author: Simon Schneider
+Author-email: s.a.schneider@mailbox.org
+License: GNU Lesser General Public License, Version 3 (LGPLv3)
+Description: # Free Oscillation Toolbox - FrosPy
+        Small toolbox to help with visualization of spectra and data-handling for splitting function measurements.
+        
+        ## Content
+         * [Wiki](https://github.com/s-schneider/frospy/wiki/Home:-Free-Oscillation-Toolbox---FrosPy)
+         * [Toroidal Mode Splittingfunctions](#toroidal-mode-splittingfunctions)
+         * [Installation](#installation)
+         * [Update](#update)
+         * [Usage](#usage)
+        
+        ## Splittingfunction Coefficients
+        
+        The splitting functions of [Schneider & Deuss, 2020](https://doi.org/10.1093/gji/ggaa567) and [Talavera-Soza & Deuss, 2020](https://doi.org/10.1093/gji/ggaa499) can be found here:
+        http://www.frospy.org
+        
+        
+        
+        
+        ## Installation
+        I recommend to run this toolbox using anaconda.
+        
+        [Follow the instructions on their homepage](https://www.anaconda.com/download/)
+        
+        [How to manage your environments](https://conda.io/docs/user-guide/tasks/manage-environments.html)
+        
+        Create a new environment:
+        Either create an environment using the .yml file, this installs everything:
+        ```
+        $ conda env create -f /tmp/environment.yml
+        ```
+        or you can do it manually:
+        ```
+        $ conda create -n frospy_env python=3.7
+        $ conda activate frospy_env
+        (frospy_env) $ conda config --add channels conda-forge
+        ```
+        
+        Install required packages
+        ```
+        (frospy_env) $ conda install obspy
+        (frospy_env) $ conda install basemap
+        (frospy_env) $ conda install cartopy
+        (frospy_env) $ conda install pyshtools
+        (frospy_env) $ python setup.py install
+        ```
+        
+Platform: OS Independent
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Physics
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown

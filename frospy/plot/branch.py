@@ -224,7 +224,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                                 smax = int(s)
                         input['modes_sc_dst'].update([(mname, smax)])
 
-            if len(sf.stats['modes_cc_in']) > 0:
+            if len(sf.stats['modes_cc_in']) > 0 and sf.stats['modes_cc_in'] != 'None':
                 input['modes_cc'] = OrderedDict()
                 for m in sf.stats['modes_cc_in']:
                     mname = m.name

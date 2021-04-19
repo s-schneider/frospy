@@ -1281,6 +1281,9 @@ def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3"):
     elif file_name == "S40RTS_CRUST.sqlite3":
         path = "%s/data/S40RTS/%s" % (path, file_name)
         model = 'S40RTS'
+    else:
+        model = file_name.split('.')[0]
+        path = "{}/data/{}/{}".format(path, model, file_name)
     _write_cst_coeffs(cst, dst, path, model=model, author=None, lcut='all')
 
     return

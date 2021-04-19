@@ -236,7 +236,7 @@ def read_setup_stats(setup, modes_dir):
             modes_scin_dst)
 
 
-def get_cst_errors(c, modes, modes_cc, modes_dst=None):
+def get_cst_errors(c, modes, modes_cc, modes_dst=None, modes_cc_dst=None):
     # to check size of mcst
     if not isinstance(c, list):
         try:
@@ -363,9 +363,11 @@ def get_cst_errors(c, modes, modes_cc, modes_dst=None):
                             cst_errors[namecc][str(d)] = err
                             ind = ind_end
     # dst coeffs
+    count = 0
     if modes_dst is not None:
         # loop through dst
         for mode in modes_dst[1:]:
+            count += 1
             m = mode.split()
             name = ''.join(m[0:3])
             max_cdeg = int(m[3])
@@ -382,10 +384,52 @@ def get_cst_errors(c, modes, modes_cc, modes_dst=None):
                     err.confidence_level = 0
                     dst_errors[name][str(d)] = err
                     ind = ind_end
+
+            # Cross coupling coefficients
+            # CC after each mode in Self
+            # 1-1  ->  1-2  ->  1-3
+            #          2-2  ->  2-3
+            #                   3-3
+            if modes_cc_dst is not None:
+                # reading for 2 and 3 modes
+                if count == 1 and len(modes_cc_dst) >= 2:
+                    # 1-2  ->  1-3
+                    cc = modes_cc_dst[1:3]
+                elif count == 2 and len(modes_cc_dst) == 4:
+                    # ->  2-3
+                    cc = modes_cc_dst[-1:]
+                else:
+                    cc = []
+
+                for mode_cc in cc:
+                    m = mode_cc.split()
+                    namecc = ''.join(m[0:3]) + '-' + ''.join(m[3:6])
+                    ccdegs = max_cc_degrees(m[:-2])
+                    max_cdeg = int(m[-1])
+                    min_cdeg = min(ccdegs)
+
+                    if min_cdeg != int(m[-2]) and max_cdeg > 0:
+                        i = list(ccdegs).index(int(m[-2]))
+                        ccdegs = ccdegs[i:]
+
+                    if max_cdeg > 0:  # only read if CC has smax > 0
+                        for d in ccdegs:
+                            if d > max_cdeg:
+                                break
+
+                            ind_end = ind + 2*d + 1
+                            err = QuantityError()
+                            err.uncertainty = np.array(c[ind:ind_end])
+                            err.upper_uncertainty = np.array(c[ind:ind_end])
+                            err.lower_uncertainty = np.array(c[ind:ind_end])
+                            err.confidence_level = 0
+                            dst_errors[namecc][str(d)] = err
+                            ind = ind_end
+
     return cst_errors, dst_errors
 
 
-def get_cst(modes, modes_cc, c, noc, modes_dst=None):
+def get_cst(modes, modes_cc, c, noc, modes_dst=None, modes_cc_dst=None):
     # Arwens format
     if noc is False:
         ind = 0
@@ -467,9 +511,11 @@ def get_cst(modes, modes_cc, c, noc, modes_dst=None):
                                 cst[namecc][str(d)] = np.array(c[ind:ind_end])
                                 ind = ind_end
         # dst coeffs
+        count = 0
         if modes_dst is not None:
             # loop through dst
             for mode in modes_dst[1:]:
+                count += 1
                 m = mode.split()
                 name = ''.join(m[0:3])
                 max_cdeg = int(m[3])
@@ -481,6 +527,41 @@ def get_cst(modes, modes_cc, c, noc, modes_dst=None):
                         ind_end = ind + 2*d + 1
                         dst[name][str(d)] = np.array(c[ind:ind_end])
                         ind = ind_end
+
+                # Cross coupling coefficients
+                # CC after each mode in Self
+                # 1-1  ->  1-2  ->  1-3
+                #          2-2  ->  2-3
+                #                   3-3
+                if modes_cc_dst is not None:
+                    # reading for 2 and 3 modes
+                    if count == 1 and len(modes_cc_dst) >= 2:
+                        # 1-2  ->  1-3
+                        cc = modes_cc_dst[1:3]
+                    elif count == 2 and len(modes_cc_dst) == 4:
+                        # ->  2-3
+                        cc = modes_cc_dst[-1:]
+                    else:
+                        cc = []
+
+                    for mode_cc in cc:
+                        m = mode_cc.split()
+                        namecc = ''.join(m[0:3]) + '-' + ''.join(m[3:6])
+                        ccdegs = max_cc_degrees(m[:-2])
+                        max_cdeg = int(m[-1])
+                        min_cdeg = min(ccdegs)
+
+                        if min_cdeg != int(m[-2]) and max_cdeg > 0:
+                            i = list(ccdegs).index(int(m[-2]))
+                            ccdegs = ccdegs[i:]
+
+                        if max_cdeg > 0:  # only read if CC has smax > 0
+                            for d in ccdegs:
+                                if d > max_cdeg:
+                                    break
+                                ind_end = ind + 2*d + 1
+                                dst[namecc][str(d)] = np.array(c[ind:ind_end])
+                                ind = ind_end
     else:
         # Haydars format
         # Self coupling coefficients, dst are commented out
@@ -530,7 +611,7 @@ def get_cst(modes, modes_cc, c, noc, modes_dst=None):
             for d in ddegs:
                 if d > max_ddeg:
                     break
-                ind_end = ind + 2 * d + 1
+                ind_end = ind + 2*d + 1
                 dst[name][str(d)] = np.array(c[ind:ind_end])
                 ind = ind_end
 
@@ -547,7 +628,7 @@ def get_cst(modes, modes_cc, c, noc, modes_dst=None):
                 for d in ccdegs:
                     if d > max_ddeg:
                         break
-                    ind_end = ind + 2 * d + 1
+                    ind_end = ind + 2*d + 1
                     dst[name][str(d)] = np.array(c[ind:ind_end])
                     ind = ind_end
                 if len(dst[name]) == 0:

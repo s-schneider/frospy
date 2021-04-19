@@ -115,7 +115,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif cfile == 'RR':
         cst, dst, cst_errors, dst_errors = read_cst_RR(modesin, modes_ccin,
                                                        verbose=verbose)
-    elif cfile in ('S20RTS', 'S40RTS0', 'SP12RTS', 'QRFSI12'):
+    elif cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12'):
         cst, dst = read_cst_S20RTS(modesin=modesin, modes_ccin=modes_ccin,
                                    setup=setup, modes_dst=modes_scin_dst,
                                    R=R, model=cfile)

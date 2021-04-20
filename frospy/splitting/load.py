@@ -17,7 +17,7 @@ def loadmodel(*args):
 
 def load(ifile=None, modes=None, setup=None, modesin_dir=None,
          format=None, name='data', damp=None, R=-0.2, db_model=None,
-         return_set=False,
+         return_set=False, include_CRUST=True,
          verbose=False, name_overide=False):
 
     """
@@ -110,7 +110,8 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
                             damp=damp)
 
     elif format in models and setup is not None:
-        cst_out = read_cst(setup=setup, cfile=format, R=R)
+        cst_out = read_cst(setup=setup, cfile=format, R=R,
+                           include_CRUST=include_CRUST)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
         header = get_header(setup.rundir, modes_sc, modes_cc, damp=0,
                             name=name, model=format)

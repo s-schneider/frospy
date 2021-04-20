@@ -55,7 +55,7 @@ def read(ifile, format=None):
 
 
 def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
-             model='data', verbose=False):
+             model='data', include_CRUST=True, verbose=False):
     """
     param modes_dir: path to directory containing:
                          modes.in
@@ -118,7 +118,8 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12'):
         cst, dst = read_cst_S20RTS(modesin=modesin, modes_ccin=modes_ccin,
                                    setup=setup, modes_dst=modes_scin_dst,
-                                   R=R, model=cfile)
+                                   R=R, model=cfile,
+                                   include_CRUST=include_CRUST)
 
     elif cfile == 'TZ':
         cst, dst, cst_errors, dst_errors = read_cst_TZ(modesin, modes_ccin)
@@ -1291,7 +1292,7 @@ def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3"):
 
 def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                     keep_mcst=False, modes_dst=None, modes_cc_dst=None,
-                    R=-0.2, model='S20RTS'):
+                    R=-0.2, model='S20RTS', include_CRUST=True):
     """
     Calculates S20RTS coefficients using the program defined in
     S20RTS_path for given self-coupling modes in 'modes' and cross-coupling
@@ -1505,31 +1506,33 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                 c_s20rts_tmp = np.add(c_vs_tmp, c_vp_tmp)
 
             # CRUST prediction
-            for s in np.arange(0, int(s_max)+1, 2):
+            if include_CRUST is True:
+                for s in np.arange(0, int(s_max)+1, 2):
 
-                # only input coupling degrees, No degree higher then 20
-                if s not in max_sc_degrees(int(m[2])) or s > _maxcdeg:
-                    continue
-                os.system('echo "%s" > input' % s)
-                res = subprocess.Popen('%s < input' % cstCRUST, shell=True,
-                                       stdout=subprocess.PIPE,
-                                       stderr=subprocess.PIPE)
+                    # only input coupling degrees, No degree higher then 20
+                    if s not in max_sc_degrees(int(m[2])) or s > _maxcdeg:
+                        continue
+                    os.system('echo "%s" > input' % s)
+                    res = subprocess.Popen('%s < input' % cstCRUST, shell=True,
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE)
 
-                output, error = res.communicate()
-                os.system('cat mcst.dat >> mcst-CRUST.dat')
-                os.remove('mcst.dat')
-            with open('mcst-CRUST.dat', 'r') as fh_crust:
-                c_crust_tmp = np.genfromtxt(fh_crust)
-            if int(s_max) > _maxcdeg:
-                # Fill everything bigger than 20 with PREM values
-                for _s in range(_maxcdeg+2, int(s_max)+2, 2):
-                    sdiff = (2*_s)+1
-                    c_crust_tmp = np.hstack((c_crust_tmp, np.zeros(sdiff)))
+                    output, error = res.communicate()
+                    os.system('cat mcst.dat >> mcst-CRUST.dat')
+                    os.remove('mcst.dat')
+                with open('mcst-CRUST.dat', 'r') as fh_crust:
+                    c_crust_tmp = np.genfromtxt(fh_crust)
+                if int(s_max) > _maxcdeg:
+                    # Fill everything bigger than 20 with PREM values
+                    for _s in range(_maxcdeg+2, int(s_max)+2, 2):
+                        sdiff = (2*_s)+1
+                        c_crust_tmp = np.hstack((c_crust_tmp, np.zeros(sdiff)))
 
-            os.remove('mcst-CRUST.dat')
+                os.remove('mcst-CRUST.dat')
 
-            sc_coeff[mode] = np.add(c_s20rts_tmp, c_crust_tmp).transpose()
-
+                sc_coeff[mode] = np.add(c_s20rts_tmp, c_crust_tmp).transpose()
+            else:
+                sc_coeff[mode] = c_s20rts_tmp.transpose()
             # Cross coupling coefficients
             # CC after each mode in Self
             # 1-1  ->  1-2  ->  1-3
@@ -1606,11 +1609,14 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                             output, error = res.communicate()
                             os.system('cat mcst.dat >> mcst-CRUST.dat')
                             os.remove('mcst.dat')
-                        with open('mcst-CRUST.dat', 'r') as fh:
-                            c_crust_tmp = np.genfromtxt(fh)
-                        os.remove('mcst-CRUST.dat')
-                        cc_coeff[modecc] = np.add(c_s20rts_tmp,
-                                                  c_crust_tmp).transpose()
+                        if include_CRUST is True:
+                            with open('mcst-CRUST.dat', 'r') as fh:
+                                c_crust_tmp = np.genfromtxt(fh)
+                            os.remove('mcst-CRUST.dat')
+                            cc_coeff[modecc] = np.add(c_s20rts_tmp,
+                                                      c_crust_tmp).transpose()
+                        else:
+                            cc_coeff[modecc] = c_s20rts_tmp.transpose()
                         # os.system('cat mcst.dat >> cst.dat')
                         # os.remove('mcst.dat')
             else:

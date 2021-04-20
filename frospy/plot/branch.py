@@ -284,11 +284,11 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         input = list(model)
         input.insert(len(input), 'data')
         n_input = len(input)
-        # right now S20 and S40 are plotted as a line by Default
+        # right now S20, S40 and SP12 are plotted as a line by Default
         # if we make that optional we have to change this if condition too
         # If S20/S40 are not lines, but dots, they need to be taken
         # into account, as well as 'data'
-        for xin in ('S20RTS', 'S40RTS', 'data'):
+        for xin in ('S20RTS', 'S40RTS', 'SP12RTS', 'data'):
             if xin in input:
                 n_input += -1
 
@@ -302,7 +302,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         for m in input:
             # right now S20 and S40 are plotted as a line by Default
             # if we make that optional we have to change this if condition too
-            if m in ('S20RTS', 'S40RTS', 'data'):
+            if m in ('S20RTS', 'S40RTS', 'SP12RTS', 'data'):
                 width[m] = 0
             else:
                 width[m] = ww[i]
@@ -1113,6 +1113,15 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                     x = sorted(x)
                     _plotstyle = 'plot'
                     _linestyle = ':'
+                    _marker = 'None'
+                    _linewidth = linewidth_S20
+                    _color = 'grey'
+                elif models == 'SP12RTS':
+                    # Sorting the x and y values for the line plot here
+                    cst = [y for _, y in sorted(zip(x, cst))]
+                    x = sorted(x)
+                    _plotstyle = 'plot'
+                    _linestyle = 'dashdot'
                     _marker = 'None'
                     _linewidth = linewidth_S20
                     _color = 'grey'

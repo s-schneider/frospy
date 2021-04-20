@@ -1596,20 +1596,21 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                             c_s20rts_tmp = np.genfromtxt(fh)
                         os.remove('mcst-S20RTS.dat')
                         # CRUST cc prediction
-                        for s in np.arange(sdeg[0], int(sdeg[1])+1, 2):
-                            # only input coupling degrees
-                            if s not in ccdegs:
-                                continue
-                            os.system('echo "%s" > input' % s)
-                            res = subprocess.Popen('%s < input' % cc_cstCRUST,
-                                                   shell=True,
-                                                   stdout=subprocess.PIPE,
-                                                   stderr=subprocess.PIPE)
-
-                            output, error = res.communicate()
-                            os.system('cat mcst.dat >> mcst-CRUST.dat')
-                            os.remove('mcst.dat')
                         if include_CRUST is True:
+                            for s in np.arange(sdeg[0], int(sdeg[1])+1, 2):
+                                # only input coupling degrees
+                                if s not in ccdegs:
+                                    continue
+                                os.system('echo "%s" > input' % s)
+                                res = subprocess.Popen('%s < input' % cc_cstCRUST,
+                                                       shell=True,
+                                                       stdout=subprocess.PIPE,
+                                                       stderr=subprocess.PIPE)
+
+                                output, error = res.communicate()
+                                os.system('cat mcst.dat >> mcst-CRUST.dat')
+                                os.remove('mcst.dat')
+
                             with open('mcst-CRUST.dat', 'r') as fh:
                                 c_crust_tmp = np.genfromtxt(fh)
                             os.remove('mcst-CRUST.dat')

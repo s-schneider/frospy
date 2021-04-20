@@ -39,6 +39,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
            cbar_aspect=1.2,
            vmin=-4, vmax=4,
            colorbarlabel=None,
+           include_CRUST=True,
            colorbar_multicolor=['blue', 'k', 'red'],
            colorbarlabel_anchor=(0.5, -.8),
            subtitle=None,
@@ -81,6 +82,9 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                         'REM', 'SAS', 'TCB', 'TZ'
                  e.g. ['S20RTS', 'RR']
 
+    param include_CRUST: add CRUST5.1 to model predictions
+    type  include_CRUST: bool (add to all models) or
+                         list of models where it will be added
     param ifiles2: input files of second data set to be pltted
 
     param label2: label of 2nd data set to be plotted
@@ -249,6 +253,13 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 continue
 
             for j, m in enumerate(model):
+                if include_CRUST is True:
+                    CRUST = True
+                else:
+                    if type(include_CRUST) == list and model in include_CRUST:
+                        CRUST = True
+                    else:
+                        CRUST = False
                 counter += 1
                 if loadingbar is True:
                     update_progress(counter/float(Nfiles), 'Loading Models')
@@ -256,7 +267,8 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                     if verbose is True:
                         print('Calculating model / modes: %s / %s' % (m, sf))
                 SF += load(setup=setup, ifile=None, format=m, damp=1,
-                                name="%s_%s" % (m, name), R=R)
+                           name="%s_%s" % (m, name), R=R,
+                           include_CRUST=CRUST)
 
     if model is None:
         model = [None]

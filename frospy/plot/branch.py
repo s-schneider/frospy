@@ -675,9 +675,6 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 tmp_e = sf_err[list(sf_err.keys())[0]]['0']['uncertainty']
                 if tmp_e == 0:
                     sf_err = s.cst_errors
-        print(s.stats.name)
-        print(sf_err)
-
         # Loop over mode names of csts, key=modename
         for key in sf.keys():
             skip = False

@@ -1144,13 +1144,14 @@ def read_cst_RR(modesin, modes_ccin, mname='RR', verbose=False):
             if line.startswith('#'):
                 continue
             name1 = ''.join(line.split()[0]).upper()
-            name2 = ''.join(line.split()[1]).upper()
-            name = format_name(''.join([name1, 'T', name2]))
+            mtype = ''.join(line.split()[1]).upper()
+            name2 = ''.join(line.split()[2]).upper()
+            name = format_name(''.join([name1, mtype, name2]))
             mode = allmodes.select(name=name)[0]
             if name not in mnames[0]:
                 continue
-            f0_err = float(line.split()[3])
-            Q_err = float(line.split()[5])
+            f0_err = float(line.split()[4])
+            Q_err = float(line.split()[6])
             f = fQ[name][0]
             Q = fQ[name][1]
             c00 = fQ2cst_err(f, f0_err, Q, Q_err, mode,

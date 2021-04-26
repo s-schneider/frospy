@@ -279,7 +279,6 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
     for S in SF:
         if verbose is True:
             print(S)
-
         # if S.stats.name.split('_')[0] not in m:
         if S.stats.model not in m:
             m.append(S.stats.model)
@@ -672,6 +671,13 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
             sf = s.dst
             sf_err = s.dst_errors
 
+            if len(sf_err) > 0:
+                tmp_e = sf_err[list(sf_err.keys())[0]]['0']['uncertainty']
+                if tmp_e == 0:
+                    sf_err = s.cst_errors
+        print(s.stats.name)
+        print(sf_err)
+
         # Loop over mode names of csts, key=modename
         for key in sf.keys():
             skip = False
@@ -721,6 +727,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 coeffs = sf[key][str(degree)]
                 try:
                     errors_temp = sf_err[key][str(degree)]
+                    # print(s.stats.name, key, degree, errors_temp)
                     errors = errors_temp['uncertainty']
                     errors_up = errors_temp['upper_uncertainty']
                     errors_lw = errors_temp['lower_uncertainty']
@@ -746,7 +753,6 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
 
             if parts != 'all':
                 coeffs = [sf[key][str(parts[1])][parts[2]]]
-
             for i, (cst, err, erru, errl) in enumerate(zip(coeffs, errors,
                                                            errors_up,
                                                            errors_lw)):
@@ -783,6 +789,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                         if plot_Q is True:
                             cst_fQ = {'f': cst}
                     if plot_Q is True:
+                        # print(s.stats.name, i, key, cst, err, erru, errl)
                         # Q = fc / (2 * (f0/(2*Q0)+(4pi)**-1/2 * Im(c00)))
                         c00 = s.cst[key]['0']
                         fc = _mode.freq * 1e3 + 1. / np.sqrt(4. * np.pi) * c00

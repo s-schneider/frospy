@@ -39,6 +39,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
            cbar_aspect=1.2,
            vmin=-4, vmax=4,
            colorbarlabel=None,
+           include_CRUST=True,
            colorbar_multicolor=['blue', 'k', 'red'],
            colorbarlabel_anchor=(0.5, -.8),
            subtitle=None,
@@ -81,6 +82,9 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                         'REM', 'SAS', 'TCB', 'TZ'
                  e.g. ['S20RTS', 'RR']
 
+    param include_CRUST: add CRUST5.1 to model predictions
+    type  include_CRUST: bool (add to all models) or
+                         list of models where it will be added
     param ifiles2: input files of second data set to be pltted
 
     param label2: label of 2nd data set to be plotted
@@ -249,6 +253,13 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 continue
 
             for j, m in enumerate(model):
+                if include_CRUST is True:
+                    CRUST = True
+                else:
+                    if type(include_CRUST) == list and model in include_CRUST:
+                        CRUST = True
+                    else:
+                        CRUST = False
                 counter += 1
                 if loadingbar is True:
                     update_progress(counter/float(Nfiles), 'Loading Models')
@@ -256,7 +267,8 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                     if verbose is True:
                         print('Calculating model / modes: %s / %s' % (m, sf))
                 SF += load(setup=setup, ifile=None, format=m, damp=1,
-                                name="%s_%s" % (m, name), R=R)
+                           name="%s_%s" % (m, name), R=R,
+                           include_CRUST=CRUST)
 
     if model is None:
         model = [None]
@@ -267,7 +279,6 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
     for S in SF:
         if verbose is True:
             print(S)
-
         # if S.stats.name.split('_')[0] not in m:
         if S.stats.model not in m:
             m.append(S.stats.model)
@@ -284,11 +295,11 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         input = list(model)
         input.insert(len(input), 'data')
         n_input = len(input)
-        # right now S20 and S40 are plotted as a line by Default
+        # right now S20, S40 and SP12 are plotted as a line by Default
         # if we make that optional we have to change this if condition too
         # If S20/S40 are not lines, but dots, they need to be taken
         # into account, as well as 'data'
-        for xin in ('S20RTS', 'S40RTS', 'data'):
+        for xin in ('S20RTS', 'S40RTS', 'SP12RTS', 'data'):
             if xin in input:
                 n_input += -1
 
@@ -302,7 +313,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         for m in input:
             # right now S20 and S40 are plotted as a line by Default
             # if we make that optional we have to change this if condition too
-            if m in ('S20RTS', 'S40RTS', 'data'):
+            if m in ('S20RTS', 'S40RTS', 'SP12RTS', 'data'):
                 width[m] = 0
             else:
                 width[m] = ww[i]
@@ -660,6 +671,10 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
             sf = s.dst
             sf_err = s.dst_errors
 
+            if len(sf_err) > 0:
+                tmp_e = sf_err[list(sf_err.keys())[0]]['0']['uncertainty']
+                if tmp_e == 0:
+                    sf_err = s.cst_errors
         # Loop over mode names of csts, key=modename
         for key in sf.keys():
             skip = False
@@ -709,6 +724,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 coeffs = sf[key][str(degree)]
                 try:
                     errors_temp = sf_err[key][str(degree)]
+                    # print(s.stats.name, key, degree, errors_temp)
                     errors = errors_temp['uncertainty']
                     errors_up = errors_temp['upper_uncertainty']
                     errors_lw = errors_temp['lower_uncertainty']
@@ -734,7 +750,6 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
 
             if parts != 'all':
                 coeffs = [sf[key][str(parts[1])][parts[2]]]
-
             for i, (cst, err, erru, errl) in enumerate(zip(coeffs, errors,
                                                            errors_up,
                                                            errors_lw)):
@@ -771,6 +786,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                         if plot_Q is True:
                             cst_fQ = {'f': cst}
                     if plot_Q is True:
+                        # print(s.stats.name, i, key, cst, err, erru, errl)
                         # Q = fc / (2 * (f0/(2*Q0)+(4pi)**-1/2 * Im(c00)))
                         c00 = s.cst[key]['0']
                         fc = _mode.freq * 1e3 + 1. / np.sqrt(4. * np.pi) * c00
@@ -1113,6 +1129,15 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                     x = sorted(x)
                     _plotstyle = 'plot'
                     _linestyle = ':'
+                    _marker = 'None'
+                    _linewidth = linewidth_S20
+                    _color = 'grey'
+                elif models == 'SP12RTS':
+                    # Sorting the x and y values for the line plot here
+                    cst = [y for _, y in sorted(zip(x, cst))]
+                    x = sorted(x)
+                    _plotstyle = 'plot'
+                    _linestyle = 'dashdot'
                     _marker = 'None'
                     _linewidth = linewidth_S20
                     _color = 'grey'

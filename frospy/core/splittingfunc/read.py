@@ -76,6 +76,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     """
 
     if setup is not None or modes_dir is not None:
+        print(1)
         out = read_setup_stats(setup, modes_dir)
         modes_sc, modes_cc, modesin, modes_ccin, modes_scin_dst = out[:]
 
@@ -86,9 +87,10 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
                           'sens': None, 'freq': 0, 'Q': 0}
                 modes_cc += Mode(header)
     elif modes is not None:
+        print(2)
         modes_sc, modes_cc, modesin, modes_ccin = get_modes4cst(modes)
         modes_scin_dst = None
-
+    # cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12')
     else:
         if not cfile.endswith('sqlite3'):
             print('if cfile not "db", setup or modes_dir has to be given')
@@ -116,7 +118,6 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
         cst, dst, cst_errors, dst_errors = read_cst_RR(modesin, modes_ccin,
                                                        verbose=verbose)
     elif cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12'):
-        print(modesin, modes_ccin)
         cst, dst = read_cst_S20RTS(modesin=modesin, modes_ccin=modes_ccin,
                                    setup=setup, modes_dst=modes_scin_dst,
                                    R=R, model=cfile,
@@ -1306,7 +1307,6 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     # higher degree than in db is requested it will be calculated
     # calculate R dst predictions if not R=-2. Only R=-0.2 saved in database
     # print(model, 'CRUST', include_CRUST)
-    print(modesin)
     if R == -0.2:
         try:
             if model == 'S20RTS':
@@ -1403,6 +1403,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         _maxcdeg = 12 # crust model
         _maxddeg = 12 # dst model
 
+    print(modesin, modes_ccin)
     sc_modes, cc_modes = get_mode_names(modesin, modes_ccin)
     sc_cdeg, sc_ddeg, cc_cdeg, cc_ddeg = get_mode_deg(modesin, modes_ccin)
 

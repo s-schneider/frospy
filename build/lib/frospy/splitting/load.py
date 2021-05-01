@@ -17,7 +17,7 @@ def loadmodel(*args):
 
 def load(ifile=None, modes=None, setup=None, modesin_dir=None,
          format=None, name='data', damp=None, R=-0.2, db_model=None,
-         return_set=False,
+         return_set=False, include_CRUST=True,
          verbose=False, name_overide=False):
 
     """
@@ -32,12 +32,12 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
               'STS_SC', 'STS_GC_SC', 'STS_GC_CC', 'Sumatra',
               'S20RTS+CRUST+BT', 'S20RTS+CRUST+Tr',
               'S20RTS+CRUST+Wh', 'S20RTS+CRUST+Ro',
+              'SP12RTS', 'QRFSI12',
               'BT', 'Tr', 'Ro', 'Wh',
               '$\phi$=1.20', '$\phi$=1.10', '$\phi$=1.04',
               '$\phi$=0.96', '$\phi$=0.90', '$\phi$=0.80']
 
     model = None
-
     if modes is not None:
         if type(modes) == str:
             modes = [modes]
@@ -109,12 +109,29 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         header = get_header(setup.rundir, modes_sc, modes_cc, name=name,
                             damp=damp)
 
-    elif format in models and setup is not None:
-        cst_out = read_cst(setup=setup, cfile=format, R=R)
-        cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-        header = get_header(setup.rundir, modes_sc, modes_cc, damp=0,
-                            name=name, model=format)
-
+    elif format in models:
+        if setup is not None:
+            cst_out = read_cst(setup=setup, cfile=format, R=R,
+                               include_CRUST=include_CRUST)
+            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+            header = get_header(setup.rundir, modes_sc, modes_cc, damp=0,
+                                name=name, model=format)
+        elif modesin_dir is not None:
+            cst_out = read_cst(format, modesin_dir,
+                               include_CRUST=include_CRUST)
+            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+            name = format
+            model = format
+            header = get_header(modesin_dir, modes_sc, modes_cc,
+                                name=name, model=model, damp=damp)
+        else:
+            cst_out = read_cst(cfile=format, modes=modes, verbose=verbose,
+                               include_CRUST=include_CRUST)
+            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+            name = format
+            model = format
+            header = get_header(None, modes_sc, modes_cc,
+                                name=name, model=model, damp=damp)
     elif format == 'dat':
         if modesin_dir is not None:
             cst_out = read_cst(cfile=ifile, modes_dir=modesin_dir)
@@ -125,30 +142,19 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         header = get_header(modesin_dir, modes_sc, modes_cc,
                             name=name, model=model, damp=damp)
 
-    elif (format in models and modesin_dir is not None):
-        cst_out = read_cst(format, modesin_dir)
-        cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-        name = format
-        model = format
-        header = get_header(modesin_dir, modes_sc, modes_cc,
-                            name=name, model=model, damp=damp)
-    elif format in models:
-        cst_out = read_cst(cfile=format, modes=modes, verbose=verbose)
-        cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-        name = format
-        model = format
-        header = get_header(None, modes_sc, modes_cc,
-                            name=name, model=model, damp=damp)
-
     # if mode is not defined, it will load all modes from the file,
     # in this case we need to loop over them
     if return_set is True:
         S = Set()
         for _m, _cst in cst.items():
             c = {_m: _cst}
-            c_err = {_m: cst_errors[_m]}
             d = {_m: dst[_m]}
-            d_err = {_m: dst_errors[_m]}
+
+            try:
+                c_err = {_m: cst_errors[_m]}
+                d_err = {_m: dst_errors[_m]}
+            except Exception:
+                pass
             modes_sc, modes_cc, modesin, modes_ccin = get_modes4cst(_m)
 
             header = get_header(modesin_dir, modes_sc,

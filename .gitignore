@@ -20,7 +20,7 @@ frospy/data/cnn
 tmp_*
 
 build_commands.sh
-build
-dist
+build/*
+dist/*
 frospy.egg-info
 frospy.egg-info/*

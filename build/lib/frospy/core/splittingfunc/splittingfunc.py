@@ -278,7 +278,7 @@ class SplittingFunc(object):
             print(msg)
         return
 
-    def plot_map(self, **kwargs):
+    def plot_map(self, fs=10, **kwargs):
         smin = None
         smax = None
         show = True
@@ -350,7 +350,7 @@ class SplittingFunc(object):
                 else:
                     kwargs['smin'] = 2
 
-                im, fig = _plot_map(clm, m, kind='cst', suptitle=title,
+                im, fig = _plot_map(clm, m, kind='cst', suptitle=title, fs=fs,
                                     **kwargs)
                 im_cst.append(im)
                 figs.append(fig)

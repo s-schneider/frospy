@@ -613,6 +613,9 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
     if 'smin' in kwargs:
         smin = kwargs['smin']
 
+    if 'fs' in kwargs:
+        plt.rcParams.update({'font.size': kwargs['fs']})
+
     if 'fig' in kwargs:
         fig = kwargs['fig']
         fig.set_size_inches(8, 4)

@@ -1411,7 +1411,6 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         _maxcdeg = 12 # crust model
         _maxddeg = 12 # dst model
 
-    print(modesin, modes_ccin)
     sc_modes, cc_modes = get_mode_names(modesin, modes_ccin)
     sc_cdeg, sc_ddeg, cc_cdeg, cc_ddeg = get_mode_deg(modesin, modes_ccin)
 

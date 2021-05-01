@@ -1305,6 +1305,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     # higher degree than in db is requested it will be calculated
     # calculate R dst predictions if not R=-2. Only R=-0.2 saved in database
     # print(model, 'CRUST', include_CRUST)
+    print(modesin)
     if R == -0.2:
         try:
             if model == 'S20RTS':

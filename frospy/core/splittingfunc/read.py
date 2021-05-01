@@ -77,6 +77,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
 
     if setup is not None or modes_dir is not None:
         if cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12'):
+            from IPython import embed; embed()
             if len(setup.modes_cc) > 1 and len(setup.modes.sc) == 0:
                 allmodes = read_modes()
                 for _m in setup.modes_cc.keys():

@@ -1759,7 +1759,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         os.remove('mdcpl.out')
         os.remove('raw.dat')
         os.remove('input')
-    except IndexError:
+    except FileNotFoundError:
         pass
 
     cT = sc_coeff[sc_modes[0]]

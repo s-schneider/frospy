@@ -76,8 +76,10 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     """
 
     if setup is not None or modes_dir is not None:
-        print(1)
+        if cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12'):
+            from IPython import embed; embed()
         out = read_setup_stats(setup, modes_dir)
+
         modes_sc, modes_cc, modesin, modes_ccin, modes_scin_dst = out[:]
 
         sc, cc = get_mode_names(modesin, modes_ccin)
@@ -87,7 +89,6 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
                           'sens': None, 'freq': 0, 'Q': 0}
                 modes_cc += Mode(header)
     elif modes is not None:
-        print(2)
         modes_sc, modes_cc, modesin, modes_ccin = get_modes4cst(modes)
         modes_scin_dst = None
     # cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12')

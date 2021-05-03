@@ -644,7 +644,7 @@ def mode_lines(ax, xrange, modes, overlap=True,
             text_plotter(mode_freqs, m_ypos, text_positions, m_names, ax,
                          txt_width, txt_height, fontsize)
 
-    return
+    return text_positions, m_ypos, txt_width, txt_height
 
 
 def plot_station_map(spectrum, inv, segments, station, gs, ax):

@@ -133,8 +133,8 @@ def plot_spectrum(main, gui=False):
                 fig.axes[1].text(mode.freq, ypos, mtxt, fontsize=14)
                 ypos += 0.07
         else:
-            plot_modes(main.spec, main.fw[0], main.fw[1], main.modes, ax.amp,
-                       l_height, l_width, fontsize=main.fs)
+            _ = plot_modes(main.spec, main.fw[0], main.fw[1], main.modes,
+                           ax.amp, l_height, l_width, fontsize=main.fs)
 
     if main.segments:
         plot_segments(main.spec, main.segments, main.fw[0], main.fw[1], seg_ax)
@@ -388,13 +388,20 @@ def init_gcpmap(gs, lon1, lon2):
 
 
 def plot_modes(spectrum, fw1, fw2, modes, ax, l_height, l_width, fontsize=10,
-               linewidth=1):
+               linewidth=1, text_positions=None, m_ypos=None,
+               txt_width=None, txt_height=None):
 
     startlabel = spectrum.flabel(fw1)
     endlabel = spectrum.flabel(fw2)
     f = spectrum.stats.freq
-    mode_lines(ax, f[startlabel:endlabel + 1], modes, label_height=l_height,
-               label_width=l_width, fontsize=fontsize, linewidth=linewidth)
+    out = mode_lines(ax, f[startlabel:endlabel + 1], modes,
+                     label_height=l_height,
+                     label_width=l_width, fontsize=fontsize,
+                     linewidth=linewidth,
+                     text_positions=text_positions, m_ypos=m_ypos,
+                     txt_width=txt_width, txt_height=txt_height)
+    text_positions, m_ypos, txt_width, txt_height = out[:]
+    return text_positions, m_ypos, txt_width, txt_height
 
 
 def plot_segments(spectrum, segments, fw1, fw2, ax, alpha=0.05,
@@ -604,7 +611,9 @@ def spectrum_label(spectrum):
 
 def mode_lines(ax, xrange, modes, overlap=True,
                label_height=None, label_width=None, print_labels=True,
-               fontsize=10, linewidth=1):
+               fontsize=10, linewidth=1,
+               text_positions=None, m_ypos=None,
+               txt_width=None, txt_height=None):
     xtrans = ax.get_xaxis_transform()
     mode_freqs = []
     mode_labels = []
@@ -625,11 +634,13 @@ def mode_lines(ax, xrange, modes, overlap=True,
                     y=1.03, ax=ax, transform=xtrans, rotation=45,
                     ha="center", va='center')
         else:
-            m_ypos = (np.ones(len(mode_freqs)) * ax.get_ylim()[1])
-            txt_height = label_height * (ax.get_ylim()[1] - ax.get_ylim()[0])
-            txt_width = 1.2 * label_width * (ax.get_xlim()[1] - ax.get_xlim()[0])
-            text_positions = get_text_positions(mode_freqs, m_ypos, txt_width,
-                                                txt_height)
+            if (text_positions is None or m_ypos is None or
+                    txt_height is None or txt_width is None):
+                m_ypos = (np.ones(len(mode_freqs)) * ax.get_ylim()[1])
+                txt_height = label_height * (ax.get_ylim()[1] - ax.get_ylim()[0])
+                txt_width = 1.2 * label_width * (ax.get_xlim()[1] - ax.get_xlim()[0])
+                text_positions = get_text_positions(mode_freqs, m_ypos, txt_width,
+                                                    txt_height)
             text_plotter(mode_freqs, m_ypos, text_positions, m_names, ax,
                          txt_width, txt_height, fontsize)
 
@@ -731,8 +742,8 @@ def plot_spectrum_partials(main):
                               ax=ax, width=main.line_width, dlabel=dlabel,
                               cmap=cmap)
                 if modes is not None:
-                    plot_modes(spectrum, fw[0], fw[1], modes, ax,
-                               l_height, l_width, fontsize=main.fs)
+                    _ = plot_modes(spectrum, fw[0], fw[1], modes, ax,
+                                   l_height, l_width, fontsize=main.fs)
                 if segments:
                     plot_segments(spectrum, segments, fw[0], fw[1], [ax])
                 ax.legend()
@@ -742,8 +753,8 @@ def plot_spectrum_partials(main):
                 spectrum.plot(fw[0], fw[1], part='Phase', width=main.line_width,
                               ax=ax, cmap=cmap, normalize=True)
                 if modes is not None:
-                    plot_modes(spectrum, fw[0], fw[1], modes, ax,
-                               l_height, l_width, fontsize=main.fs)
+                    _ = plot_modes(spectrum, fw[0], fw[1], modes, ax,
+                                   l_height, l_width, fontsize=main.fs)
                 if segments:
                     plot_segments(spectrum, segments, fw[0], fw[1], [ax])
 

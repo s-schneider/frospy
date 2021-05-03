@@ -76,7 +76,17 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     """
 
     if setup is not None or modes_dir is not None:
+        if cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12'):
+            if len(setup.modes_cc) > 0 and len(setup.modes_sc) == 0:
+                allmodes = read_modes()
+                for _m in setup.modes_cc.keys():
+                    _m1, _m2 = _m.split('-')
+                    setup.modes_sc[_m1] = 20
+                    setup.modes_sc[_m2] = 20
+                    setup.modes += allmodes.select(name=_m1)
+                    setup.modes += allmodes.select(name=_m2)
         out = read_setup_stats(setup, modes_dir)
+
         modes_sc, modes_cc, modesin, modes_ccin, modes_scin_dst = out[:]
 
         sc, cc = get_mode_names(modesin, modes_ccin)
@@ -88,7 +98,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif modes is not None:
         modes_sc, modes_cc, modesin, modes_ccin = get_modes4cst(modes)
         modes_scin_dst = None
-
+    # cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12')
     else:
         if not cfile.endswith('sqlite3'):
             print('if cfile not "db", setup or modes_dir has to be given')

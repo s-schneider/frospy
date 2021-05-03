@@ -389,7 +389,7 @@ def init_gcpmap(gs, lon1, lon2):
 
 def plot_modes(spectrum, fw1, fw2, modes, ax, l_height, l_width, fontsize=10,
                linewidth=1, text_positions=None, m_ypos=None,
-               txt_width=None, txt_height=None):
+               txt_width=None, txt_height=None, mline_ylim=None):
 
     startlabel = spectrum.flabel(fw1)
     endlabel = spectrum.flabel(fw2)
@@ -399,7 +399,8 @@ def plot_modes(spectrum, fw1, fw2, modes, ax, l_height, l_width, fontsize=10,
                      label_width=l_width, fontsize=fontsize,
                      linewidth=linewidth,
                      text_positions=text_positions, m_ypos=m_ypos,
-                     txt_width=txt_width, txt_height=txt_height)
+                     txt_width=txt_width, txt_height=txt_height,
+                     mline_ylim=mline_ylim)
     text_positions, m_ypos, txt_width, txt_height = out[:]
     return text_positions, m_ypos, txt_width, txt_height
 
@@ -613,7 +614,8 @@ def mode_lines(ax, xrange, modes, overlap=True,
                label_height=None, label_width=None, print_labels=True,
                fontsize=10, linewidth=1,
                text_positions=None, m_ypos=None,
-               txt_width=None, txt_height=None):
+               txt_width=None, txt_height=None,
+               mline_ylim=None):
     xtrans = ax.get_xaxis_transform()
     mode_freqs = []
     mode_labels = []
@@ -624,7 +626,7 @@ def mode_lines(ax, xrange, modes, overlap=True,
             mode_labels.append([mode.freq, name])
             mode_freqs.append(mode.freq)
     axvlines(mode_freqs, ax=ax, linestyle=':', linewidth=linewidth,
-             color='grey')
+             color='grey', ylim=mline_ylim)
     if mode_labels and print_labels is True:
         mode_labels = np.array(mode_labels, dtype=object)
         m_names = mode_labels.transpose()[1]

@@ -1778,15 +1778,13 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                 else:
                     cc_coeff_dst = None
 
-    try:
-        # os.system('cp mcst.dat cst.dat')
-        os.remove('modes.in')
-        os.remove('cst.dat')
-        os.remove('mdcpl.out')
-        os.remove('raw.dat')
-        os.remove('input')
-    except FileNotFoundError:
-        pass
+    for _file in ('modes.in', 'cst.dat', 'mdcpl.out', 'raw.dat', 'input'):
+        try:
+            # os.system('cp mcst.dat cst.dat')
+            os.remove(_file)
+        except FileNotFoundError:
+            print(_file)
+            pass
 
     cT = sc_coeff[sc_modes[0]]
     mode = sc_modes[0]

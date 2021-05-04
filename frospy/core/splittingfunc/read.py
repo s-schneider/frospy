@@ -1416,9 +1416,9 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         cc_cstS20RTS = None
         dstS20RTS = None
         cc_dstS20RTS = None
-        _maxmdeg = 12 # cst model
-        _maxcdeg = 12 # crust model
-        _maxddeg = 12 # dst model
+        _maxmdeg = 20 # cst model
+        _maxcdeg = 20 # crust model
+        _maxddeg = 20 # dst model
     sc_modes, cc_modes = get_mode_names(modesin, modes_ccin)
     sc_cdeg, sc_ddeg, cc_cdeg, cc_ddeg = get_mode_deg(modesin, modes_ccin)
 
@@ -1442,7 +1442,6 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         cc_coeff = {}
 
     count = 0
-    from IPython import embed; embed()
     for mode, s_max in zip(sc_modes, sc_cdeg):
         m = split_digit_nondigit(mode)
         if int(s_max) == 0 and int(m[2]) > 0:

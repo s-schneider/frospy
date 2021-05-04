@@ -1549,8 +1549,10 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                         c_crust_tmp = np.hstack((c_crust_tmp, np.zeros(sdiff)))
 
                 os.remove('mcst-CRUST.dat')
-
-                sc_coeff[mode] = np.add(c_s20rts_tmp, c_crust_tmp).transpose()
+                if model == 'CRUST':
+                    sc_coeff[mode] = c_crust_tmp.transpose()
+                else:
+                    sc_coeff[mode] = np.add(c_s20rts_tmp, c_crust_tmp).transpose()
             else:
                 sc_coeff[mode] = c_s20rts_tmp.transpose()
             # Cross coupling coefficients
@@ -1635,8 +1637,11 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                             with open('mcst-CRUST.dat', 'r') as fh:
                                 c_crust_tmp = np.genfromtxt(fh)
                             os.remove('mcst-CRUST.dat')
-                            cc_coeff[modecc] = np.add(c_s20rts_tmp,
-                                                      c_crust_tmp).transpose()
+                            if model == 'CRUST':
+                                cc_coeff[modecc] = c_crust_tmp.transpose()
+                            else:
+                                cc_coeff[modecc] = np.add(c_s20rts_tmp,
+                                                          c_crust_tmp).transpose()
                         else:
                             cc_coeff[modecc] = c_s20rts_tmp.transpose()
                         # os.system('cat mcst.dat >> cst.dat')

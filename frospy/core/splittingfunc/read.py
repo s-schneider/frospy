@@ -1442,7 +1442,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         cc_coeff = {}
 
     count = 0
-
+    from IPython import embed; embed()
     for mode, s_max in zip(sc_modes, sc_cdeg):
         m = split_digit_nondigit(mode)
         if int(s_max) == 0 and int(m[2]) > 0:

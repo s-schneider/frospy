@@ -1476,7 +1476,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                         sdiff = (2*_s)+1
                         c_s20rts_tmp = np.hstack((c_s20rts_tmp, np.zeros(sdiff)))
                 os.remove('mcst-S20RTS.dat')
-            else:
+            elif model == 'SP12RTS':
                 # SP12RTS vs prediction
                 for s in np.arange(0, int(s_max)+1, 2):
                     # only input coupling degrees, No degree higher then 20

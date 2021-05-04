@@ -32,7 +32,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
               'STS_SC', 'STS_GC_SC', 'STS_GC_CC', 'Sumatra',
               'S20RTS+CRUST+BT', 'S20RTS+CRUST+Tr',
               'S20RTS+CRUST+Wh', 'S20RTS+CRUST+Ro',
-              'SP12RTS', 'QRFSI12',
+              'SP12RTS', 'QRFSI12', 'CRUST',
               'BT', 'Tr', 'Ro', 'Wh',
               '$\phi$=1.20', '$\phi$=1.10', '$\phi$=1.04',
               '$\phi$=0.96', '$\phi$=0.90', '$\phi$=0.80']

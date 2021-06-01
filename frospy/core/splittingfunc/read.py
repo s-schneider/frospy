@@ -76,7 +76,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     """
 
     if setup is not None or modes_dir is not None:
-        if cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12'):
+        if cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST'):
             if len(setup.modes_cc) > 0 and len(setup.modes_sc) == 0:
                 allmodes = read_modes()
                 for _m in setup.modes_cc.keys():
@@ -125,7 +125,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif cfile == 'RR':
         cst, dst, cst_errors, dst_errors = read_cst_RR(modesin, modes_ccin,
                                                        verbose=verbose)
-    elif cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12'):
+    elif cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST'):
         cst, dst = read_cst_S20RTS(modesin=modesin, modes_ccin=modes_ccin,
                                    setup=setup, modes_dst=modes_scin_dst,
                                    R=R, model=cfile,
@@ -1303,7 +1303,8 @@ def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3"):
 
 def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                     keep_mcst=False, modes_dst=None, modes_cc_dst=None,
-                    R=-0.2, model='S20RTS', include_CRUST=True):
+                    R=-0.2, model='S20RTS', include_CRUST=True,
+                    verbose=False):
     """
     Calculates S20RTS coefficients using the program defined in
     S20RTS_path for given self-coupling modes in 'modes' and cross-coupling
@@ -1411,6 +1412,14 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         _maxcdeg = 12 # crust model
         _maxddeg = 12 # dst model
 
+    if model == 'CRUST':
+        cstS20RTS = None
+        cc_cstS20RTS = None
+        dstS20RTS = None
+        cc_dstS20RTS = None
+        _maxmdeg = 20 # cst model
+        _maxcdeg = 20 # crust model
+        _maxddeg = 20 # dst model
     sc_modes, cc_modes = get_mode_names(modesin, modes_ccin)
     sc_cdeg, sc_ddeg, cc_cdeg, cc_ddeg = get_mode_deg(modesin, modes_ccin)
 
@@ -1434,7 +1443,6 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         cc_coeff = {}
 
     count = 0
-
     for mode, s_max in zip(sc_modes, sc_cdeg):
         m = split_digit_nondigit(mode)
         if int(s_max) == 0 and int(m[2]) > 0:
@@ -1446,7 +1454,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             os.system('echo "%03d %s %03d" >> modes.in' % (int(m[0]),
                                                            m[1].lower(),
                                                            int(m[2])))
-            if model != 'SP12RTS':
+            if model != 'SP12RTS' and model != 'CRUST':
                 # S20RTS prediction
                 for s in np.arange(0, int(s_max)+1, 2):
                     # only input coupling degrees, No degree higher then 20
@@ -1468,7 +1476,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                         sdiff = (2*_s)+1
                         c_s20rts_tmp = np.hstack((c_s20rts_tmp, np.zeros(sdiff)))
                 os.remove('mcst-S20RTS.dat')
-            else:
+            elif model == 'SP12RTS':
                 # SP12RTS vs prediction
                 for s in np.arange(0, int(s_max)+1, 2):
                     # only input coupling degrees, No degree higher then 20
@@ -1541,8 +1549,10 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                         c_crust_tmp = np.hstack((c_crust_tmp, np.zeros(sdiff)))
 
                 os.remove('mcst-CRUST.dat')
-
-                sc_coeff[mode] = np.add(c_s20rts_tmp, c_crust_tmp).transpose()
+                if model == 'CRUST':
+                    sc_coeff[mode] = c_crust_tmp.transpose()
+                else:
+                    sc_coeff[mode] = np.add(c_s20rts_tmp, c_crust_tmp).transpose()
             else:
                 sc_coeff[mode] = c_s20rts_tmp.transpose()
             # Cross coupling coefficients
@@ -1591,22 +1601,23 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                         ccdegs = max_cc_degrees(max_cc_input)
 
                         # S20RTS cc prediction
-                        for s in np.arange(sdeg[0], int(sdeg[1])+1, 2):
-                            # only input coupling degrees
-                            if s not in ccdegs:
-                                continue
-                            os.system('echo "%s" > input' % s)
-                            res = subprocess.Popen('%s < input' % cc_cstS20RTS,
-                                                   shell=True,
-                                                   stdout=subprocess.PIPE,
-                                                   stderr=subprocess.PIPE)
+                        if model != 'CRUST':
+                            for s in np.arange(sdeg[0], int(sdeg[1])+1, 2):
+                                # only input coupling degrees
+                                if s not in ccdegs:
+                                    continue
+                                os.system('echo "%s" > input' % s)
+                                res = subprocess.Popen('%s < input' % cc_cstS20RTS,
+                                                       shell=True,
+                                                       stdout=subprocess.PIPE,
+                                                       stderr=subprocess.PIPE)
 
-                            output, error = res.communicate()
-                            os.system('cat mcst.dat >> mcst-S20RTS.dat')
-                            os.remove('mcst.dat')
-                        with open('mcst-S20RTS.dat', 'r') as fh:
-                            c_s20rts_tmp = np.genfromtxt(fh)
-                        os.remove('mcst-S20RTS.dat')
+                                output, error = res.communicate()
+                                os.system('cat mcst.dat >> mcst-S20RTS.dat')
+                                os.remove('mcst.dat')
+                            with open('mcst-S20RTS.dat', 'r') as fh:
+                                c_s20rts_tmp = np.genfromtxt(fh)
+                            os.remove('mcst-S20RTS.dat')
                         # CRUST cc prediction
                         if include_CRUST is True:
                             for s in np.arange(sdeg[0], int(sdeg[1])+1, 2):
@@ -1626,14 +1637,19 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                             with open('mcst-CRUST.dat', 'r') as fh:
                                 c_crust_tmp = np.genfromtxt(fh)
                             os.remove('mcst-CRUST.dat')
-                            cc_coeff[modecc] = np.add(c_s20rts_tmp,
-                                                      c_crust_tmp).transpose()
+                            if model == 'CRUST':
+                                cc_coeff[modecc] = c_crust_tmp.transpose()
+                            else:
+                                cc_coeff[modecc] = np.add(c_s20rts_tmp,
+                                                          c_crust_tmp).transpose()
                         else:
                             cc_coeff[modecc] = c_s20rts_tmp.transpose()
                         # os.system('cat mcst.dat >> cst.dat')
                         # os.remove('mcst.dat')
             else:
                 cc_modesin = None
+
+    # dst calculation here?
     if modes_dst is None:
         dst = None
         sc_coeff_dst = None
@@ -1762,15 +1778,14 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                 else:
                     cc_coeff_dst = None
 
-    try:
-        # os.system('cp mcst.dat cst.dat')
-        os.remove('modes.in')
-        os.remove('cst.dat')
-        os.remove('mdcpl.out')
-        os.remove('raw.dat')
-        os.remove('input')
-    except FileNotFoundError:
-        pass
+    for _file in ('modes.in', 'cst.dat', 'mdcpl.out', 'raw.dat', 'input'):
+        try:
+            # os.system('cp mcst.dat cst.dat')
+            os.remove(_file)
+        except FileNotFoundError:
+            if verbose is True:
+                print(_file)
+            pass
 
     cT = sc_coeff[sc_modes[0]]
     mode = sc_modes[0]

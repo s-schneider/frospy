@@ -43,6 +43,8 @@ frospy/data/AD/modes-full.json
 frospy/data/AD/noisewindows_new.dat
 frospy/data/CB/CB_ani_2-cc.cst
 frospy/data/CB/__init__.py
+frospy/data/CRUST/CRUST.sqlite3
+frospy/data/CRUST/__init__.py
 frospy/data/DE/__init__.py
 frospy/data/DE/fc_and_Q.txt
 frospy/data/HT/__init__.py

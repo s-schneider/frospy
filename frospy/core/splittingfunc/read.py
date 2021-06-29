@@ -711,8 +711,8 @@ def read_cst_db(model, setup=None, modes=None, file_name=None, R=-0.2):
         file_name = "%s/cst.sqlite3" % frospydata.__path__[0]
 
     if setup is None and modes is None:
-        msg = 'No input specified'
-        print(msg)
+        # msg = 'No input specified'
+        # print(msg)
         return
 
     coeffs = AttribDict({'cst': {}, 'dst': {}})

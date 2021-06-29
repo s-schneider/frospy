@@ -440,7 +440,7 @@ class Spectrum(object):
                         label=label, **plotargs)
 
         # Labeling
-        if part in ['Re', 'Im', 'Phase']:
+        if part in ['Re', 'Im', 'Phase', 'Amplitude']:
             if ylabel:
                 ax.set_ylabel(ylabel)
             else:

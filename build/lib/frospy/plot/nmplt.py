@@ -1003,7 +1003,7 @@ def beachball(fm, linewidth=2, facecolor='b', bgcolor='w', edgecolor='k',
             return fig, ax
 
 
-def axvlines(xs, ax, **plot_kwargs):
+def axvlines(xs, ax, ylim=None, **plot_kwargs):
     """
     Use this for modes plot
     Draw vertical lines on plot
@@ -1012,7 +1012,10 @@ def axvlines(xs, ax, **plot_kwargs):
     :return: The plot object corresponding to the lines.
     """
     xs = np.array((xs, ) if np.isscalar(xs) else xs, copy=False)
-    lims = ax.get_ylim()
+    if ylim is None:
+        lims = ax.get_ylim()
+    else:
+        lims = ylim
     x_points = np.repeat(xs[:, None], repeats=3, axis=1).flatten()
     y_points = np.repeat(np.array(lims + (np.nan, ))[None, :], repeats=len(xs),
                          axis=0).flatten()

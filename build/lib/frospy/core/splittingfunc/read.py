@@ -1303,7 +1303,8 @@ def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3"):
 
 def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                     keep_mcst=False, modes_dst=None, modes_cc_dst=None,
-                    R=-0.2, model='S20RTS', include_CRUST=True):
+                    R=-0.2, model='S20RTS', include_CRUST=True,
+                    verbose=False):
     """
     Calculates S20RTS coefficients using the program defined in
     S20RTS_path for given self-coupling modes in 'modes' and cross-coupling
@@ -1782,7 +1783,8 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             # os.system('cp mcst.dat cst.dat')
             os.remove(_file)
         except FileNotFoundError:
-            print(_file)
+            if verbose is True:
+                print(_file)
             pass
 
     cT = sc_coeff[sc_modes[0]]

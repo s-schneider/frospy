@@ -1354,7 +1354,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             for mode, smax in setup.modes_sc.items():
                 if smax == 0:
                     continue
-                degs = list(cst[format_name(mode)].keys())
+                degs = [int(x) for x in list(cst[format_name(mode)].keys())]
                 if smax not in degs:
                     raise IOError
                 degs = [int(d) for d in degs]
@@ -1364,8 +1364,8 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             for mode, smm in setup.modes_cc.items():
                 if smm[1] == 0:
                     continue
-                degs = list(cst[format_name(mode)].keys())
-                if str(smm[1]) not in degs:
+                degs = [int(x) for x in list(cst[format_name(mode)].keys())]
+                if smm[1] not in degs:
                     raise IOError
                 degs = [int(d) for d in degs]
                 if max(degs) < smm[1]:
@@ -1374,7 +1374,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             for mode, smax in setup.modes_sc_dst.items():
                 if smax == 0:
                     continue
-                degs = list(dst[format_name(mode)].keys())
+                degs = [int(x) for x in list(dst[format_name(mode)].keys())]
                 if smax not in degs:
                     raise IOError
                 degs = [int(d) for d in degs]

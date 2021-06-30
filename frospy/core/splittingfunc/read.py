@@ -1355,10 +1355,10 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                 if smax == 0:
                     continue
                 degs = list(cst[format_name(mode)].keys())
-                if str(smax) not in degs:
+                if smax not in degs:
                     raise IOError
                 degs = [int(d) for d in degs]
-                if max(degs) != smax:
+                if max(degs) < smax:
                     raise IOError
 
             for mode, smm in setup.modes_cc.items():
@@ -1368,17 +1368,17 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                 if str(smm[1]) not in degs:
                     raise IOError
                 degs = [int(d) for d in degs]
-                if max(degs) != smm[1]:
+                if max(degs) < smm[1]:
                     raise IOError
 
             for mode, smax in setup.modes_sc_dst.items():
                 if smax == 0:
                     continue
                 degs = list(dst[format_name(mode)].keys())
-                if str(smax) not in degs:
+                if smax not in degs:
                     raise IOError
                 degs = [int(d) for d in degs]
-                if max(degs) != smax:
+                if max(degs) < smax:
                     raise IOError
 
             # Is there cc for dst already implemented?

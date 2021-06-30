@@ -1289,7 +1289,8 @@ def _read_cst_S20RTS_db(setup, file_name="S20RTS_CRUST.sqlite3"):
     return cst, dst
 
 
-def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3"):
+def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3",
+                         verbose=False):
     bins = ['/quanta1/home', '/net/home']
     for path in bins:
         if os.path.exists(path):
@@ -1315,7 +1316,8 @@ def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3"):
     else:
         model = file_name.split('.')[0]
         path = "{}/data/{}/{}".format(path, model, file_name)
-    print('write', path)
+    if verbose is True:
+        print('write', path)
     _write_cst_coeffs(cst, dst, path, model=model, author=None, lcut='all')
 
     return
@@ -1347,7 +1349,6 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             else:
                 file_name = "{}.sqlite3".format(model)
             cst, dst = _read_cst_S20RTS_db(setup, file_name=file_name)
-            print('cst', len(cst))
             if len(cst) == 0:
                 raise IOError
 
@@ -1391,16 +1392,15 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             #     degs = [int(d) for d in degs]
             #     if max(degs) != smm[1]:
             #         raise IOError
-            print('returning')
             return cst, dst
 
         except Exception as e:
-            print(e)
             if verbose is True:
                 print(e)
             else:
                 pass
-    print('calculating')
+    if verbose is True:
+        print('No database entry found: calculating')
     if bin_path is None:
         bins = ['/quanta1/home', '/net/home']
         for path in bins:
@@ -1899,9 +1899,8 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     elif R == -0.2:
         WRITE2DB = True
 
-    print('write?', WRITE2DB, model)
     if WRITE2DB is True:
-        _write_cst_S20RTS_db(cst, dst, file_name)
+        _write_cst_S20RTS_db(cst, dst, file_name, verbose=verbose)
     return cst, dst
 
 

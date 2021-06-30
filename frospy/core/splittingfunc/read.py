@@ -1259,11 +1259,28 @@ def read_cst_REM(modesin, modes_ccin):
 
 
 def _read_cst_S20RTS_db(setup, file_name="S20RTS_CRUST.sqlite3"):
+    bins = ['/quanta1/home', '/net/home']
+    for path in bins:
+        if os.path.exists(path):
+            bin_path = path
+            break
+
+    if bin_path is not None:
+        if bin_path.startswith('/quanta'):
+            path = "/quanta1/home/simons/dev/python/frospy/frospy"
+        else:
+            if getpass.getuser() == 'simons':
+                path = "/net/home/simons/dev/python/frospy/frospy"
+            else:
+                path = "/net/home/talavera/codes/nmPy/nmpy"
+    else:
+        path = frospydata.__path__[0]
+
     if file_name == "S20RTS_CRUST.sqlite3":
-        path = "%s/S20RTS/%s" % (frospydata.__path__[0], file_name)
+        path = "%s/S20RTS/%s" % (path, file_name)
         out = read_cst_db(setup=setup, model='S20RTS', file_name=path)
     elif file_name == "S40RTS_CRUST.sqlite3":
-        path = "%s/S40RTS/%s" % (frospydata.__path__[0], file_name)
+        path = "%s/S40RTS/%s" % (path, file_name)
         out = read_cst_db(setup=setup, model='S40RTS', file_name=path)
     print('read', path)
     cst, dst, cst_errors, dst_errors = out[:]

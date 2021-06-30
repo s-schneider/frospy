@@ -128,7 +128,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST'):
         cst, dst = read_cst_S20RTS(modesin=modesin, modes_ccin=modes_ccin,
                                    setup=setup, modes_dst=modes_scin_dst,
-                                   R=R, model=cfile,
+                                   R=R, model=cfile, verbose=verbose,
                                    include_CRUST=include_CRUST)
 
     elif cfile == 'TZ':
@@ -1336,7 +1336,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     # higher degree than in db is requested it will be calculated
     # calculate R dst predictions if not R=-2. Only R=-0.2 saved in database
     # print(model, 'CRUST', include_CRUST)
-    from IPython import embed; embed()
+
     if R == -0.2:
         try:
             if model == 'S20RTS':
@@ -1380,21 +1380,24 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                 if max(degs) != smax:
                     raise IOError
 
-            for mode, smm in setup.modes_cc_dst.items():
-                if smm[1] == 0:
-                    continue
-                degs = list(dst[format_name(mode)].keys())
-                if str(smm[1]) not in degs:
-                    raise IOError
-                degs = [int(d) for d in degs]
-                if max(degs) != smm[1]:
-                    raise IOError
+            # Is there cc for dst already implemented?
+            # for mode, smm in setup.modes_cc_dst.items():
+            #     if smm[1] == 0:
+            #         continue
+            #     degs = list(dst[format_name(mode)].keys())
+            #     if str(smm[1]) not in degs:
+            #         raise IOError
+            #     degs = [int(d) for d in degs]
+            #     if max(degs) != smm[1]:
+            #         raise IOError
 
             return cst, dst
 
         except Exception as e:
-            print(e)
-            # pass
+            if verbose is True:
+                print(e)
+            else:
+                pass
 
     if bin_path is None:
         bins = ['/quanta1/home', '/net/home']

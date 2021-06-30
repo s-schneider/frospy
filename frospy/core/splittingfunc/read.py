@@ -1283,7 +1283,7 @@ def _read_cst_S20RTS_db(setup, file_name="S20RTS_CRUST.sqlite3"):
     elif file_name == "S40RTS_CRUST.sqlite3":
         path = "%s/S40RTS/%s" % (path, file_name)
         out = read_cst_db(setup=setup, model='S40RTS', file_name=path)
-    print('read', path)
+    print('read return', path)
     cst, dst, cst_errors, dst_errors = out[:]
 
     return cst, dst
@@ -1345,7 +1345,6 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                 file_name = "S40RTS_CRUST.sqlite3"
             else:
                 file_name = "{}.sqlite3".format(model)
-            print('reading', file_name)
             cst, dst = _read_cst_S20RTS_db(setup, file_name=file_name)
             if len(cst) == 0:
                 raise IOError
@@ -1394,11 +1393,12 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             return cst, dst
 
         except Exception as e:
+            print(e)
             if verbose is True:
                 print(e)
             else:
                 pass
-
+    print('calculating')
     if bin_path is None:
         bins = ['/quanta1/home', '/net/home']
         for path in bins:

@@ -128,7 +128,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST'):
         cst, dst = read_cst_S20RTS(modesin=modesin, modes_ccin=modes_ccin,
                                    setup=setup, modes_dst=modes_scin_dst,
-                                   R=R, model=cfile,
+                                   R=R, model=cfile, verbose=verbose,
                                    include_CRUST=include_CRUST)
 
     elif cfile == 'TZ':
@@ -1258,19 +1258,40 @@ def read_cst_REM(modesin, modes_ccin):
     return cst, cst_errors
 
 
-def _read_cst_S20RTS_db(setup, file_name="S20RTS_CRUST.sqlite3"):
+def _read_cst_S20RTS_db(setup, file_name="S20RTS_CRUST.sqlite3",
+                        verbose=False):
+    bins = ['/quanta1/home', '/net/home']
+    for path in bins:
+        if os.path.exists(path):
+            bin_path = path
+            break
+
+    if bin_path is not None:
+        if bin_path.startswith('/quanta'):
+            path = "/quanta1/home/simons/dev/python/frospy/frospy"
+        else:
+            if getpass.getuser() == 'simons':
+                path = "/net/home/simons/dev/python/frospy/frospy"
+            else:
+                path = "/net/home/talavera/codes/nmPy/nmpy"
+        path = os.path.join(path, 'data')
+    else:
+        path = frospydata.__path__[0]
+    if verbose is True:
+        print('read', path, file_name)
     if file_name == "S20RTS_CRUST.sqlite3":
-        path = "%s/S20RTS/%s" % (frospydata.__path__[0], file_name)
+        path = "%s/S20RTS/%s" % (path, file_name)
         out = read_cst_db(setup=setup, model='S20RTS', file_name=path)
     elif file_name == "S40RTS_CRUST.sqlite3":
-        path = "%s/S40RTS/%s" % (frospydata.__path__[0], file_name)
+        path = "%s/S40RTS/%s" % (path, file_name)
         out = read_cst_db(setup=setup, model='S40RTS', file_name=path)
     cst, dst, cst_errors, dst_errors = out[:]
 
     return cst, dst
 
 
-def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3"):
+def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3",
+                         verbose=False):
     bins = ['/quanta1/home', '/net/home']
     for path in bins:
         if os.path.exists(path):
@@ -1296,6 +1317,8 @@ def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3"):
     else:
         model = file_name.split('.')[0]
         path = "{}/data/{}/{}".format(path, model, file_name)
+    if verbose is True:
+        print('write', path)
     _write_cst_coeffs(cst, dst, path, model=model, author=None, lcut='all')
 
     return
@@ -1316,6 +1339,8 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     # higher degree than in db is requested it will be calculated
     # calculate R dst predictions if not R=-2. Only R=-0.2 saved in database
     # print(model, 'CRUST', include_CRUST)
+
+    # from IPython import embed; embed()
     if R == -0.2:
         try:
             if model == 'S20RTS':
@@ -1331,47 +1356,52 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             for mode, smax in setup.modes_sc.items():
                 if smax == 0:
                     continue
-                degs = list(cst[format_name(mode)].keys())
-                if str(smax) not in degs:
+                degs = [int(x) for x in list(cst[format_name(mode)].keys())]
+                if smax not in degs:
                     raise IOError
                 degs = [int(d) for d in degs]
-                if max(degs) != smax:
+                if max(degs) < smax:
                     raise IOError
 
             for mode, smm in setup.modes_cc.items():
                 if smm[1] == 0:
                     continue
-                degs = list(cst[format_name(mode)].keys())
-                if str(smm[1]) not in degs:
+                degs = [int(x) for x in list(cst[format_name(mode)].keys())]
+                if smm[1] not in degs:
                     raise IOError
                 degs = [int(d) for d in degs]
-                if max(degs) != smm[1]:
+                if max(degs) < smm[1]:
                     raise IOError
 
             for mode, smax in setup.modes_sc_dst.items():
                 if smax == 0:
                     continue
-                degs = list(dst[format_name(mode)].keys())
-                if str(smax) not in degs:
+                degs = [int(x) for x in list(dst[format_name(mode)].keys())]
+                if smax not in degs:
                     raise IOError
                 degs = [int(d) for d in degs]
-                if max(degs) != smax:
+                if max(degs) < smax:
                     raise IOError
 
-            for mode, smm in setup.modes_cc_dst.items():
-                if smm[1] == 0:
-                    continue
-                degs = list(dst[format_name(mode)].keys())
-                if str(smm[1]) not in degs:
-                    raise IOError
-                degs = [int(d) for d in degs]
-                if max(degs) != smm[1]:
-                    raise IOError
+            # Is there cc for dst already implemented?
+            # for mode, smm in setup.modes_cc_dst.items():
+            #     if smm[1] == 0:
+            #         continue
+            #     degs = list(dst[format_name(mode)].keys())
+            #     if str(smm[1]) not in degs:
+            #         raise IOError
+            #     degs = [int(d) for d in degs]
+            #     if max(degs) != smm[1]:
+            #         raise IOError
             return cst, dst
 
-        except Exception:
-            pass
-
+        except Exception as e:
+            if verbose is True:
+                print(e)
+            else:
+                pass
+    if verbose is True:
+        print('No database entry found: calculating')
     if bin_path is None:
         bins = ['/quanta1/home', '/net/home']
         for path in bins:
@@ -1865,13 +1895,13 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     # if R == -0.2 and model != 'QRFSI12':
     WRITE2DB = False
 
-    if model != 'S20RTS':
+    if model in ('S20RTS', 'S40RTS'):
         WRITE2DB = True
     elif R == -0.2:
         WRITE2DB = True
 
     if WRITE2DB is True:
-        _write_cst_S20RTS_db(cst, dst, file_name)
+        _write_cst_S20RTS_db(cst, dst, file_name, verbose=verbose)
     return cst, dst
 
 

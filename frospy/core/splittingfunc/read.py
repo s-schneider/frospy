@@ -1265,6 +1265,7 @@ def _read_cst_S20RTS_db(setup, file_name="S20RTS_CRUST.sqlite3"):
     elif file_name == "S40RTS_CRUST.sqlite3":
         path = "%s/S40RTS/%s" % (frospydata.__path__[0], file_name)
         out = read_cst_db(setup=setup, model='S40RTS', file_name=path)
+    print('read', path)
     cst, dst, cst_errors, dst_errors = out[:]
 
     return cst, dst
@@ -1865,11 +1866,12 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     # if R == -0.2 and model != 'QRFSI12':
     WRITE2DB = False
 
-    if model != 'S20RTS':
+    if model in ('S20RTS', 'S40RTS'):
         WRITE2DB = True
     elif R == -0.2:
         WRITE2DB = True
 
+    print('write', WRITE2DB, model, file_name)
     if WRITE2DB is True:
         _write_cst_S20RTS_db(cst, dst, file_name)
     return cst, dst

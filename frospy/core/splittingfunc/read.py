@@ -1388,10 +1388,12 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                 degs = [int(d) for d in degs]
                 if max(degs) != smm[1]:
                     raise IOError
+
             return cst, dst
 
-        except Exception:
-            pass
+        except Exception as e:
+            print(e)
+            # pass
 
     if bin_path is None:
         bins = ['/quanta1/home', '/net/home']

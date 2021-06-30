@@ -1346,6 +1346,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             else:
                 file_name = "{}.sqlite3".format(model)
             cst, dst = _read_cst_S20RTS_db(setup, file_name=file_name)
+            print('cst', len(cst))
             if len(cst) == 0:
                 raise IOError
 

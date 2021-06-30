@@ -1275,7 +1275,7 @@ def _read_cst_S20RTS_db(setup, file_name="S20RTS_CRUST.sqlite3"):
                 path = "/net/home/talavera/codes/nmPy/nmpy"
     else:
         path = frospydata.__path__[0]
-
+    print('read', path, file_name)
     if file_name == "S20RTS_CRUST.sqlite3":
         path = "%s/S20RTS/%s" % (path, file_name)
         out = read_cst_db(setup=setup, model='S20RTS', file_name=path)

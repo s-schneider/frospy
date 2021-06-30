@@ -1297,6 +1297,7 @@ def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3"):
     else:
         model = file_name.split('.')[0]
         path = "{}/data/{}/{}".format(path, model, file_name)
+    print('write', path)
     _write_cst_coeffs(cst, dst, path, model=model, author=None, lcut='all')
 
     return
@@ -1871,7 +1872,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     elif R == -0.2:
         WRITE2DB = True
 
-    print('write', WRITE2DB, model, file_name)
+    print('write?', WRITE2DB, model)
     if WRITE2DB is True:
         _write_cst_S20RTS_db(cst, dst, file_name)
     return cst, dst

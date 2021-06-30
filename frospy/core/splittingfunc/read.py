@@ -1337,6 +1337,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     # calculate R dst predictions if not R=-2. Only R=-0.2 saved in database
     # print(model, 'CRUST', include_CRUST)
 
+    from IPython import embed; embed()
     if R == -0.2:
         try:
             if model == 'S20RTS':

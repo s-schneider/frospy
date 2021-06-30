@@ -1389,7 +1389,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             #     degs = [int(d) for d in degs]
             #     if max(degs) != smm[1]:
             #         raise IOError
-
+            print('returning')
             return cst, dst
 
         except Exception as e:

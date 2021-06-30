@@ -1273,6 +1273,7 @@ def _read_cst_S20RTS_db(setup, file_name="S20RTS_CRUST.sqlite3"):
                 path = "/net/home/simons/dev/python/frospy/frospy"
             else:
                 path = "/net/home/talavera/codes/nmPy/nmpy"
+        path = os.path.join(path, 'data')
     else:
         path = frospydata.__path__[0]
     print('read', path, file_name)

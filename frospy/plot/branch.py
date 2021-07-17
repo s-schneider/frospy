@@ -543,117 +543,23 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                             colors[mlabel] = next(colormap)
                         except StopIteration:
                             if label2 is not None:
-                                colormap = get_iter_colormap(
-                                                    model[0:-1], cmap,
-                                                    random_values='center')
+                                colormap = get_iter_colormap(model[0:-1], cmap,
+                                                             random_values='center')
                             else:
-                                colormap = get_iter_colormap(
-                                                    model, cmap,
-                                                    random_values='center')
+                                colormap = get_iter_colormap(model, cmap,
+                                                             random_values='center')
                             colors[mlabel] = next(colormap)
                 if model_colors is not None:
                     if mlabel in model_colors:
                         colors[mlabel] = model_colors[mlabel]
     # Ordering modes
-    mode_list = Modes()
-    labels = []
-    if mode != 'cc':  # SC splittingfunc
-        for x in x_ticklabel:
-            if verbose:
-                msg = 'Reading mode for tick: %s' % x
-                print(msg)
-            m = read_modes(modenames=str(x))[0]
-            mode_list += m
-        if isinstance(ordering, (list,)):
-            mode_list.sort(keys=ordering)
-        else:
-            mode_list.sort(keys=[ordering])
-        for i, tick in enumerate(mode_list):
-            if verbose:
-                msg = 'Setting tick: %s' % tick
-                print(msg)
-            x_ticklabel[i] = "$_{%s}%s_{%s}$" % (tick.n, tick.type, tick.l)
-            labels += [format_name(tick.name, 2)]
-            s_nums[format_name(tick.name, 2)] = i
-
-    else:  # CC splittingfunc
-        for x in x_ticklabel:
-            m = Mode()
-            m.name = x
-
-            # CC sens the same as 2nd mode in CC
-            x = x.split('-')[1]
-            m_sc = read_modes(modenames=str(x))[0]
-            m.sens = m_sc.sens
-            mode_list += m
-
-        if isinstance(ordering, (list,)):  # only works for sens
-            mode_list.sort(keys=ordering)
-        else:
-            mode_list.sort(keys=["cc"])
-
-        for i, tick in enumerate(mode_list):
-            m = split_digit_nondigit(tick.name)
-            x_ticklabel[i] = ("$_{%s}%s_{%s}$-$_{%s}%s_{%s}$" %
-                              (int(m[0]), m[1], int(m[2]),
-                               int(m[4]), m[5], int(m[6])))
-            labels += [format_name(tick.name, 2)]
-            s_nums[format_name(tick.name, 2)] = i
+    _out = sort_modes(mode, x_ticklabel, ordering, verbose)
+    x_ticklabel, labels, s_nums, mode_list = _out[:]
 
     # Prepare Vlines that separates overtones here
+    set_line = get_vlines(mode, ordering, s_nums, labels, mode_list, verbose)
     x_init = range(len(s_nums))
     label_data_set = {}
-    # label_data_set = False
-    # Find ticks where put a vline
-    # e.g. 00T04 and 01t04, should have a vline, to seperate the branches
-    ii = 1
-    set_line = []
-
-    if verbose is True:
-        print('\nPreparing vlines for:')
-    for x, y, m1, m2 in zip(labels[:], labels[1:],
-                            mode_list[:], mode_list[1:]):
-
-        if mode != 'cc':  # SC splittingfunc
-            if "n" in ordering:
-                n1 = int(split_digit_nondigit(x)[0])
-                n2 = int(split_digit_nondigit(y)[0])
-            elif "l" in ordering:
-                n1 = int(split_digit_nondigit(x)[2])
-                n2 = int(split_digit_nondigit(y)[2])
-            if "sens" in ordering:
-                n1 = m1.sens
-                n2 = m2.sens
-            if "freq" in ordering:
-                n1 = int(m1.freq)
-                n2 = int(m2.freq)
-            if n1 != n2:
-                set_line.append(ii)
-                if verbose is True:
-                    print("Line between %s %s" % (x, y))
-            ii += 1
-        else:  # CC splittingfunc
-            if "n" in ordering:
-                n1 = int(split_digit_nondigit(x)[0])
-                n2 = int(split_digit_nondigit(y)[0])
-                n3 = int(split_digit_nondigit(x)[4])
-                n4 = int(split_digit_nondigit(y)[4])
-            elif "l" in ordering:
-                n1 = int(split_digit_nondigit(x)[2])
-                n2 = int(split_digit_nondigit(y)[2])
-                n3 = int(split_digit_nondigit(x)[6])
-                n4 = int(split_digit_nondigit(y)[6])
-            if "sens" in ordering:
-                n1 = m1.sens
-                n2 = m2.sens
-                n3 = m1.sens
-                n4 = m2.sens
-            if n1 != n2 or n3 != n4:
-                set_line.append(ii)
-                if verbose is True:
-                    print("Line between %s %s" % (x, y))
-            ii += 1
-
     # Plotting loop
     if verbose is True:
         print('\nPlotting:')
@@ -1264,3 +1170,106 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                         transparent=True)
 
     return SF
+
+
+def get_vlines(mode, ordering, s_nums, labels, mode_list, verbose=False):
+    # Find ticks where put a vline
+    # e.g. 00T04 and 01t04, should have a vline, to seperate the branches
+    ii = 1
+    set_line = []
+
+    if verbose is True:
+        print('\nPreparing vlines for:')
+    for x, y, m1, m2 in zip(labels[:], labels[1:],
+                            mode_list[:], mode_list[1:]):
+
+        if mode != 'cc':  # SC splittingfunc
+            if "n" in ordering:
+                n1 = int(split_digit_nondigit(x)[0])
+                n2 = int(split_digit_nondigit(y)[0])
+            elif "l" in ordering:
+                n1 = int(split_digit_nondigit(x)[2])
+                n2 = int(split_digit_nondigit(y)[2])
+            if "sens" in ordering:
+                n1 = m1.sens
+                n2 = m2.sens
+            if "freq" in ordering:
+                n1 = int(m1.freq)
+                n2 = int(m2.freq)
+            if n1 != n2:
+                set_line.append(ii)
+                if verbose is True:
+                    print("Line between %s %s" % (x, y))
+            ii += 1
+        else:  # CC splittingfunc
+            if "n" in ordering:
+                n1 = int(split_digit_nondigit(x)[0])
+                n2 = int(split_digit_nondigit(y)[0])
+                n3 = int(split_digit_nondigit(x)[4])
+                n4 = int(split_digit_nondigit(y)[4])
+            elif "l" in ordering:
+                n1 = int(split_digit_nondigit(x)[2])
+                n2 = int(split_digit_nondigit(y)[2])
+                n3 = int(split_digit_nondigit(x)[6])
+                n4 = int(split_digit_nondigit(y)[6])
+            if "sens" in ordering:
+                n1 = m1.sens
+                n2 = m2.sens
+                n3 = m1.sens
+                n4 = m2.sens
+            if n1 != n2 or n3 != n4:
+                set_line.append(ii)
+                if verbose is True:
+                    print("Line between %s %s" % (x, y))
+            ii += 1
+    return set_line
+
+
+def sort_modes(mode, x_ticklabel, ordering, verbose=False):
+    # Ordering modes
+    mode_list = Modes()
+    labels = []
+    s_nums = {}
+    if mode != 'cc':  # SC splittingfunc
+        for x in x_ticklabel:
+            if verbose:
+                msg = 'Reading mode for tick: %s' % x
+                print(msg)
+            m = read_modes(modenames=str(x))[0]
+            mode_list += m
+        if isinstance(ordering, (list,)):
+            mode_list.sort(keys=ordering)
+        else:
+            mode_list.sort(keys=[ordering])
+        for i, tick in enumerate(mode_list):
+            if verbose:
+                msg = 'Setting tick: %s' % tick
+                print(msg)
+            x_ticklabel[i] = "$_{%s}%s_{%s}$" % (tick.n, tick.type, tick.l)
+            labels += [format_name(tick.name, 2)]
+            s_nums[format_name(tick.name, 2)] = i
+
+    else:  # CC splittingfunc
+        for x in x_ticklabel:
+            m = Mode()
+            m.name = x
+
+            # CC sens the same as 2nd mode in CC
+            x = x.split('-')[1]
+            m_sc = read_modes(modenames=str(x))[0]
+            m.sens = m_sc.sens
+            mode_list += m
+
+        if isinstance(ordering, (list,)):  # only works for sens
+            mode_list.sort(keys=ordering)
+        else:
+            mode_list.sort(keys=["cc"])
+
+        for i, tick in enumerate(mode_list):
+            m = split_digit_nondigit(tick.name)
+            x_ticklabel[i] = ("$_{%s}%s_{%s}$-$_{%s}%s_{%s}$" %
+                              (int(m[0]), m[1], int(m[2]),
+                               int(m[4]), m[5], int(m[6])))
+            labels += [format_name(tick.name, 2)]
+            s_nums[format_name(tick.name, 2)] = i
+    return x_ticklabel, labels, s_nums, mode_list

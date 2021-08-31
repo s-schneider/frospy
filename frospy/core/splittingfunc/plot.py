@@ -879,8 +879,13 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
     # plot it and set up / format labels
     if show_colorbar is True:
-        cb = fig.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
-                          orientation='horizontal', extend='both')
+        if 'fs' in kwargs:
+            cb = fig.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
+                              orientation='horizontal', extend='both',
+                              fontsize=kwargs['fs'])
+        else:
+            cb = fig.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
+                              orientation='horizontal', extend='both')
         cb.vmin = s.min()
         cb.vmax = s.max()
 

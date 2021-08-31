@@ -695,6 +695,10 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
         if arg == 'meridians_thick': # meridian thickness
             meridians_thick = val
+        if arg == 'dpi':
+            dpi = val
+        else:
+            dpi = 200
 
     lons = np.arange(-180, 180)
     lats = np.arange(-90, 90)
@@ -896,11 +900,11 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
         if 'filename' in kwargs and save:
             name = kwargs['filename']
             fname = '%s_%s_%s' % (mode.name, kind, name)
-            fig.savefig('%s.png' % fname, orientation='landscape', dpi=400,
+            fig.savefig('%s.png' % fname, orientation='landscape', dpi=dpi,
                         bbox_inches="tight", pad_inches=0.01, transparent=True)
         elif save:
             fname = '%s_%s' % (mode.name, kind)
-            fig.savefig('%s.png' % fname, orientation='landscape', dpi=400,
+            fig.savefig('%s.png' % fname, orientation='landscape', dpi=dpi,
                         bbox_inches="tight", pad_inches=0.01, transparent=True)
     return im, fig
 

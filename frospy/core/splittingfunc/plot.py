@@ -615,6 +615,9 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
     if 'fs' in kwargs:
         plt.rcParams.update({'font.size': kwargs['fs']})
+        fs = kwargs['fs']
+    else:
+        fs = 10
 
     if 'fig' in kwargs:
         fig = kwargs['fig']
@@ -785,11 +788,11 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
                 title = "%s \n $_{%s}%s_{%s},$ $s_{max}=%s$"
                 title = title % (suptitle, mode.n, mode.type, mode.l, smax)
         if 'filename' in kwargs:
-            ax.set_title('%s \n %s' % (kwargs['filename'], title))
+            ax.set_title('%s \n %s' % (kwargs['filename'], title), fontsize=fs)
         elif not kind_in_title:
-            ax.set_title(title, weight="bold")
+            ax.set_title(title, weight="bold", fontsize=fs)
         else:
-            ax.set_title(title)
+            ax.set_title(title, fontsize=fs)
 
     else: # CC splitting func
         if ax is None:
@@ -835,11 +838,11 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
                              int(ccn[4]), str(ccn[5]).upper(), int(ccn[6]),
                              _sdegs)
         if 'filename' in kwargs:
-            ax.set_title('%s \n %s' % (kwargs['filename'], title))
+            ax.set_title('%s \n %s' % (kwargs['filename'], title), fontsize=fs)
         elif not kind_in_title:
-            ax.set_title(title, weight="bold")
+            ax.set_title(title, weight="bold", fontsize=fs)
         else:
-            ax.set_title(title)
+            ax.set_title(title, fontsize=fs)
 
     cp = m.drawmapboundary()
     m.drawcoastlines(linewidth=coastline_thick)
@@ -893,7 +896,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
         cb.vmin = s.min()
         cb.vmax = s.max()
 
-        cb.ax.set_title(r'$\mu$Hz', x=1.2, y=-0.7)
+        cb.ax.set_title(r'$\mu$Hz', x=1.2, y=-0.7, fontsize=fs)
 
     if 'savefig' in kwargs:
         save = kwargs['savefig']

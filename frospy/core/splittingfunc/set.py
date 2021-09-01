@@ -694,16 +694,20 @@ class Set(object):
                 else:
                     suffix = 'png'
 
+                if 'dpi' in kwargs:
+                    dpi = kwargs['dpi']
+                else:
+                    dpi = 200
                 if 'filename' in kwargs and save:
                     name = kwargs['filename']
                     fname = 'Set_%s_%s_%s' % (mode, kind, name)
                     fig.savefig('%s.%s' % (fname, suffix), bbox_inches="tight",
-                                orientation='landscape', dpi=400,
+                                orientation='landscape', dpi=dpi,
                                 pad_inches=0.01)
                 elif save:
                     fname = 'Set_%s_%s' % (mode, kind)
                     fig.savefig('%s.%s' % (fname, suffix), bbox_inches="tight",
-                                orientation='landscape', dpi=400,
+                                orientation='landscape', dpi=dpi,
                                 pad_inches=0.01,)
 
         return fig

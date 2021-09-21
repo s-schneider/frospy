@@ -76,7 +76,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     """
 
     if setup is not None or modes_dir is not None:
-        if cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST'):
+        if cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST', 'VSXI'):
             if len(setup.modes_cc) > 0 and len(setup.modes_sc) == 0:
                 allmodes = read_modes()
                 for _m in setup.modes_cc.keys():
@@ -125,7 +125,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif cfile == 'RR':
         cst, dst, cst_errors, dst_errors = read_cst_RR(modesin, modes_ccin,
                                                        verbose=verbose)
-    elif cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST'):
+    elif cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST', 'VSXI'):
         cst, dst = read_cst_S20RTS(modesin=modesin, modes_ccin=modes_ccin,
                                    setup=setup, modes_dst=modes_scin_dst,
                                    R=R, model=cfile, verbose=verbose,

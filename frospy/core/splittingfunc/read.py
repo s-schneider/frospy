@@ -1450,6 +1450,15 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         _maxmdeg = 20 # cst model
         _maxcdeg = 20 # crust model
         _maxddeg = 20 # dst model
+
+    if model == 'VSXI':
+        cstS20RTS = "{}/simons/bin/mdcplmrho_all_cstVSXI".format(bin_path)
+        cc_cstS20RTS = "{}/simons/bin/mdcplmrho_allC_cstVSXI".format(bin_path)
+        dstS20RTS = None
+        cc_dstS20RTS = None
+        _maxmdeg = 8 # cst model
+        _maxcdeg = 8 # crust model
+        _maxddeg = 8 # dst model
     sc_modes, cc_modes = get_mode_names(modesin, modes_ccin)
     sc_cdeg, sc_ddeg, cc_cdeg, cc_ddeg = get_mode_deg(modesin, modes_ccin)
 

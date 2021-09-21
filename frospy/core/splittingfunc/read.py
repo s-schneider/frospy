@@ -1482,6 +1482,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         cc_coeff = {}
 
     count = 0
+    from IPython import embed; embed()
     for mode, s_max in zip(sc_modes, sc_cdeg):
         m = split_digit_nondigit(mode)
         if int(s_max) == 0 and int(m[2]) > 0:
@@ -1493,7 +1494,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             os.system('echo "%03d %s %03d" >> modes.in' % (int(m[0]),
                                                            m[1].lower(),
                                                            int(m[2])))
-            if model != 'SP12RTS' and model != 'CRUST':
+            if model not in ('SP12RTS', 'CRUST'):
                 # S20RTS prediction
                 for s in np.arange(0, int(s_max)+1, 2):
                     # only input coupling degrees, No degree higher then 20

@@ -30,7 +30,7 @@ Install required packages
 ```
 
 ## Wiki and examples
-Examples and more explanation about the package can be found on the [Wiki](https://github.com/s-schneider/frospy/wiki/Home:-Free-Oscillation-Toolbox---FrosPy)
+Examples and more explanation about the package can be found on the [Wiki](https://github.com/s-schneider/frospy/wiki/Home)
 
 ## Splittingfunction Coefficients
 

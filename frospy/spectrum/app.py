@@ -209,9 +209,10 @@ def check_input(data, args):
     if type(data) == obspy.core.stream.Stream:
         check_data_files = False
     else:
-        if type(data) is not list:
-            data = [data]
-        data_in = data[:]
+        if data is not None:
+            if type(data) is not list:
+                data = [data]
+            data_in = data[:]
 
     if type(syn) == obspy.core.stream.Stream:
         check_data_files = False
@@ -312,11 +313,13 @@ def files_exists(check_list):
         if item is None or item is False:
             continue
         if type(item) != list:
-            if not os.path.exists(item):
+            if item is None:
+                check_list[i] = False
+            elif not os.path.exists(item):
                 check_list[i] = False
         else:
             for j, subitem in enumerate(item):
-                if subitem is False:
+                if subitem is False or subitem is None:
                     continue
                 elif not os.path.exists(subitem):
                     check_list[i][j] = False

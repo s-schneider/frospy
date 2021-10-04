@@ -387,8 +387,8 @@ def init_gcpmap(gs, lon1, lon2):
     return ax
 
 
-def plot_modes(spectrum, fw1, fw2, modes, ax, l_height, l_width, fontsize=10,
-               linewidth=1, text_positions=None, m_ypos=None,
+def plot_modes(spectrum, fw1, fw2, modes, ax, l_height=0.11, l_width=0.012,
+               fontsize=10, linewidth=1, text_positions=None, m_ypos=None,
                txt_width=None, txt_height=None, mline_ylim=None):
 
     startlabel = spectrum.flabel(fw1)

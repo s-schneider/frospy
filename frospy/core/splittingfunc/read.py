@@ -76,7 +76,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     """
 
     if setup is not None or modes_dir is not None:
-        if cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST'):
+        if cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST', 'VSXI', 'VS'):
             if len(setup.modes_cc) > 0 and len(setup.modes_sc) == 0:
                 allmodes = read_modes()
                 for _m in setup.modes_cc.keys():
@@ -125,7 +125,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif cfile == 'RR':
         cst, dst, cst_errors, dst_errors = read_cst_RR(modesin, modes_ccin,
                                                        verbose=verbose)
-    elif cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST'):
+    elif cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST', 'VSXI', 'VS'):
         cst, dst = read_cst_S20RTS(modesin=modesin, modes_ccin=modes_ccin,
                                    setup=setup, modes_dst=modes_scin_dst,
                                    R=R, model=cfile, verbose=verbose,
@@ -1450,6 +1450,15 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         _maxmdeg = 20 # cst model
         _maxcdeg = 20 # crust model
         _maxddeg = 20 # dst model
+
+    if model in ('VSXI', 'VS'):
+        cstS20RTS = "{}/simons/bin/mdcplmrho_all_cst{}".format(bin_path, model)
+        cc_cstS20RTS = "{}/simons/bin/mdcplmrho_allC_cst{}".format(bin_path, model)
+        dstS20RTS = None
+        cc_dstS20RTS = None
+        _maxmdeg = 8 # cst model
+        _maxcdeg = 8 # crust model
+        _maxddeg = 8 # dst model
     sc_modes, cc_modes = get_mode_names(modesin, modes_ccin)
     sc_cdeg, sc_ddeg, cc_cdeg, cc_ddeg = get_mode_deg(modesin, modes_ccin)
 
@@ -1484,7 +1493,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             os.system('echo "%03d %s %03d" >> modes.in' % (int(m[0]),
                                                            m[1].lower(),
                                                            int(m[2])))
-            if model != 'SP12RTS' and model != 'CRUST':
+            if model not in ('SP12RTS', 'CRUST'):
                 # S20RTS prediction
                 for s in np.arange(0, int(s_max)+1, 2):
                     # only input coupling degrees, No degree higher then 20

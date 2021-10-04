@@ -1,19 +1,6 @@
 # Free Oscillation Toolbox - FrosPy
 Small toolbox to help with visualization of spectra and data-handling for splitting function measurements.
 
-## Content
- * [Wiki](https://github.com/s-schneider/frospy/wiki/Home:-Free-Oscillation-Toolbox---FrosPy)
- * [Toroidal Mode Splittingfunctions](#toroidal-mode-splittingfunctions)
- * [Installation](#installation)
-
-## Splittingfunction Coefficients
-
-The splitting functions of [Schneider & Deuss, 2020](https://doi.org/10.1093/gji/ggaa567) and [Talavera-Soza & Deuss, 2020](https://doi.org/10.1093/gji/ggaa499) can be found here:
-http://www.frospy.org
-
-
-
-
 ## Installation
 I recommend to run this toolbox using anaconda.
 
@@ -41,3 +28,11 @@ Install required packages
 (frospy_env) $ conda install pyshtools
 (frospy_env) $ python setup.py install
 ```
+
+## Wiki and examples
+Examples and more explanation about the package can be found on the [Wiki](https://github.com/s-schneider/frospy/wiki/Home:-Free-Oscillation-Toolbox---FrosPy)
+
+## Splittingfunction Coefficients
+
+The splitting functions of [Schneider & Deuss, 2020](https://doi.org/10.1093/gji/ggaa567) and [Talavera-Soza & Deuss, 2020](https://doi.org/10.1093/gji/ggaa499) can be found here:
+http://www.frospy.org

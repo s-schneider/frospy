@@ -312,7 +312,9 @@ def files_exists(check_list):
         if item is None or item is False:
             continue
         if type(item) != list:
-            if not os.path.exists(item):
+            if item is None:
+                check_list[i] = False
+            elif not os.path.exists(item):
                 check_list[i] = False
         else:
             for j, subitem in enumerate(item):

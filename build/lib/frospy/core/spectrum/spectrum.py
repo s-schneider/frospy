@@ -9,12 +9,13 @@ Module for handling nmPy segment objects.
     (https://www.gnu.org/copyleft/lesser.html)
 """
 import matplotlib.pyplot as plt
-from frospy.plot.nmplt import get_iter_colormap, get_iter_linestyle
+from frospy.plot.nmplt import (get_iter_colormap, get_iter_linestyle,
+                               format_exponent)
 
 from frospy.core.segment import Segment
 from frospy.util.base import (inv4trace, nextpow2, freq_index, time_index,
-                            get_local_extrema, group_consecutive_numbers,
-                            takeClosest, misfit)
+                              get_local_extrema, group_consecutive_numbers,
+                              takeClosest, misfit)
 from frospy.util.base import taper as taper_trace
 from frospy import data as frospydata
 
@@ -392,7 +393,7 @@ class Spectrum(object):
         return ymax/hw/np.power(no_of_peaks, peak_order)
 
     def plot(self, fw1, fw2, part='Amplitude', ax=None, width=0.825,
-             cmap='rainbow', xlabel=None, ylabel=None, dlabel=None,
+             cmap='rainbow', xlabel='f(mHz)', ylabel=None, dlabel=None,
              normalize=False, ticks=None, cmap_highlight=None,
              color='k',
              **plotargs):
@@ -439,7 +440,7 @@ class Spectrum(object):
                         label=label, **plotargs)
 
         # Labeling
-        if part in ['Re', 'Im', 'Phase']:
+        if part in ['Re', 'Im', 'Phase', 'Amplitude']:
             if ylabel:
                 ax.set_ylabel(ylabel)
             else:
@@ -456,7 +457,7 @@ class Spectrum(object):
         if ticks:
             ax.yaxis.set_ticks(ticks)
         ax.set_xlim(f[startlabel], f[endlabel + 1])
-
+        ax = format_exponent(ax)
         return ax
 
     def get_spectrum(self, fw1, fw2, part='Amplitude',

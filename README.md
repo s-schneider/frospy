@@ -11,7 +11,7 @@ I recommend to run this toolbox using anaconda.
 Create a new environment:
 Either create an environment using the .yml file, this installs everything:
 ```
-$ conda env create -f /tmp/environment.yml
+$ conda env create -f environment.yml
 ```
 or you can do it manually:
 ```

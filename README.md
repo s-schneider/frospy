@@ -5,8 +5,6 @@ Small toolbox to help with visualization of spectra and data-handling for splitt
  * [Wiki](https://github.com/s-schneider/frospy/wiki/Home:-Free-Oscillation-Toolbox---FrosPy)
  * [Toroidal Mode Splittingfunctions](#toroidal-mode-splittingfunctions)
  * [Installation](#installation)
- * [Update](#update)
- * [Usage](#usage)
 
 ## Splittingfunction Coefficients
 

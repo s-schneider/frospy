@@ -66,7 +66,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         setup = read_setup(setup)
         # setup = read_setup(setup)
 
-    if format is None and ifile is not None:
+    if format is None and ifile is not None and not ifile.endswith('sph'):
         # try to guess format from file extension
         _, format = os.path.splitext(ifile)
         format = format[1:]
@@ -75,7 +75,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         cst, dst = _read_pickle(ifile)
         pass
 
-    if ifile is not None and ifile.endswith('.sqlite3'):
+    if ifile is not None and ifile.endswith('.sqlite3') and not ifile.endswith('sph'):
         if name_overide is True:
             name = name
         else:
@@ -105,7 +105,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             header = get_header(None, modes_sc, modes_cc,
                                 name=name, damp=damp[0][0])
 
-    elif setup is not None and ifile is not None:
+    elif setup is not None and ifile is not None and not ifile.endswith('sph'):
         cst_out = read_cst(setup=setup, cfile=ifile)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
         header = get_header(setup.rundir, modes_sc, modes_cc, name=name,

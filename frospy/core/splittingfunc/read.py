@@ -1519,21 +1519,21 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                                                            m[1].lower(),
                                                            int(m[2])))
             if model not in ('SP12RTS', 'CRUST'):
-                from IPython import embed; embed()
-                if os.path.exists('input'):
-                    os.remove('input')
-                if modelfile is not None:
-                    if type(modelfile) != list:
-                        os.system('echo "{}" > input'.format(modelfile))
-                    else:
-                        os.system('echo "{}" > input'.format(modelfile[0]))
-                        os.system('echo "{}" >> input'.format(modelfile[1]))
                 # S20RTS prediction
                 for s in np.arange(0, int(s_max)+1, 2):
                     # only input coupling degrees, No degree higher then 20
                     if s not in max_sc_degrees(int(m[2])) or s > _maxmdeg:
                         continue
-                    os.system('echo "%s" >> input' % s)
+                    if modelfile is not None:
+                        if type(modelfile) != list:
+                            os.system('echo "{}" > input'.format(modelfile))
+                            os.system('echo "%s" >> input' % s)
+                        else:
+                            os.system('echo "{}" > input'.format(modelfile[0]))
+                            os.system('echo "{}" >> input'.format(modelfile[1]))
+                            os.system('echo "%s" >> input' % s)
+                    else:
+                        os.system('echo "%s" > input' % s)
                     res = subprocess.Popen('%s < input' % cstS20RTS, shell=True,
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.PIPE)
@@ -1684,10 +1684,13 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                                 if modelfile is not None:
                                     if type(modelfile) != list:
                                         os.system('echo "{}" > input'.format(modelfile))
+                                        os.system('echo "%s" >> input' % s)
                                     else:
                                         os.system('echo "{}" > input'.format(modelfile[0]))
                                         os.system('echo "{}" >> input'.format(modelfile[1]))
-                                os.system('echo "%s" >> input' % s)
+                                        os.system('echo "%s" >> input' % s)
+                                else:
+                                    os.system('echo "%s" > input' % s)
                                 res = subprocess.Popen('%s < input' % cc_cstS20RTS,
                                                        shell=True,
                                                        stdout=subprocess.PIPE,

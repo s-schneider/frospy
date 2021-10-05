@@ -67,55 +67,17 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         # setup = read_setup(setup)
 
     if format is None and ifile is not None and not type(ifile) == list:
-        if not ifile.endswith('sph'):
-            # try to guess format from file extension
-            _, format = os.path.splitext(ifile)
-            format = format[1:]
+        # try to guess format from file extension
+        _, format = os.path.splitext(ifile)
+        format = format[1:]
 
     if format == 'pickle':
         cst, dst = _read_pickle(ifile)
         pass
 
-    if ifile is not None and ifile.endswith('.sqlite3') and not type(ifile) == list:
-        if not ifile.endswith('sph'):
-            if name_overide is True:
-                name = name
-            else:
-                name = db_model
-
-            cst_out = read_cst(setup=setup, modes=modes, cfile=ifile,
-                               model=db_model)
-            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-            if verbose is True:
-                print('cst errors: \n', cst_errors)
-                print('cst errors: \n', dst_errors)
-                print('\n')
-
-            if setup is not None:
-                header = get_header(setup.rundir, modes_sc, modes_cc,
-                                    name=name, damp=None)
-            else:
-                if type(modes) is not list:
-                    modes = [modes]
-                for _i, _name in enumerate(modes):
-                    modes[_i] = format_name(_name).upper()
-
-                damp = db_query(db_path=ifile, table=db_model, select='damp',
-                                condition_dict={'mode': modes[0], 'kind': 'cst'})
-                if verbose is True:
-                    print('damping found: ', damp)
-                header = get_header(None, modes_sc, modes_cc,
-                                    name=name, damp=damp[0][0])
-
-    elif setup is not None and ifile is not None and not type(ifile) == list:
-        if not ifile.endswith('sph'):
-            cst_out = read_cst(setup=setup, cfile=ifile)
-            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-            header = get_header(setup.rundir, modes_sc, modes_cc, name=name,
-                                damp=damp)
-
-    elif format in models or mdcplbin is not None:
+    if format in models or mdcplbin is not None:
         if setup is not None:
+            print('1')
             cst_out = read_cst(setup=setup, cfile=format, R=R,
                                include_CRUST=include_CRUST,
                                mdcplbin=mdcplbin)
@@ -149,6 +111,43 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             model = format
             header = get_header(None, modes_sc, modes_cc,
                                 name=name, model=model, damp=damp)
+
+    elif ifile is not None and ifile.endswith('.sqlite3') and not ifile.endswith('sph'):
+        if name_overide is True:
+            name = name
+        else:
+            name = db_model
+
+        cst_out = read_cst(setup=setup, modes=modes, cfile=ifile,
+                           model=db_model)
+        cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+        if verbose is True:
+            print('cst errors: \n', cst_errors)
+            print('cst errors: \n', dst_errors)
+            print('\n')
+
+        if setup is not None:
+            header = get_header(setup.rundir, modes_sc, modes_cc,
+                                name=name, damp=None)
+        else:
+            if type(modes) is not list:
+                modes = [modes]
+            for _i, _name in enumerate(modes):
+                modes[_i] = format_name(_name).upper()
+
+            damp = db_query(db_path=ifile, table=db_model, select='damp',
+                            condition_dict={'mode': modes[0], 'kind': 'cst'})
+            if verbose is True:
+                print('damping found: ', damp)
+            header = get_header(None, modes_sc, modes_cc,
+                                name=name, damp=damp[0][0])
+
+    elif setup is not None and ifile is not None and not ifile.endswith('sph'):
+        cst_out = read_cst(setup=setup, cfile=ifile)
+        cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+        header = get_header(setup.rundir, modes_sc, modes_cc, name=name,
+                            damp=damp)
+
     elif format == 'dat':
         if modesin_dir is not None:
             cst_out = read_cst(cfile=ifile, modes_dir=modesin_dir)

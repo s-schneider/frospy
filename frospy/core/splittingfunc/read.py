@@ -1464,6 +1464,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         _maxddeg = 20 # dst model
 
     if model in ('VSXI', 'VS'):
+        print('here')
         cstS20RTS = "{}/simons/bin/mdcplmrho_all_cst{}".format(bin_path, model)
         cc_cstS20RTS = "{}/simons/bin/mdcplmrho_allC_cst{}".format(bin_path, model)
         dstS20RTS = None

@@ -1425,6 +1425,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
 
     cstCRUST = "%s/simons/bin/mdcplmrho_all_cstCRUST" % bin_path
     cc_cstCRUST = "%s/simons/bin/mdcplmrho_allC_cstCRUST" % bin_path
+    modelfile = None
 
     if model == 'S20RTS':
         cstS20RTS = "%s/talavera/bin/mdcplmrho_all_cstS20RTS" % bin_path
@@ -1464,7 +1465,6 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         _maxddeg = 20 # dst model
 
     if model in ('VSXI', 'VS'):
-        print('here')
         cstS20RTS = "{}/simons/bin/mdcplmrho_all_cst{}".format(bin_path, model)
         cc_cstS20RTS = "{}/simons/bin/mdcplmrho_allC_cst{}".format(bin_path, model)
         dstS20RTS = None
@@ -1481,8 +1481,9 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         _maxmdeg = 8 # cst model
         _maxcdeg = 8 # crust model
         _maxddeg = 8 # dst model
+        modelfile = model
 
-    print(cstS20RTS, cc_cstS20RTS)
+    print(cstS20RTS, cc_cstS20RTS, modelfile)
     sc_modes, cc_modes = get_mode_names(modesin, modes_ccin)
     sc_cdeg, sc_ddeg, cc_cdeg, cc_ddeg = get_mode_deg(modesin, modes_ccin)
 
@@ -1518,6 +1519,8 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                                                            m[1].lower(),
                                                            int(m[2])))
             if model not in ('SP12RTS', 'CRUST'):
+                if modelfile is not None:
+                    os.system('echo "{}" > input'.format(modelfile))
                 # S20RTS prediction
                 for s in np.arange(0, int(s_max)+1, 2):
                     # only input coupling degrees, No degree higher then 20

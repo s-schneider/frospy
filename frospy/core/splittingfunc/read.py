@@ -1520,7 +1520,11 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                                                            int(m[2])))
             if model not in ('SP12RTS', 'CRUST'):
                 if modelfile is not None:
-                    os.system('echo "{}" > input'.format(modelfile))
+                    if type(modelfile) != list:
+                        os.system('echo "{}" > input'.format(modelfile))
+                    else:
+                        os.system('echo "{}" > input'.format(modelfile[0]))
+                        os.system('echo "{}" > input'.format(modelfile[1]))
                 # S20RTS prediction
                 for s in np.arange(0, int(s_max)+1, 2):
                     # only input coupling degrees, No degree higher then 20
@@ -1672,6 +1676,12 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                                 # only input coupling degrees
                                 if s not in ccdegs:
                                     continue
+                                if modelfile is not None:
+                                    if type(modelfile) != list:
+                                        os.system('echo "{}" > input'.format(modelfile))
+                                    else:
+                                        os.system('echo "{}" > input'.format(modelfile[0]))
+                                        os.system('echo "{}" > input'.format(modelfile[1]))
                                 os.system('echo "%s" > input' % s)
                                 res = subprocess.Popen('%s < input' % cc_cstS20RTS,
                                                        shell=True,

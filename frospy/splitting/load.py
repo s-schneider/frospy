@@ -111,7 +111,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         header = get_header(setup.rundir, modes_sc, modes_cc, name=name,
                             damp=damp)
 
-    elif format in models:
+    elif format in models or mdcplbin is not None:
         if setup is not None:
             cst_out = read_cst(setup=setup, cfile=format, R=R,
                                include_CRUST=include_CRUST,

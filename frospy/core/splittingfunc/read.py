@@ -1519,7 +1519,8 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                                                            m[1].lower(),
                                                            int(m[2])))
             if model not in ('SP12RTS', 'CRUST'):
-                os.remove('input')
+                if os.path.exists('input'):
+                    os.remove('input')
                 if modelfile is not None:
                     if type(modelfile) != list:
                         os.system('echo "{}" > input'.format(modelfile))
@@ -1677,7 +1678,8 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                                 # only input coupling degrees
                                 if s not in ccdegs:
                                     continue
-                                os.remove('input')
+                                if os.path.exists('input'):
+                                    os.remove('input')
                                 if modelfile is not None:
                                     if type(modelfile) != list:
                                         os.system('echo "{}" > input'.format(modelfile))

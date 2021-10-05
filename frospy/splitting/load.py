@@ -128,11 +128,19 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             model = format
             header = get_header(modesin_dir, modes_sc, modes_cc,
                                 name=name, model=model, damp=damp)
-        else:
-            cst_out = read_cst(cfile=format, modes=modes, verbose=verbose,
+        elif mdcplbin is not None:
+            cst_out = read_cst(cfile=ifile, modes=modes, verbose=verbose,
                                include_CRUST=include_CRUST,
                                mdcplbin=mdcplbin,
                                mdcplccbin=mdcplccbin)
+            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+            name = format
+            model = format
+            header = get_header(None, modes_sc, modes_cc,
+                                name=name, model=model, damp=damp)
+        else:
+            cst_out = read_cst(cfile=format, modes=modes, verbose=verbose,
+                               include_CRUST=include_CRUST)
             cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
             name = format
             model = format

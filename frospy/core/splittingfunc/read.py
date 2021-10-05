@@ -78,7 +78,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
 
     if setup is not None or modes_dir is not None:
         if cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST',
-                     'VSXI', 'VS', 'custom'):
+                     'VSXI', 'VS') or cfile.endswith('.sph'):
             if len(setup.modes_cc) > 0 and len(setup.modes_sc) == 0:
                 allmodes = read_modes()
                 for _m in setup.modes_cc.keys():
@@ -1473,8 +1473,8 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         _maxddeg = 8 # dst model
 
     if mdcplbin is not None:
-        cstS20RTS = "{}/simons/bin/{}".format(bin_path, mdcplbin)
-        cc_cstS20RTS = "{}/simons/bin/{}".format(bin_path, mdcplccbin)
+        cstS20RTS = mdcplbin
+        cc_cstS20RTS = mdcplccbin
         dstS20RTS = None
         cc_dstS20RTS = None
         _maxmdeg = 8 # cst model

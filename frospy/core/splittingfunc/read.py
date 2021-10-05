@@ -1519,6 +1519,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                                                            m[1].lower(),
                                                            int(m[2])))
             if model not in ('SP12RTS', 'CRUST'):
+                from IPython import embed; embed()
                 if os.path.exists('input'):
                     os.remove('input')
                 if modelfile is not None:

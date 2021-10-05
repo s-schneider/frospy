@@ -113,6 +113,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
 
     elif format in models or mdcplbin is not None:
         if setup is not None:
+            print('1')
             cst_out = read_cst(setup=setup, cfile=format, R=R,
                                include_CRUST=include_CRUST,
                                mdcplbin=mdcplbin)
@@ -120,6 +121,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             header = get_header(setup.rundir, modes_sc, modes_cc, damp=0,
                                 name=name, model=format)
         elif modesin_dir is not None:
+            print('2')
             cst_out = read_cst(format, modesin_dir,
                                include_CRUST=include_CRUST,
                                mdcplbin=mdcplbin)
@@ -129,6 +131,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             header = get_header(modesin_dir, modes_sc, modes_cc,
                                 name=name, model=model, damp=damp)
         elif mdcplbin is not None:
+            print('3')
             cst_out = read_cst(cfile=ifile, modes=modes, verbose=verbose,
                                include_CRUST=include_CRUST,
                                mdcplbin=mdcplbin,
@@ -139,6 +142,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             header = get_header(None, modes_sc, modes_cc,
                                 name=name, model=model, damp=damp)
         else:
+            print('4')
             cst_out = read_cst(cfile=format, modes=modes, verbose=verbose,
                                include_CRUST=include_CRUST)
             cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]

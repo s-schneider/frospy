@@ -35,7 +35,8 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
               'SP12RTS', 'QRFSI12', 'CRUST', 'VSXI', 'VS',
               'BT', 'Tr', 'Ro', 'Wh',
               '$\phi$=1.20', '$\phi$=1.10', '$\phi$=1.04',
-              '$\phi$=0.96', '$\phi$=0.90', '$\phi$=0.80']
+              '$\phi$=0.96', '$\phi$=0.90', '$\phi$=0.80',
+              'custom']
 
     model = None
     if modes is not None:
@@ -111,12 +112,14 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
 
     elif format in models:
         if setup is not None:
+            print('1')
             cst_out = read_cst(setup=setup, cfile=format, R=R,
                                include_CRUST=include_CRUST)
             cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
             header = get_header(setup.rundir, modes_sc, modes_cc, damp=0,
                                 name=name, model=format)
         elif modesin_dir is not None:
+            print('2')
             cst_out = read_cst(format, modesin_dir,
                                include_CRUST=include_CRUST)
             cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
@@ -125,6 +128,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             header = get_header(modesin_dir, modes_sc, modes_cc,
                                 name=name, model=model, damp=damp)
         else:
+            print('3')
             cst_out = read_cst(cfile=format, modes=modes, verbose=verbose,
                                include_CRUST=include_CRUST)
             cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]

@@ -55,7 +55,8 @@ def read(ifile, format=None):
 
 
 def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
-             model='data', include_CRUST=True, verbose=False):
+             model='data', include_CRUST=True,
+             mdcplbin=None, mdcplccbin=None, verbose=False):
     """
     param modes_dir: path to directory containing:
                          modes.in
@@ -112,7 +113,15 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
         print(cfile, modesin, modes_ccin)
 
     cst, dst, cst_errors, dst_errors = None, None, None, None
-    if cfile == 'AD':
+
+    if mdcplbin is not None:
+        cst, dst = read_cst_S20RTS(modesin=modesin, modes_ccin=modes_ccin,
+                                   setup=setup, modes_dst=modes_scin_dst,
+                                   R=R, model=cfile, verbose=verbose,
+                                   include_CRUST=include_CRUST,
+                                   mdcplbin=mdcplbin,
+                                   mdcplccbin=mdcplccbin)
+    elif cfile == 'AD':
         file_name = "AD_cst.json"
         path = "%s/AD/%s" % (frospydata.__path__[0], file_name)
         cst, dst, cst_errors, dst_errors = read_cst_AD(modesin, modes_ccin,
@@ -1328,7 +1337,9 @@ def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3",
 def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                     keep_mcst=False, modes_dst=None, modes_cc_dst=None,
                     R=-0.2, model='S20RTS', include_CRUST=True,
-                    verbose=False):
+                    verbose=False,
+                    mdcplbin=None,
+                    mdcplccbin=None):
     """
     Calculates S20RTS coefficients using the program defined in
     S20RTS_path for given self-coupling modes in 'modes' and cross-coupling
@@ -1460,6 +1471,16 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         _maxmdeg = 8 # cst model
         _maxcdeg = 8 # crust model
         _maxddeg = 8 # dst model
+
+    if mdcplbin is not None:
+        cstS20RTS = "{}/simons/bin/{}".format(bin_path, mdcplbin)
+        cc_cstS20RTS = "{}/simons/bin/{}".format(bin_path, mdcplccbin)
+        dstS20RTS = None
+        cc_dstS20RTS = None
+        _maxmdeg = 8 # cst model
+        _maxcdeg = 8 # crust model
+        _maxddeg = 8 # dst model
+
     sc_modes, cc_modes = get_mode_names(modesin, modes_ccin)
     sc_cdeg, sc_ddeg, cc_cdeg, cc_ddeg = get_mode_deg(modesin, modes_ccin)
 
@@ -1909,6 +1930,8 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         WRITE2DB = True
     elif R == -0.2:
         WRITE2DB = True
+    if mdcplbin is not None:
+        WRITE2DB = False
 
     if WRITE2DB is True:
         _write_cst_S20RTS_db(cst, dst, file_name, verbose=verbose)

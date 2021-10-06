@@ -606,6 +606,9 @@ def get_header(dir, modes_sc, modes_cc, name=None, damp=None, model=None):
         events = None
         seg_cnt = None
 
+    if modes_cc is None:
+        modes_cc = []
+
     header = {'modes_in': modes_sc, 'modes_cc_in': modes_cc, 'damp': damp,
               'nsegments': seg_cnt, 'name': name, 'model': model}
 

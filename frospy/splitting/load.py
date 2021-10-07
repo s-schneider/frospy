@@ -108,10 +108,12 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
                 model = ifile[0]
             else:
                 model = ifile
+
             if name_overide is True:
                 name = name
+                model = name
             else:
-                name = 'custom'
+                name = 'custom'    
             path = None
 
         else:

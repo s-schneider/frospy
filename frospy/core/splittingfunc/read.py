@@ -1502,7 +1502,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     os.chdir(tmp_path)
 
     sc_coeff = {}
-    if if cc_modes is not None:
+    if cc_modes is not None:
         if len(cc_modes) != 0:
             cc_coeff = {}
 

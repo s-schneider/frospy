@@ -170,7 +170,8 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
                 c_err = {_m: cst_errors[_m]}
                 d_err = {_m: dst_errors[_m]}
             except Exception:
-                pass
+                c_err = None
+                d_err = None
             modes_sc, modes_cc, modesin, modes_ccin = get_modes4cst(_m)
 
             header = get_header(modesin_dir, modes_sc,

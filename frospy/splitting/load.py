@@ -105,14 +105,13 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
                                mdcplccbin=mdcplccbin)
             cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
             if type(ifile) == list:
-                _ifile = ifile[0]
+                model = ifile[0]
             else:
-                _ifile = ifile
+                model = ifile
             if name_overide is True:
                 name = name
             else:
-                name = _ifile
-            model = _ifile
+                name = 'custom'
             path = None
 
         else:
@@ -174,7 +173,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         model = format
 
     header = get_header(path, modes_sc, modes_cc, name=name, damp=damp,
-                        model=format)
+                        model=model)
     # if mode is not defined, it will load all modes from the file,
     # in this case we need to loop over them
     if return_set is True:

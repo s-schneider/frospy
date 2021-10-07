@@ -104,11 +104,15 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
                                mdcplbin=mdcplbin,
                                mdcplccbin=mdcplccbin)
             cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+            if type(ifile) == list:
+                _ifile = ifile[0]
+            else:
+                _ifile = ifile
             if name_overide is True:
                 name = name
             else:
-                name = ifile
-            model = ifile
+                name = _ifile
+            model = _ifile
             path = None
 
         else:

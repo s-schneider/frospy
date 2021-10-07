@@ -1502,8 +1502,9 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     os.chdir(tmp_path)
 
     sc_coeff = {}
-    if len(cc_modes) != 0:
-        cc_coeff = {}
+    if if cc_modes is not None:
+        if len(cc_modes) != 0:
+            cc_coeff = {}
 
     count = 0
     for mode, s_max in zip(sc_modes, sc_cdeg):
@@ -1632,7 +1633,9 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             # 1-1  ->  1-2  ->  1-3
             #          2-2  ->  2-3
             #                   3-3
-            if len(cc_modes) != 0:
+            if cc_modes is not None:
+                if len(cc_modes) == 0:
+                    continue
                 # Workaround for cross-coupling
                 if setup is not None:
                     cc_cdeg = list(setup.modes_cc.values())
@@ -1874,7 +1877,9 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     mode = sc_modes[0]
     count = 1
     for mode in sc_modes[1:]:
-        if len(cc_modes) != 0:
+        if cc_modes is not None:
+            if len(cc_modes) == 0:
+                continue
             # reading for 2 and 3 modes
             if count == 1 and len(cc_modes) >= 1:
                 # 1-2  ->  1-3

@@ -540,7 +540,8 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                      s.stats.model is not None
                      ):
                     label_model_set[s.stats.model] = False
-                print(mlabel, mark, markers)
+                if verbose is True:
+                    print('Labels ', label, mlabel, mark, markers)
                 if mlabel not in mark:
                     mark[mlabel] = markers[mlabel]
                 if mlabel not in colors:

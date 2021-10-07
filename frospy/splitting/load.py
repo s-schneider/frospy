@@ -107,7 +107,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             if name_overide is True:
                 name = name
             else:
-                name = 'custom'
+                name = ifile
             model = ifile
             path = None
 

@@ -115,6 +115,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     cst, dst, cst_errors, dst_errors = None, None, None, None
 
     if mdcplbin is not None:
+        from IPython import embed; embed()
         cst, dst = read_cst_S20RTS(modesin=modesin, modes_ccin=modes_ccin,
                                    setup=setup, modes_dst=modes_scin_dst,
                                    R=R, model=cfile, verbose=verbose,

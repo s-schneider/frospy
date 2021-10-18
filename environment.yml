@@ -9,3 +9,4 @@ dependencies:
   - cartopy
   - pyshtools
   - pip
+  - natsort

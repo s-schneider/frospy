@@ -253,12 +253,18 @@ class Set(object):
                         continue
                     else:
                         i += 1
+                for mname in sf.stats.modes_cc_in.names:
+                    if not fnmatch.fnmatch(mname.upper(), modes.upper()):
+                        continue
+                    else:
+                        i += 1
                 if i == 0:
                     continue
+
             if modes_cc is not None:
                 i = 0
                 for mname in sf.stats.modes_cc_in.names:
-                    if not fnmatch.fnmatch(mname.upper(), modes.upper()):
+                    if not fnmatch.fnmatch(mname.upper(), modes_cc.upper()):
                         continue
                     else:
                         i += 1

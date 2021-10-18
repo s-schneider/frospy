@@ -112,7 +112,11 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
                 name = name
                 model = name
             else:
+<<<<<<< HEAD
                 name = 'custom'
+=======
+                name = 'custom'
+>>>>>>> main
             path = None
 
         else:

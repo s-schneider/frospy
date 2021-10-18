@@ -395,7 +395,7 @@ class Spectrum(object):
     def plot(self, fw1, fw2, part='Amplitude', ax=None, width=0.825,
              cmap='rainbow', xlabel='f(mHz)', ylabel=None, dlabel=None,
              normalize=False, ticks=None, cmap_highlight=None,
-             color='k', show=True,
+             color='k', show=False,
              **plotargs):
 
         if ax is None:

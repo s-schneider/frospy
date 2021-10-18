@@ -87,7 +87,7 @@ def get_misfit_snr(spectrum, pick):
     return fwhm, cmf, rmf
 
 
-def get_pick(spectrum, fw, modes, weighting='sum', event=''):
+def get_pick(spectrum, fw, modes=None, weighting='sum', event=''):
     weight = spectrum.weight(fw[0], fw[1], rule=weighting)
     tw1 = spectrum.stats.tw[0] / 3600.
     tw2 = spectrum.stats.tw[1] / 3600.
@@ -100,6 +100,8 @@ def get_pick(spectrum, fw, modes, weighting='sum', event=''):
                 weight=weight)
 
     seg_modes = Modes()
+    if modes is None:
+        modes = read_modes()
     for m in modes:
         if m.freq > fw[0] and m.freq < fw[1]:
             seg_modes += m

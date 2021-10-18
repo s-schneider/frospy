@@ -207,6 +207,7 @@ frospy/data/docs/main.pdf
 frospy/data/docs/main.synctex.gz
 frospy/data/docs/main.tex
 frospy/data/docs/main.toc
+frospy/data/examples/031111B.ahx
 frospy/data/test/test.ahx
 frospy/data/test/test.ahx.syn
 frospy/data/test/test.dat

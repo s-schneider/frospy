@@ -458,6 +458,7 @@ class Spectrum(object):
             ax.yaxis.set_ticks(ticks)
         ax.set_xlim(f[startlabel], f[endlabel + 1])
         ax = format_exponent(ax)
+        plt.show()
         return ax
 
     def get_spectrum(self, fw1, fw2, part='Amplitude',

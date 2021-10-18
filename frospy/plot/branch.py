@@ -531,39 +531,41 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 x_ticklabel.append(label)
                 s_nums[label] = i
                 i += 1
-            else:
-                mlabel = s.stats.model
-                # print("Model:", s, mlabel)
-                # Sometimes data sneaks into the model plot? have to check
-                # if the s.stats.model is not None here, else continue
-                if mlabel == None:
-                    continue
-                if (
-                     s.stats.model not in label_model_set and
-                     s.stats.model is not None
-                     ):
-                    label_model_set[s.stats.model] = False
-                if verbose is True:
-                    print('Labels ', label, mlabel, mark, markers)
-                if mlabel not in mark:
-                    mark[mlabel] = markers[mlabel]
-                if mlabel not in colors:
-                    if cmap == 'grey':
-                        colors[mlabel] = 'grey'
-                    else:
-                        try:
-                            colors[mlabel] = next(colormap)
-                        except StopIteration:
-                            if label2 is not None:
-                                colormap = get_iter_colormap(model[0:-1], cmap,
-                                                             random_values='center')
-                            else:
-                                colormap = get_iter_colormap(model, cmap,
-                                                             random_values='center')
-                            colors[mlabel] = next(colormap)
-                if model_colors is not None:
-                    if mlabel in model_colors:
-                        colors[mlabel] = model_colors[mlabel]
+
+            # Why was this if condition here?
+            # else:
+            mlabel = s.stats.model
+            # print("Model:", s, mlabel)
+            # Sometimes data sneaks into the model plot? have to check
+            # if the s.stats.model is not None here, else continue
+            if mlabel == None:
+                continue
+            if (
+                 s.stats.model not in label_model_set and
+                 s.stats.model is not None
+                 ):
+                label_model_set[s.stats.model] = False
+            if verbose is True:
+                print('Labels ', label, mlabel, mark, markers)
+            if mlabel not in mark:
+                mark[mlabel] = markers[mlabel]
+            if mlabel not in colors:
+                if cmap == 'grey':
+                    colors[mlabel] = 'grey'
+                else:
+                    try:
+                        colors[mlabel] = next(colormap)
+                    except StopIteration:
+                        if label2 is not None:
+                            colormap = get_iter_colormap(model[0:-1], cmap,
+                                                         random_values='center')
+                        else:
+                            colormap = get_iter_colormap(model, cmap,
+                                                         random_values='center')
+                        colors[mlabel] = next(colormap)
+            if model_colors is not None:
+                if mlabel in model_colors:
+                    colors[mlabel] = model_colors[mlabel]
     # Ordering modes
     _out = sort_modes(mode, x_ticklabel, ordering, verbose)
     x_ticklabel, labels, s_nums, mode_list = _out[:]

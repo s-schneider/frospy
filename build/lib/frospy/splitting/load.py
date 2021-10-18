@@ -18,7 +18,8 @@ def loadmodel(*args):
 def load(ifile=None, modes=None, setup=None, modesin_dir=None,
          format=None, name='data', damp=None, R=-0.2, db_model=None,
          return_set=False, include_CRUST=True,
-         verbose=False, name_overide=False):
+         verbose=False, name_overide=False,
+         mdcplbin=None, mdcplccbin=None):
 
     """
     param setup: :frospy.core.setup.settings.Setup object:
@@ -35,7 +36,8 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
               'SP12RTS', 'QRFSI12', 'CRUST', 'VSXI', 'VS',
               'BT', 'Tr', 'Ro', 'Wh',
               '$\phi$=1.20', '$\phi$=1.10', '$\phi$=1.04',
-              '$\phi$=0.96', '$\phi$=0.90', '$\phi$=0.80']
+              '$\phi$=0.96', '$\phi$=0.90', '$\phi$=0.80',
+              'custom']
 
     model = None
     if modes is not None:
@@ -64,7 +66,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         setup = read_setup(setup)
         # setup = read_setup(setup)
 
-    if format is None and ifile is not None:
+    if format is None and ifile is not None and not type(ifile) == list:
         # try to guess format from file extension
         _, format = os.path.splitext(ifile)
         format = format[1:]
@@ -73,7 +75,55 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         cst, dst = _read_pickle(ifile)
         pass
 
-    if ifile is not None and ifile.endswith('.sqlite3'):
+    if format in models or mdcplbin is not None:
+        if setup is not None:
+            cst_out = read_cst(setup=setup, cfile=format, R=R,
+                               include_CRUST=include_CRUST,
+                               mdcplbin=mdcplbin)
+            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+            path = setup.rundir
+            modes_sc = modes_sc
+            modes_cc = modes_cc
+            damp = 0
+            name = name
+            model = format
+
+        elif modesin_dir is not None:
+            cst_out = read_cst(format, modesin_dir,
+                               include_CRUST=include_CRUST,
+                               mdcplbin=mdcplbin)
+            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+            name = format
+            model = format
+            path = modesin_dir
+
+        elif mdcplbin is not None:
+            cst_out = read_cst(cfile=ifile, modes=modes, verbose=verbose,
+                               include_CRUST=include_CRUST,
+                               mdcplbin=mdcplbin,
+                               mdcplccbin=mdcplccbin)
+            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+            if type(ifile) == list:
+                model = ifile[0]
+            else:
+                model = ifile
+
+            if name_overide is True:
+                name = name
+                model = name
+            else:
+                name = 'custom'
+            path = None
+
+        else:
+            cst_out = read_cst(cfile=format, modes=modes, verbose=verbose,
+                               include_CRUST=include_CRUST)
+            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
+            name = format
+            model = format
+            path = None
+
+    elif ifile is not None and ifile.endswith('.sqlite3') and not ifile.endswith('sph'):
         if name_overide is True:
             name = name
         else:
@@ -88,8 +138,10 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             print('\n')
 
         if setup is not None:
-            header = get_header(setup.rundir, modes_sc, modes_cc,
-                                name=name, damp=None)
+            path = setup.rundir
+            damp = None
+            model = None
+            model = format
         else:
             if type(modes) is not list:
                 modes = [modes]
@@ -100,38 +152,16 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
                             condition_dict={'mode': modes[0], 'kind': 'cst'})
             if verbose is True:
                 print('damping found: ', damp)
-            header = get_header(None, modes_sc, modes_cc,
-                                name=name, damp=damp[0][0])
 
-    elif setup is not None and ifile is not None:
+            path = None
+            damp = damp[0][0]
+            model = None
+
+    elif setup is not None and ifile is not None and not ifile.endswith('sph'):
         cst_out = read_cst(setup=setup, cfile=ifile)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-        header = get_header(setup.rundir, modes_sc, modes_cc, name=name,
-                            damp=damp)
+        path = setup.rundir
 
-    elif format in models:
-        if setup is not None:
-            cst_out = read_cst(setup=setup, cfile=format, R=R,
-                               include_CRUST=include_CRUST)
-            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-            header = get_header(setup.rundir, modes_sc, modes_cc, damp=0,
-                                name=name, model=format)
-        elif modesin_dir is not None:
-            cst_out = read_cst(format, modesin_dir,
-                               include_CRUST=include_CRUST)
-            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-            name = format
-            model = format
-            header = get_header(modesin_dir, modes_sc, modes_cc,
-                                name=name, model=model, damp=damp)
-        else:
-            cst_out = read_cst(cfile=format, modes=modes, verbose=verbose,
-                               include_CRUST=include_CRUST)
-            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-            name = format
-            model = format
-            header = get_header(None, modes_sc, modes_cc,
-                                name=name, model=model, damp=damp)
     elif format == 'dat':
         if modesin_dir is not None:
             cst_out = read_cst(cfile=ifile, modes_dir=modesin_dir)
@@ -139,9 +169,12 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         else:
             cst_out = read_cst(cfile=ifile, modes=modes)
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-        header = get_header(modesin_dir, modes_sc, modes_cc,
-                            name=name, model=model, damp=damp)
+        path = modesin_dir
+        name = ifile.split('/')[-1]
+        model = format
 
+    header = get_header(path, modes_sc, modes_cc, name=name, damp=damp,
+                        model=model)
     # if mode is not defined, it will load all modes from the file,
     # in this case we need to loop over them
     if return_set is True:
@@ -154,7 +187,8 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
                 c_err = {_m: cst_errors[_m]}
                 d_err = {_m: dst_errors[_m]}
             except Exception:
-                pass
+                c_err = None
+                d_err = None
             modes_sc, modes_cc, modesin, modes_ccin = get_modes4cst(_m)
 
             header = get_header(modesin_dir, modes_sc,

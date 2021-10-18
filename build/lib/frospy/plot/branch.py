@@ -282,13 +282,17 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         # if S.stats.name.split('_')[0] not in m:
         if S.stats.model not in m:
             m.append(S.stats.model)
-
+    if verbose is True:
+        print('models', m)
     if SF_in is not None:
         # if model[0] is not None: # I dont know why this is here
         #     model.append(m[1])
         if len(m) == 2 and model[0] is None:
             model = [m[-1]]  # apppend 2nd data set as 1st model
-
+        else:
+            model = m
+    if verbose is True:
+        print('models w/o data', model)
     # spacing between coeffs for the same modes,
     # only if one than one data set is plotted
     if spacing and model[0] is not None:
@@ -325,6 +329,8 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         for m in input:
             width[m] = 0
 
+    if verbose is True:
+        print('Final models ', model)
     # Prepare Figures and Plot
     # use first splitting function to check the amount of plots
     # we need 2 * degree + 1 figures
@@ -398,10 +404,15 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
     for m in marker_order:
         _markers.update([(m, markers[m])])
 
+    print('models :', len(model), 'markers :', len(markers))
     markersit = iter(_markers)
     markers = {}
     for _m in model:
+        if _m is None:
+            continue
         markers[_m] = next(markersit)
+        if verbose is True:
+            print('markers: ', _m, markers[_m])
     colors = {}
     colors_data = {}
 
@@ -520,38 +531,41 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 x_ticklabel.append(label)
                 s_nums[label] = i
                 i += 1
-            else:
-                mlabel = s.stats.model
-                # print("Model:", s, mlabel)
-                # Sometimes data sneaks into the model plot? have to check
-                # if the s.stats.model is not None here, else continue
-                if mlabel == None:
-                    continue
-                if (
-                     s.stats.model not in label_model_set and
-                     s.stats.model is not None
-                     ):
-                    label_model_set[s.stats.model] = False
 
-                if mlabel not in mark:
-                    mark[mlabel] = markers[mlabel]
-                if mlabel not in colors:
-                    if cmap == 'grey':
-                        colors[mlabel] = 'grey'
-                    else:
-                        try:
-                            colors[mlabel] = next(colormap)
-                        except StopIteration:
-                            if label2 is not None:
-                                colormap = get_iter_colormap(model[0:-1], cmap,
-                                                             random_values='center')
-                            else:
-                                colormap = get_iter_colormap(model, cmap,
-                                                             random_values='center')
-                            colors[mlabel] = next(colormap)
-                if model_colors is not None:
-                    if mlabel in model_colors:
-                        colors[mlabel] = model_colors[mlabel]
+            # Why was this if condition here?
+            # else:
+            mlabel = s.stats.model
+            # print("Model:", s, mlabel)
+            # Sometimes data sneaks into the model plot? have to check
+            # if the s.stats.model is not None here, else continue
+            if mlabel == None:
+                continue
+            if (
+                 s.stats.model not in label_model_set and
+                 s.stats.model is not None
+                 ):
+                label_model_set[s.stats.model] = False
+            if verbose is True:
+                print('Labels ', label, mlabel, mark, markers)
+            if mlabel not in mark:
+                mark[mlabel] = markers[mlabel]
+            if mlabel not in colors:
+                if cmap == 'grey':
+                    colors[mlabel] = 'grey'
+                else:
+                    try:
+                        colors[mlabel] = next(colormap)
+                    except StopIteration:
+                        if label2 is not None:
+                            colormap = get_iter_colormap(model[0:-1], cmap,
+                                                         random_values='center')
+                        else:
+                            colormap = get_iter_colormap(model, cmap,
+                                                         random_values='center')
+                        colors[mlabel] = next(colormap)
+            if model_colors is not None:
+                if mlabel in model_colors:
+                    colors[mlabel] = model_colors[mlabel]
     # Ordering modes
     _out = sort_modes(mode, x_ticklabel, ordering, verbose)
     x_ticklabel, labels, s_nums, mode_list = _out[:]

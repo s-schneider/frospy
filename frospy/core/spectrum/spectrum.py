@@ -395,7 +395,7 @@ class Spectrum(object):
     def plot(self, fw1, fw2, part='Amplitude', ax=None, width=0.825,
              cmap='rainbow', xlabel='f(mHz)', ylabel=None, dlabel=None,
              normalize=False, ticks=None, cmap_highlight=None,
-             color='k',
+             color='k', show=True,
              **plotargs):
 
         if ax is None:
@@ -458,7 +458,8 @@ class Spectrum(object):
             ax.yaxis.set_ticks(ticks)
         ax.set_xlim(f[startlabel], f[endlabel + 1])
         ax = format_exponent(ax)
-        plt.show()
+        if show is True:
+            plt.show()
         return ax
 
     def get_spectrum(self, fw1, fw2, part='Amplitude',

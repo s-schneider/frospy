@@ -77,7 +77,6 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
 
     if format in models or mdcplbin is not None:
         if setup is not None:
-            print('1')
             cst_out = read_cst(setup=setup, cfile=format, R=R,
                                include_CRUST=include_CRUST,
                                mdcplbin=mdcplbin)
@@ -113,7 +112,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
                 name = name
                 model = name
             else:
-                name = 'custom'    
+                name = 'custom'
             path = None
 
         else:

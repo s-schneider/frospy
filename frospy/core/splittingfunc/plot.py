@@ -603,6 +603,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
               **kwargs):
 
     bins = Bin()
+    lon_0 = -lon_0
     fig_config = {'figsize': (3, 1.8)}
     map_config = {'projection': 'kav7', 'lon_0': lon_0,
                   'resolution': 'c'}
@@ -646,6 +647,17 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
             elif cmap.lower() == 'arwen' or cmap.lower() == 'yr':
                 colors = [(1, 0, 0), (1, 1, 0), (0, 0, 1)]
                 cmap_name = 'sf_cmap'
+                cmap = LinearSegmentedColormap.from_list(cmap_name,
+                                                         colors, N=12)
+
+            elif cmap.lower() == 'lies':
+                colors = [(0.46, 0.01, 0), (0.76, 0.05, 0), (0.98, 0.28, 0),
+                          (.97, 0.5, 0), (0.98, 0.68, 0.24),  # Reds
+                          (0.97, 0.87, 0.6), (0.87, 0.96, 0.84),  # W, GY
+                          (0.67, 0.839, 0.831), (0.376, 0.73, 0.81),
+                          (0.01, 0.576, 0.745),
+                          (0.09, 0.3, 0.64), (0.01, 0.01, 0.39)]
+                cmap_name = 'lies_cmap'
                 cmap = LinearSegmentedColormap.from_list(cmap_name,
                                                          colors, N=12)
             else:
@@ -886,12 +898,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
 
     # plot it and set up / format labels
     if show_colorbar is True:
-        if 'fs' in kwargs:
-            cb = fig.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
-                              orientation='horizontal', extend='both',
-                              fontsize=kwargs['fs'])
-        else:
-            cb = fig.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
+        cb = fig.colorbar(im, cax=ax_cb, ticks=ticks, format='%3.1f',
                               orientation='horizontal', extend='both')
         cb.vmin = s.min()
         cb.vmax = s.max()

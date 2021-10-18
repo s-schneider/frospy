@@ -59,23 +59,33 @@ class Stats(AttribDict):
 
     __setattr__ = __setitem__
 
+    # def __str__(self, extended=False):
+    #     """
+    #     Return better readable string representation of Stats object
+    #     """
+    #     _pretty_str = '%s\t|' % (self.station)
+    #     _pretty_str += ' channel: %s | event: %s |' % (self.channel,
+    #                                                    self.event)
+    #     if isinstance(self.modes, Modes):
+    #         mode_list = []
+    #         for mod in self.modes:
+    #             mode_list.append(mod.name)
+    #         _pretty_str += ' mode(s): %s' % (mode_list)
+    #     else:
+    #         _pretty_str += ' mode(s): %s' % (self.modes)
+    #     if extended is True:
+    #         _pretty_str += ' | author: %s |' % (self.author)
+    #         _pretty_str += ' data origin: %s' % (self.data_origin)
+    #     return _pretty_str
+
     def __str__(self, extended=False):
         """
         Return better readable string representation of Stats object
         """
-        _pretty_str = '%s\t|' % (self.station)
-        _pretty_str += ' channel: %s | event: %s |' % (self.channel,
-                                                       self.event)
-        if isinstance(self.modes, Modes):
-            mode_list = []
-            for mod in self.modes:
-                mode_list.append(mod.name)
-            _pretty_str += ' mode(s): %s' % (mode_list)
-        else:
-            _pretty_str += ' mode(s): %s' % (self.modes)
-        if extended is True:
-            _pretty_str += ' | author: %s |' % (self.author)
-            _pretty_str += ' data origin: %s' % (self.data_origin)
+        _pretty_str = ''
+
+        for k, v in dict(self).items():
+            _pretty_str += '{}: {}\n'.format(k, v)
         return _pretty_str
 
     def _repr_pretty_(self, p, cycle):

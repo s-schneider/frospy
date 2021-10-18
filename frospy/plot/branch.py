@@ -538,7 +538,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
             # print("Model:", s, mlabel)
             # Sometimes data sneaks into the model plot? have to check
             # if the s.stats.model is not None here, else continue
-            if mlabel == None:
+            if mlabel is None:
                 continue
             if (
                  s.stats.model not in label_model_set and

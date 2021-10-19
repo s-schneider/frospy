@@ -113,6 +113,7 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
                 model = name
             else:
                 name = 'custom'
+
             path = None
 
         else:

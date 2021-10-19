@@ -320,6 +320,7 @@ def read(ifile, format=None, **kwargs):
                         # if mode == '0S6':
                         #     print(pick.stats.modes)
                         segments += pick
+        return segments
 
     else:
         files = glob.glob(ifile)

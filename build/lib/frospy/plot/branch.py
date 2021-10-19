@@ -538,7 +538,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
             # print("Model:", s, mlabel)
             # Sometimes data sneaks into the model plot? have to check
             # if the s.stats.model is not None here, else continue
-            if mlabel == None:
+            if mlabel is None:
                 continue
             if (
                  s.stats.model not in label_model_set and
@@ -977,7 +977,12 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
 
                 # Right now only symmetrical errorbars
                 # Have to fix it for asymmetrical.. again
-                plot_dict[_ax][_label][2].append(err)
+                try:
+                    # f and Q plot are stored as arrays?
+                    plot_dict[_ax][_label][2].append(err[0])
+                except IndexError:
+                    # err is a float
+                    plot_dict[_ax][_label][2].append(err)
                 plot_dict[_ax][_label][3].append(s)
 
     # Set the colors for the different dampings

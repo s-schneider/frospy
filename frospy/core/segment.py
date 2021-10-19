@@ -289,6 +289,38 @@ def read(ifile, format=None, **kwargs):
             segments += update_segment_pickle(x)
         return segments
 
+    elif format == 'json':
+        with open(ifile) as fh:
+            data = json.load(fh)
+
+        all_modes = read_modes()
+        segments = Segment()
+
+        for mode, values in data['segments'].items():
+            if modes != 'all':
+                if mode not in modes:
+                    continue
+
+            m = all_modes.select(name=mode)
+            for cmt, picks in values.items():
+                for chan, pdata in picks.items():
+                    for stat, p in pdata.items():
+                        fw1 = p['fw1']
+                        fw2 = p['fw2']
+                        tw1 = p['tw1']
+                        tw2 = p['tw2']
+                        weight = p['weight']
+                        pick = Pick({'station': stat,
+                                     'event': cmt,
+                                     'channel': chan,
+                                     'modes': m,
+                                     'author': 'Arwen Deuss',
+                                     'data_origin': 'AD_picks.json'},
+                                    fw1, fw2, tw1, tw2, weight)
+                        # if mode == '0S6':
+                        #     print(pick.stats.modes)
+                        segments += pick
+
     else:
         files = glob.glob(ifile)
         segments = Segment()

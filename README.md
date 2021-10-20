@@ -1,4 +1,4 @@
-# Free Oscillation Toolbox - FrosPy
+## Free Oscillation Toolbox - FrosPy
 Small toolbox to help with visualization of spectra and data-handling for splitting function measurements.
 
 ## Installation

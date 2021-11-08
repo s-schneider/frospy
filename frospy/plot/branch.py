@@ -991,9 +991,11 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
 
     # Set the colors for the different dampings
     if len(_label_damping) != 0:
-        x = [float(y.split()[1]) for y in _label_damping]
-        x.sort()
-        _label_damping = ["data %s" % str(y) for y in x]
+        y = [float(y.split()[1]) for y in _label_damping]
+        # x.sort()
+        x = _label_damping
+        _label_damping = [x for _, x in sorted(zip(y, x))]
+        # _label_damping = ["data %s" % str(y) for y in x]
         _cmap = getattr(cm, cmap_all_damping)
         _N = len(_label_damping)
         # had something to do with the dmapings?

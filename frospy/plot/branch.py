@@ -410,7 +410,11 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
     for _m in model:
         if _m is None:
             continue
-        markers[_m] = next(markersit)
+        try:
+            markers[_m] = next(markersit)
+        except StopIteration:
+            markersit = iter(_markers)
+            markers[_m] = next(markersit)
         if verbose is True:
             print('markers: ', _m, markers[_m])
     colors = {}

@@ -110,28 +110,39 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
                             damp=damp)
 
     elif format in models:
+        """
+        et_header(dir, modes_sc, modes_cc, name=None, damp=None, model=None):
+        """
         if setup is not None:
             cst_out = read_cst(setup=setup, cfile=format, R=R,
                                include_CRUST=include_CRUST)
             cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-            header = get_header(setup.rundir, modes_sc, modes_cc, damp=0,
-                                name=name, model=format)
+            d = setup.rundir
+            damp = 0
+            model = format
+
         elif modesin_dir is not None:
             cst_out = read_cst(format, modesin_dir,
                                include_CRUST=include_CRUST)
             cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
             name = format
             model = format
-            header = get_header(modesin_dir, modes_sc, modes_cc,
-                                name=name, model=model, damp=damp)
+            d = modesin_dir
+
         else:
             cst_out = read_cst(cfile=format, modes=modes, verbose=verbose,
                                include_CRUST=include_CRUST)
             cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
             name = format
             model = format
-            header = get_header(None, modes_sc, modes_cc,
-                                name=name, model=model, damp=damp)
+            d = None
+
+        if include_CRUST is True and format != 'CRUST':
+            name += '\n+CRUST5.1'
+        if format == 'CRUST':
+            name = 'CRUST5.1'
+        header = get_header(dir=d, modes_sc=modes_sc, modes_cc=modes_cc,
+                            name=name, damp=damp, model=model)
     elif format == 'dat':
         if modesin_dir is not None:
             cst_out = read_cst(cfile=ifile, modes_dir=modesin_dir)

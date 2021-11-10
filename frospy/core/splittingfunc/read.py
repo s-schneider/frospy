@@ -1341,7 +1341,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     # print(model, 'CRUST', include_CRUST)
 
     # from IPython import embed; embed()
-    if R == -0.2:
+    if R == -0.2 and include_CRUST is True:
         try:
             if model == 'S20RTS':
                 file_name = "S20RTS_CRUST.sqlite3"
@@ -1896,9 +1896,9 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     WRITE2DB = False
 
     if model in ('S20RTS', 'S40RTS'):
-        WRITE2DB = True
-    elif R == -0.2:
-        WRITE2DB = True
+        if include_CRUST is True:
+            if R == -0.2:
+                WRITE2DB = True
 
     if WRITE2DB is True:
         _write_cst_S20RTS_db(cst, dst, file_name, verbose=verbose)

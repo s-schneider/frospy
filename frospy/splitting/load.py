@@ -124,6 +124,11 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             model = format
             path = None
 
+        if include_CRUST is True and format != 'CRUST':
+            name += '\n+CRUST5.1'
+        if format == 'CRUST':
+            name = 'CRUST5.1'
+
     elif ifile is not None and ifile.endswith('.sqlite3') and not ifile.endswith('sph'):
         if name_overide is True:
             name = name
@@ -163,37 +168,6 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
         cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
         path = setup.rundir
 
-    elif format in models:
-        if setup is not None:
-            cst_out = read_cst(setup=setup, cfile=format, R=R,
-                               include_CRUST=include_CRUST)
-            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-            d = setup.rundir
-            damp = 0
-            model = format
-
-        elif modesin_dir is not None:
-            cst_out = read_cst(format, modesin_dir,
-                               include_CRUST=include_CRUST)
-            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-            name = format
-            model = format
-            d = modesin_dir
-
-        else:
-            cst_out = read_cst(cfile=format, modes=modes, verbose=verbose,
-                               include_CRUST=include_CRUST)
-            cst, dst, cst_errors, dst_errors, modes_sc, modes_cc = cst_out[:]
-            name = format
-            model = format
-            d = None
-
-        if include_CRUST is True and format != 'CRUST':
-            name += '\n+CRUST5.1'
-        if format == 'CRUST':
-            name = 'CRUST5.1'
-        header = get_header(dir=d, modes_sc=modes_sc, modes_cc=modes_cc,
-                            name=name, damp=damp, model=model)
     elif format == 'dat':
         if modesin_dir is not None:
             cst_out = read_cst(cfile=ifile, modes_dir=modesin_dir)

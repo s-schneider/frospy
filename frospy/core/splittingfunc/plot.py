@@ -599,14 +599,20 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
               kind_in_title=True, show_title=True, legend_show=True,
               ticks=False, weight="bold", llsvp=False, plates=False,
               outline_color="k", outline_thick=1, coastline_thick=1,
-              meridians_thick=0.5, lon_0=180.0, proj='kav7', resolution='c',
+              meridians_thick=0.5, lon_0=180.0, lat_0=None, proj='kav7',
+              resolution='c',
               **kwargs):
 
     bins = Bin()
     lon_0 = -lon_0
     fig_config = {'figsize': (3, 1.8)}
-    map_config = {'projection': proj, 'lon_0': lon_0,
-                  'resolution': resolution}
+    if lat_0 is not None:
+        map_config = {'projection': proj, 'lon_0': lon_0,
+                      'lat_0': lat_0,
+                      'resolution': resolution}
+    else:
+        map_config = {'projection': proj, 'lon_0': lon_0,
+                      'resolution': resolution}
 
     if 'smax' in kwargs:
         smax = kwargs['smax']

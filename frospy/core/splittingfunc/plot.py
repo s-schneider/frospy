@@ -638,6 +638,10 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
         show_colorbar = True
     else:
         show_colorbar = False
+    if 'drawlines' in kwargs:
+        drawlines = kwargs['drawlines']
+    else:
+        drawlines = True
 
     if 'cmap' in kwargs:
         cmap = kwargs['cmap']
@@ -859,10 +863,10 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
     cp = m.drawmapboundary()
     if resolution is not None:
         m.drawcoastlines(linewidth=coastline_thick)
-    else:
-        m.drawcoastlines()
-    m.drawparallels(np.arange(-90., 120., 60.), linewidth=meridians_thick, zorder=1, dashes=(None,None))
-    m.drawmeridians(np.arange(0., 420., 60.), linewidth=meridians_thick, zorder=1, dashes=(None,None))
+
+    if drawlines is True:
+        m.drawparallels(np.arange(-90., 120., 60.), linewidth=meridians_thick, zorder=1, dashes=(None,None))
+        m.drawmeridians(np.arange(0., 420., 60.), linewidth=meridians_thick, zorder=1, dashes=(None,None))
 
     if plates: # scattering has no wrapping depending on lon_0
         path = tplates.__path__[0]

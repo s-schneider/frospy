@@ -857,7 +857,10 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
             ax.set_title(title, fontsize=fs)
 
     cp = m.drawmapboundary()
-    m.drawcoastlines(linewidth=coastline_thick)
+    if resolution is not None:
+        m.drawcoastlines(linewidth=coastline_thick)
+    else:
+        m.drawcoastlines()
     m.drawparallels(np.arange(-90., 120., 60.), linewidth=meridians_thick, zorder=1, dashes=(None,None))
     m.drawmeridians(np.arange(0., 420., 60.), linewidth=meridians_thick, zorder=1, dashes=(None,None))
 

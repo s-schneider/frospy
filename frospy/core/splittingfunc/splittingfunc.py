@@ -278,7 +278,7 @@ class SplittingFunc(object):
             print(msg)
         return
 
-    def plot_map(self, fs=10, cmap='lies', proj='kav7', resolution='',
+    def plot_map(self, fs=10, cmap='lies', proj='kav7', resolution='c',
                  lon_0=180.0, **kwargs):
         smin = None
         smax = None

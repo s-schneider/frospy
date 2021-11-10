@@ -278,7 +278,7 @@ class SplittingFunc(object):
             print(msg)
         return
 
-    def plot_map(self, fs=10, **kwargs):
+    def plot_map(self, fs=10, cmap='lies', **kwargs):
         smin = None
         smax = None
         show = True
@@ -351,7 +351,7 @@ class SplittingFunc(object):
                     kwargs['smin'] = 2
 
                 im, fig = _plot_map(clm, m, kind='cst', suptitle=title, fs=fs,
-                                    **kwargs)
+                                    cmap=cmap, **kwargs)
                 im_cst.append(im)
                 figs.append(fig)
 
@@ -505,22 +505,23 @@ class SplittingFunc(object):
         Qc = calc_Q(mode, fc, d00)
 
         if derr is not None:
-            Qe = calc_Q(mode, fc, c00, err)
+            Qe = calc_Q(mode, fc, d00, derr)
             derr = Qc - Qe
 
-        if derru is not None:
-            # err in d00 translates to opposite sign error in Q
-            if derrl > 0:
-                # if its positive only upper uncsrt exist
-                derrl = 0
-            if derru < 0:
-                # if its negative only lower uncsrt exist
-                derru = 0
+        if derru is not None and derrl is not None:
+            ## err in d00 translates to opposite sign error in Q
+            #if derrl > 0:
+            #    # if its positive only upper uncsrt exist
+            #    derrl = 0
+            #if derru < 0:
+            #    # if its negative only lower uncsrt exist
+            #    derru = 0
 
-            Qe = calc_Q(mode, fc, d00, derru)
-            derru = abs(Qc - Qe)
-            Qe = calc_Q(mode, fc, d00, derrl)
-            derrl = abs(Qc - Qe)
+            # errl/erru they are flipped on purpose
+            Qe_l = calc_Q(mode, fc, d00, derru)
+            Qe_u = calc_Q(mode, fc, d00, derrl)
+            derru = abs(Qc - Qe_u)
+            derrl = abs(Qc - Qe_l)
 
         return (fc, err, erru, errl), (Qc, derr, derru, derrl)
 
@@ -605,6 +606,9 @@ def get_header(dir, modes_sc, modes_cc, name=None, damp=None, model=None):
     else:
         events = None
         seg_cnt = None
+
+    if modes_cc is None:
+        modes_cc = Modes([])
 
     header = {'modes_in': modes_sc, 'modes_cc_in': modes_cc, 'damp': damp,
               'nsegments': seg_cnt, 'name': name, 'model': model}

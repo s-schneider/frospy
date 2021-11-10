@@ -139,7 +139,6 @@ frospy/data/S40RTS/S40RTS_CRUST.sqlite3
 frospy/data/SAS/__init__.py
 frospy/data/SAS/cst.sqlite3
 frospy/data/SAS/eventmap.eps
-frospy/data/SAS/eventmap.png
 frospy/data/SAS/new_cat.xml
 frospy/data/SAS/old_cat.xml
 frospy/data/SAS/stations_latlon.xml
@@ -152,10 +151,10 @@ frospy/data/TCB/TCB_ani_2-cc.cst
 frospy/data/TCB/__init__.py
 frospy/data/TZ/AB_s2_tromp_zanzerkia.dat
 frospy/data/TZ/__init__.py
+frospy/data/VS/__init__.py
+frospy/data/VSXI/__init__.py
 frospy/data/WZM/fc_and_Q.txt
-frospy/data/__pycache__/__init__.cpython-37.pyc
 frospy/data/basemap/__init__.py
-frospy/data/basemap/__pycache__/__init__.cpython-37.pyc
 frospy/data/basemap/llsvp/LLSVP_countour.dat
 frospy/data/basemap/llsvp/LLSVP_countoursegment0.dat
 frospy/data/basemap/llsvp/LLSVP_countoursegment1.dat
@@ -206,6 +205,7 @@ frospy/data/docs/main.pdf
 frospy/data/docs/main.synctex.gz
 frospy/data/docs/main.tex
 frospy/data/docs/main.toc
+frospy/data/examples/031111B.ahx
 frospy/data/test/test.ahx
 frospy/data/test/test.ahx.syn
 frospy/data/test/test.dat

@@ -55,7 +55,8 @@ def read(ifile, format=None):
 
 
 def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
-             model='data', include_CRUST=True, verbose=False):
+             model='data', include_CRUST=True,
+             mdcplbin=None, mdcplccbin=None, verbose=False):
     """
     param modes_dir: path to directory containing:
                          modes.in
@@ -76,7 +77,10 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     """
 
     if setup is not None or modes_dir is not None:
-        if cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST'):
+
+        if cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST',
+                     'VSXI', 'VS') or cfile.endswith('.sph'):
+
             if len(setup.modes_cc) > 0 and len(setup.modes_sc) == 0:
                 allmodes = read_modes()
                 for _m in setup.modes_cc.keys():
@@ -111,7 +115,15 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
         print(cfile, modesin, modes_ccin)
 
     cst, dst, cst_errors, dst_errors = None, None, None, None
-    if cfile == 'AD':
+
+    if mdcplbin is not None:
+        cst, dst = read_cst_S20RTS(modesin=modesin, modes_ccin=modes_ccin,
+                                   setup=setup, modes_dst=modes_scin_dst,
+                                   R=R, model=cfile, verbose=verbose,
+                                   include_CRUST=include_CRUST,
+                                   mdcplbin=mdcplbin,
+                                   mdcplccbin=mdcplccbin)
+    elif cfile == 'AD':
         file_name = "AD_cst.json"
         path = "%s/AD/%s" % (frospydata.__path__[0], file_name)
         cst, dst, cst_errors, dst_errors = read_cst_AD(modesin, modes_ccin,
@@ -125,7 +137,7 @@ def read_cst(setup=None, modes=None, cfile=None, modes_dir=None, R=-0.2,
     elif cfile == 'RR':
         cst, dst, cst_errors, dst_errors = read_cst_RR(modesin, modes_ccin,
                                                        verbose=verbose)
-    elif cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST'):
+    elif cfile in ('S20RTS', 'S40RTS', 'SP12RTS', 'QRFSI12', 'CRUST', 'VSXI', 'VS'):
         cst, dst = read_cst_S20RTS(modesin=modesin, modes_ccin=modes_ccin,
                                    setup=setup, modes_dst=modes_scin_dst,
                                    R=R, model=cfile, verbose=verbose,
@@ -1327,7 +1339,9 @@ def _write_cst_S20RTS_db(cst, dst, file_name="S20RTS_CRUST.sqlite3",
 def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                     keep_mcst=False, modes_dst=None, modes_cc_dst=None,
                     R=-0.2, model='S20RTS', include_CRUST=True,
-                    verbose=False):
+                    verbose=False,
+                    mdcplbin=None,
+                    mdcplccbin=None):
     """
     Calculates S20RTS coefficients using the program defined in
     S20RTS_path for given self-coupling modes in 'modes' and cross-coupling
@@ -1413,6 +1427,7 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
 
     cstCRUST = "%s/simons/bin/mdcplmrho_all_cstCRUST" % bin_path
     cc_cstCRUST = "%s/simons/bin/mdcplmrho_allC_cstCRUST" % bin_path
+    modelfile = None
 
     if model == 'S20RTS':
         cstS20RTS = "%s/talavera/bin/mdcplmrho_all_cstS20RTS" % bin_path
@@ -1450,6 +1465,28 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         _maxmdeg = 20 # cst model
         _maxcdeg = 20 # crust model
         _maxddeg = 20 # dst model
+
+    if model in ('VSXI', 'VS'):
+        cstS20RTS = "{}/simons/bin/mdcplmrho_all_cst{}".format(bin_path, model)
+        cc_cstS20RTS = "{}/simons/bin/mdcplmrho_allC_cst{}".format(bin_path, model)
+        dstS20RTS = None
+        cc_dstS20RTS = None
+        _maxmdeg = 8 # cst model
+        _maxcdeg = 8 # crust model
+        _maxddeg = 8 # dst model
+
+    if mdcplbin is not None:
+        cstS20RTS = mdcplbin
+        cc_cstS20RTS = mdcplccbin
+        dstS20RTS = None
+        cc_dstS20RTS = None
+        _maxmdeg = 8 # cst model
+        _maxcdeg = 8 # crust model
+        _maxddeg = 8 # dst model
+        modelfile = model
+
+    if verbose:
+        print(cstS20RTS, cc_cstS20RTS, model)
     sc_modes, cc_modes = get_mode_names(modesin, modes_ccin)
     sc_cdeg, sc_ddeg, cc_cdeg, cc_ddeg = get_mode_deg(modesin, modes_ccin)
 
@@ -1470,7 +1507,8 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
 
     sc_coeff = {}
     if cc_modes is not None:
-        cc_coeff = {}
+        if len(cc_modes) != 0:
+            cc_coeff = {}
 
     count = 0
     for mode, s_max in zip(sc_modes, sc_cdeg):
@@ -1484,13 +1522,22 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             os.system('echo "%03d %s %03d" >> modes.in' % (int(m[0]),
                                                            m[1].lower(),
                                                            int(m[2])))
-            if model != 'SP12RTS' and model != 'CRUST':
+            if model not in ('SP12RTS', 'CRUST'):
                 # S20RTS prediction
                 for s in np.arange(0, int(s_max)+1, 2):
                     # only input coupling degrees, No degree higher then 20
                     if s not in max_sc_degrees(int(m[2])) or s > _maxmdeg:
                         continue
-                    os.system('echo "%s" > input' % s)
+                    if modelfile is not None:
+                        if type(modelfile) != list:
+                            os.system('echo "{}" > input'.format(modelfile))
+                            os.system('echo "%s" >> input' % s)
+                        else:
+                            os.system('echo "{}" > input'.format(modelfile[0]))
+                            os.system('echo "{}" >> input'.format(modelfile[1]))
+                            os.system('echo "%s" >> input' % s)
+                    else:
+                        os.system('echo "%s" > input' % s)
                     res = subprocess.Popen('%s < input' % cstS20RTS, shell=True,
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.PIPE)
@@ -1591,6 +1638,8 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
             #          2-2  ->  2-3
             #                   3-3
             if cc_modes is not None:
+                if len(cc_modes) == 0:
+                    continue
                 # Workaround for cross-coupling
                 if setup is not None:
                     cc_cdeg = list(setup.modes_cc.values())
@@ -1636,7 +1685,18 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
                                 # only input coupling degrees
                                 if s not in ccdegs:
                                     continue
-                                os.system('echo "%s" > input' % s)
+                                if os.path.exists('input'):
+                                    os.remove('input')
+                                if modelfile is not None:
+                                    if type(modelfile) != list:
+                                        os.system('echo "{}" > input'.format(modelfile))
+                                        os.system('echo "%s" >> input' % s)
+                                    else:
+                                        os.system('echo "{}" > input'.format(modelfile[0]))
+                                        os.system('echo "{}" >> input'.format(modelfile[1]))
+                                        os.system('echo "%s" >> input' % s)
+                                else:
+                                    os.system('echo "%s" > input' % s)
                                 res = subprocess.Popen('%s < input' % cc_cstS20RTS,
                                                        shell=True,
                                                        stdout=subprocess.PIPE,
@@ -1822,6 +1882,8 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
     count = 1
     for mode in sc_modes[1:]:
         if cc_modes is not None:
+            if len(cc_modes) == 0:
+                continue
             # reading for 2 and 3 modes
             if count == 1 and len(cc_modes) >= 1:
                 # 1-2  ->  1-3
@@ -1899,7 +1961,8 @@ def read_cst_S20RTS(modesin, modes_ccin, setup=None, bin_path=None,
         if include_CRUST is True:
             if R == -0.2:
                 WRITE2DB = True
-
+    if mdcplbin is not None:
+        WRITE2DB = False
     if WRITE2DB is True:
         _write_cst_S20RTS_db(cst, dst, file_name, verbose=verbose)
     return cst, dst

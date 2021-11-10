@@ -1,3 +1,5 @@
+from future.utils import native_str
+import pickle
 from frospy.util.base import sort_human
 from frospy.util.base import split_digit_nondigit
 
@@ -13,6 +15,8 @@ def write(SF, filename='cst-coef', format='dat', coupling='self',
         text_file = open("{}.{}".format(filename, format), "wt")
         _n = text_file.write(msg)
         text_file.close()
+    elif format == 'pickle':
+        _write_pickle(SF, filename)
     return
 
 
@@ -70,3 +74,30 @@ def create_cst_content(SF, coupling, verbose=False):
                     msg += ' '.join(cf_errors)
                 msg += '\n'
     return msg
+
+
+def _write_pickle(SF, filename, protocol=2, **kwargs):
+    """
+    Write a Python pickle of current modes.
+
+    .. note::
+        Writing into PICKLE format allows to store additional attributes
+        appended to the current Modes object or any contained Mode.
+
+    .. warning::
+        This function should NOT be called directly, it registers via the
+        the :meth:`~frospy.core.modes.Modes.write` method of an
+        nmPy :class:`~frospy.core.modes.Modes` object, call this instead.
+
+    :type mode: :class:`~frospy.core.splittingfunc.SplittingFunc or Set`
+    :param mode: The SplittingFunc object to write.
+    :type filename: str
+    :param filename: Name of file to write.
+    :type protocol: int, optional
+    :param protocol: Pickle protocol, defaults to ``2``.
+    """
+    if isinstance(filename, (str, native_str)):
+        with open(filename, 'wb') as fp:
+            pickle.dump(SF, fp, protocol=protocol)
+    else:
+        pickle.dump(SF, filename, protocol=protocol)

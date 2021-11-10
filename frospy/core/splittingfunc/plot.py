@@ -614,6 +614,11 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
         map_config = {'projection': proj, 'lon_0': lon_0,
                       'resolution': resolution}
 
+    if 'plot_kernel' in kwargs:
+        plot_kernel = kwargs['plot_kernel']
+    else:
+        plot_kernel = True
+
     if 'smax' in kwargs:
         smax = kwargs['smax']
 
@@ -757,6 +762,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
                            stop=1.0, name='shiftedcmap')
 
     if '-' not in mode.name:
+
         if ax is None:
             if os.path.exists(bins.sc_cstkernels):
                 gs = gridspec.GridSpec(1, 2, width_ratios=[0.8, 3.2],

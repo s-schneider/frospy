@@ -22,7 +22,7 @@ Classifier: Topic :: Scientific/Engineering :: Physics
 Requires-Python: >=3.6
 Description-Content-Type: text/markdown
 
-# Free Oscillation Toolbox - FrosPy
+## Free Oscillation Toolbox - FrosPy
 Small toolbox to help with visualization of spectra and data-handling for splitting function measurements.
 
 ## Installation

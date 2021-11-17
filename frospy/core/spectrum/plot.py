@@ -212,7 +212,7 @@ def plot_spectrum(main, gui=False):
             else:
                 t1 = 'Mode'
             for i, mode in enumerate(main.modes):
-                if i == 1:
+                if i == 0:
                     t1 += " ${}_{%d}%s_{%d}$" % (mode.n, mode.type, mode.l)
                 else:
                     t1 += "-${}_{%d}%s_{%d}$" % (mode.n, mode.type, mode.l)

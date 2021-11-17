@@ -301,7 +301,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         print('models w/o data', model)
     # spacing between coeffs for the same modes,
     # only if one than one data set is plotted
-    from IPython import embed; embed()
+    # from IPython import embed; embed()
     if spacing: # and
         if model[0] is None:
             input = []

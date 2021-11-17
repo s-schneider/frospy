@@ -312,13 +312,18 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
 
         else:
             input = list(model)
-        input.insert(len(input), 'data')
+        dkey = 'data'
+        if 'data' in input:
+            input.insert(len(input),'measurement')
+            dkey = 'measurement'
+        else:
+            input.insert(len(input), 'data')
         n_input = len(input)
         # right now S20, S40 and SP12 are plotted as a line by Default
         # if we make that optional we have to change this if condition too
         # If S20/S40 are not lines, but dots, they need to be taken
         # into account, as well as 'data'
-        for xin in ('S20RTS', 'S20RTS1', 'S40RTS', 'SP12RTS', 'data'):
+        for xin in ('S20RTS', 'S40RTS', 'SP12RTS', dkey):
             if xin in input:
                 n_input += -1
 
@@ -332,12 +337,13 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         for m in input:
             # right now S20 and S40 are plotted as a line by Default
             # if we make that optional we have to change this if condition too
-            if m in ('S20RTS', 'S40RTS', 'SP12RTS', 'data'):
+            if m in ('S20RTS', 'S40RTS', 'SP12RTS', dkey):
                 width[m] = 0
             else:
                 width[m] = ww[i]
                 i += 1
     else:
+        dkey = 'data'
         input = list(model)
         input.insert(-1, 'data')
         width = {}
@@ -978,7 +984,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                                          linestyle='--')
 
                     _label = s.stats.name
-                    _width = 'data'
+                    _width = dkey
                     if _label.lower() != 'data':
                         if _label.lower().startswith('data'):
                             _width = _label.split()[0]

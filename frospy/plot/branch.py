@@ -966,9 +966,11 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                     _width = 'data'
                     if _label.lower() != 'data':
                         if _label.lower().startswith('data'):
-                            idx = int(_label.lower().split()[0].split('data')[-1])
-                            if idx == 'data':
+                            idx = _label.lower().split()[0].split('data')[-1]
+                            if idx == '':
                                 idx = 0
+                            else:
+                                idx = int(idx)
                             if idx + 1 > len(_label_damping):
                                 _label_damping.append([])
                             if _label not in _label_damping[idx]:
@@ -1047,9 +1049,11 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 _label = data_label[0]
             elif models.startswith('data'):
                 # Trying to make it possible to plot all dampings for a run
-                idx = int(_label.lower().split()[0].split('data')[-1])
-                if idx == 'data':
+                idx = _label.lower().split()[0].split('data')[-1]
+                if idx == '':
                     idx = 0
+                else:
+                    idx = int(idx)
                 _marker = marker
                 _color = cmap_damping[idx][_label]
                 _zorder = zorder_damping[idx][_label]

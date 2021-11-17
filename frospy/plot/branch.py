@@ -1029,14 +1029,15 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
             if models == 'data':
                 _marker = marker
                 _color = color1
-                _zorder = 100
+                _zorder = 101
                 _label = data_label[0]
             elif models.startswith('data'):
                 # Trying to make it possible to plot all dampings for a run
                 _marker = marker
                 _color = cmap_damping[_label]
                 _zorder = zorder_damping[_label]
-                print(_label)
+                if _label.split()[-1] == '0':
+                    _zorder = 100
                 if damping_label is not None:
                     _label = label.split()[1]
                 else:

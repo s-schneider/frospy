@@ -1027,6 +1027,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 _zorder_damping[_l] = 99 - _i
             cmap_damping[_j] = _cmap_damping
             zorder_damping[_j] = _zorder_damping
+        print('new label indexing')
 
     legend_set = False
     # Do the plotting loop here using plot_dict

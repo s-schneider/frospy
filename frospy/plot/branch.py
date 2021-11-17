@@ -284,9 +284,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         if S.stats.model not in m:
             m.append(S.stats.model)
         if S.stats.name != 'data' and S.stats.name.startswith('data'):
-            print(S)
             name = S.stats.name.split()[0]
-            print(name)
             if name not in datain:
                 datain.append(name)
 
@@ -303,7 +301,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         print('models w/o data', model)
     # spacing between coeffs for the same modes,
     # only if one than one data set is plotted
-    # from IPython import embed; embed()
+    from IPython import embed; embed()
     if spacing: # and
         if model[0] is None:
             input = []
@@ -983,6 +981,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                     _width = 'data'
                     if _label.lower() != 'data':
                         if _label.lower().startswith('data'):
+                            _width = _label.split()[0]
                             idx = _label.lower().split()[0].split('data')[-1]
                             if idx == '':
                                 idx = 0

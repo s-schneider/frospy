@@ -981,6 +981,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                     _width = 'data'
                     if _label.lower() != 'data':
                         if _label.lower().startswith('data'):
+                            print(_label, _label.split()[0])
                             _width = _label.split()[0]
                             idx = _label.lower().split()[0].split('data')[-1]
                             if idx == '':

@@ -301,7 +301,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         print('models w/o data', model)
     # spacing between coeffs for the same modes,
     # only if one than one data set is plotted
-    from IPython import embed; embed()
+    # from IPython import embed; embed()
     if spacing: # and
         if model[0] is None:
             input = []
@@ -318,7 +318,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         # if we make that optional we have to change this if condition too
         # If S20/S40 are not lines, but dots, they need to be taken
         # into account, as well as 'data'
-        for xin in ('S20RTS', 'S40RTS', 'SP12RTS', 'data'):
+        for xin in ('S20RTS', 'S20RTS1', 'S40RTS', 'SP12RTS', 'data'):
             if xin in input:
                 n_input += -1
 
@@ -982,7 +982,8 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                     if _label.lower() != 'data':
                         if _label.lower().startswith('data'):
                             _width = _label.split()[0]
-                            print(_label, _label.split()[0], width[_width])
+                            if verbose:
+                                print(_label, _label.split()[0], width[_width])
                             idx = _label.lower().split()[0].split('data')[-1]
                             if idx == '':
                                 idx = 0
@@ -1080,7 +1081,6 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                     _label = label.split()[1]
                 else:
                     _label = None
-                print(_label, x, cst)
             else:
                 _zorder = 10
                 _marker = mark[models]

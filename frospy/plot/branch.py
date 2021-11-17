@@ -964,9 +964,15 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
 
                     _label = s.stats.name
                     _width = 'data'
-                    if _label.lower() != 'data' and _label.lower().startswith('data'):
-                        if _label not in _label_damping:
-                            _label_damping += [_label]
+                    if _label.lower() != 'data':
+                        if _label.lower().startswith('data'):
+                            idx = _label.lower().split()[0].split('data')[-1]
+                            if idx == 'data':
+                                idx = 0
+                            if idx + 1 > len(_label_damping):
+                                _label_damping.append([])
+                            if _label not in _label_damping[idx]:
+                                _label_damping[idx] += [_label]
 
                 _ax = ax_dict[i]
                 if _label not in plot_dict[_ax]:
@@ -991,26 +997,34 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
 
     # Set the colors for the different dampings
     if len(_label_damping) != 0:
-        y = [float(y.split()[1]) for y in _label_damping]
-        # x.sort()
-        x = _label_damping
-        _label_damping = [x for _, x in sorted(zip(y, x))]
-        # _label_damping = ["data %s" % str(y) for y in x]
-        _cmap = getattr(cm, cmap_all_damping)
-        _N = len(_label_damping)
-        # had something to do with the dmapings?
-        if skip2 is True:
-            cmap_damping = _cmap(np.linspace(0, 1, _N + 2))
-            cmap_damping = cmap_damping[2:]
-        else:
-            cmap_damping = _cmap(np.linspace(0, 1, _N))
+        cmap_damping = [0] * len(_label_damping)
+        zorder_damping = [0] * len(_label_damping)
+        for _j, _ld in enumerate(_label_damping):
+            y = [float(y.split()[1]) for y in _ld]
+            # x.sort()
+            x = _ld
+            _ld = [x for _, x in sorted(zip(y, x))]
+            # _label_damping = ["data %s" % str(y) for y in x]
+            if type(cmap_all_damping) != list:
+                cad = cmap_all_damping
+            else:
+                cad = cmap_all_damping[_j]
+            _cmap = getattr(cm, cad)
+            _N = len(_ld)
+            # had something to do with the dmapings?
+            if skip2 is True:
+                cmap_damping = _cmap(np.linspace(0, 1, _N + 2))
+                cmap_damping = cmap_damping[2:]
+            else:
+                cmap_damping = _cmap(np.linspace(0, 1, _N))
 
-        _cmap_damping = {}
-        zorder_damping = {}
-        for _i, _ld in enumerate(_label_damping):
-            _cmap_damping[_ld] = cmap_damping[_i]
-            zorder_damping[_ld] = 99 - _i
-        cmap_damping = _cmap_damping
+            _cmap_damping = {}
+            _zorder_damping = {}
+            for _i, _l in enumerate(_ld):
+                _cmap_damping[_l] = cmap_damping[_i]
+                _zorder_damping[_l] = 99 - _i
+            cmap_damping[_j] = _cmap_damping
+            zorder_damping[_j] = _zorder_damping
 
     legend_set = False
     # Do the plotting loop here using plot_dict
@@ -1033,9 +1047,12 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 _label = data_label[0]
             elif models.startswith('data'):
                 # Trying to make it possible to plot all dampings for a run
+                idx = _label.lower().split()[0].split('data')[-1]
+                if idx == 'data':
+                    idx = 0
                 _marker = marker
-                _color = cmap_damping[_label]
-                _zorder = zorder_damping[_label]
+                _color = cmap_damping[idx][_label]
+                _zorder = zorder_damping[idx][_label]
                 if _label.split()[-1] == '0':
                     _zorder = 100
                 if damping_label is not None:

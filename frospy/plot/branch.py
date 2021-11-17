@@ -352,6 +352,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
 
     if verbose is True:
         print('Final models ', model)
+    print('Spacing ', width)
     # Prepare Figures and Plot
     # use first splitting function to check the amount of plots
     # we need 2 * degree + 1 figures

@@ -274,6 +274,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         model = [None]
     # reading second set of SF types. Only two possible tight now
     m = []
+    datain = []
     if verbose is True:
         print('\nLoaded Data/models:')
     for S in SF:
@@ -282,6 +283,13 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         # if S.stats.name.split('_')[0] not in m:
         if S.stats.model not in m:
             m.append(S.stats.model)
+        if S.stats.name != 'data' and S.stats.name.startswith('data'):
+            print(S)
+            name = S.stats.name.split()[0]
+            print(name)
+            if name not in datain:
+                datain.append(name)
+
     if verbose is True:
         print('models', m)
     if SF_in is not None:
@@ -295,10 +303,17 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         print('models w/o data', model)
     # spacing between coeffs for the same modes,
     # only if one than one data set is plotted
-    print('spacing:', spacing)
-    from IPython import embed; embed()
-    if spacing: # and model[0] is not None:
-        input = list(model)
+    # from IPython import embed; embed()
+    if spacing: # and
+        if model[0] is None:
+            input = []
+            for d in datain:
+                input.append(d)
+            for _m in model[1:]:
+                input.append(_m)
+
+        else:
+            input = list(model)
         input.insert(len(input), 'data')
         n_input = len(input)
         # right now S20, S40 and SP12 are plotted as a line by Default

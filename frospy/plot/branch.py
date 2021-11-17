@@ -966,7 +966,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                     _width = 'data'
                     if _label.lower() != 'data':
                         if _label.lower().startswith('data'):
-                            idx = _label.lower().split()[0].split('data')[-1]
+                            idx = int(_label.lower().split()[0].split('data')[-1])
                             if idx == 'data':
                                 idx = 0
                             if idx + 1 > len(_label_damping):
@@ -1047,7 +1047,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 _label = data_label[0]
             elif models.startswith('data'):
                 # Trying to make it possible to plot all dampings for a run
-                idx = _label.lower().split()[0].split('data')[-1]
+                idx = int(_label.lower().split()[0].split('data')[-1])
                 if idx == 'data':
                     idx = 0
                 _marker = marker

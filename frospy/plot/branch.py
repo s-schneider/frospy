@@ -1036,6 +1036,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 _marker = marker
                 _color = cmap_damping[_label]
                 _zorder = zorder_damping[_label]
+                print(_label)
                 if damping_label is not None:
                     _label = label.split()[1]
                 else:

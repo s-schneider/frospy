@@ -1080,6 +1080,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                     _label = label.split()[1]
                 else:
                     _label = None
+                print(_label, x, cst)
             else:
                 _zorder = 10
                 _marker = mark[models]

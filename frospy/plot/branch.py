@@ -999,8 +999,8 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
 
     # Set the colors for the different dampings
     if len(_label_damping) != 0:
-        cmap_damping = [0] * len(_label_damping)
-        zorder_damping = [0] * len(_label_damping)
+        cmap_damping = list([0] * len(_label_damping))
+        zorder_damping = list([0] * len(_label_damping))
         for _j, _ld in enumerate(_label_damping):
             y = [float(y.split()[1]) for y in _ld]
             # x.sort()
@@ -1015,18 +1015,18 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
             _N = len(_ld)
             # had something to do with the dmapings?
             if skip2 is True:
-                cmap_damping = _cmap(np.linspace(0, 1, _N + 2))
-                cmap_damping = cmap_damping[2:]
+                cmap_tmp = _cmap(np.linspace(0, 1, _N + 2))
+                cmap_tmp = cmap_tmp[2:]
             else:
-                cmap_damping = _cmap(np.linspace(0, 1, _N))
+                cmap_tmp = _cmap(np.linspace(0, 1, _N))
 
             _cmap_damping = {}
             _zorder_damping = {}
             for _i, _l in enumerate(_ld):
-                _cmap_damping[_l] = cmap_damping[_i]
+                _cmap_damping[_l] = cmap_tmp[_i]
                 _zorder_damping[_l] = 99 - _i
-            cmap_damping[_j] += [_cmap_damping]
-            zorder_damping[_j] += [_zorder_damping]
+            cmap_damping[_j] = _cmap_damping
+            zorder_damping[_j] = _zorder_damping
 
     legend_set = False
     # Do the plotting loop here using plot_dict

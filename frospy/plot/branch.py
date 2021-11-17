@@ -1025,8 +1025,8 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
             for _i, _l in enumerate(_ld):
                 _cmap_damping[_l] = cmap_damping[_i]
                 _zorder_damping[_l] = 99 - _i
-            cmap_damping[_j] = _cmap_damping
-            zorder_damping[_j] = _zorder_damping
+            cmap_damping[_j] += [_cmap_damping]
+            zorder_damping[_j] += [_zorder_damping]
 
     legend_set = False
     # Do the plotting loop here using plot_dict

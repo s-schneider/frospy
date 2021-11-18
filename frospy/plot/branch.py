@@ -306,7 +306,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         print('models w/o data', model)
     # spacing between coeffs for the same modes,
     # only if one than one data set is plotted
-    from IPython import embed; embed()
+    # from IPython import embed; embed()
     dkey = 'data'
     if spacing: # and
         if model[0] is None:
@@ -1106,12 +1106,10 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 if _label.split()[-1] == '0':
                     _zorder = 100
                 if datain[key] not in label_set:
-                    print('Setting new key ', datain[key])
                     _label = datain[key]
                     label_set[datain[key]] = True
                 else:
                     _label = None
-                    print('NO LABEL', datain[key])
                 # if damping_label is not None:
                 #     _label = label.split()[1]
                 # else:

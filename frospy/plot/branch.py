@@ -1099,7 +1099,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                     idx = 0
                 else:
                     idx = int(idx)
-                _marker = markers[key]
+                _marker = markers[datain[key]]
                 _color = cmap_damping[idx][_label]
                 _zorder = zorder_damping[idx][_label]
                 if _label.split()[-1] == '0':

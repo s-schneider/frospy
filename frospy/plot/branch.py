@@ -280,14 +280,13 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
     for S in SF:
         if verbose is True:
             print(S)
-        # if S.stats.name.split('_')[0] not in m:
+
         if S.stats.name != 'data' and S.stats.name.startswith('data'):
             name = S.stats.name.split()[0]
             if name not in datain:
                 datain[name] = S.stats.model
-        else S.stats.model not in m:
+        elif S.stats.model not in m:
             m.append(S.stats.model)
-
     if verbose is True:
         print('models', m)
     if SF_in is not None:

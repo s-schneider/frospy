@@ -1108,7 +1108,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 if datain[key] not in label_set:
                     print('Setting new key ', datain[key])
                     _label = datain[key]
-                    datain[key] = True
+                    label_set[datain[key]] = True
                 else:
                     print('NO LABEL', datain[key])
                 # if damping_label is not None:

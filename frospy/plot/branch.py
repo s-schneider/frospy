@@ -301,7 +301,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         print('models w/o data', model)
     # spacing between coeffs for the same modes,
     # only if one than one data set is plotted
-    from IPython import embed; embed()
+    # from IPython import embed; embed()
     dkey = 'data'
     if spacing: # and
         if model[0] is None:
@@ -443,6 +443,15 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
             markers[_m] = next(markersit)
         if verbose is True:
             print('markers: ', _m, markers[_m])
+    for _d in datain:
+        try:
+            markers[_d] = next(markersit)
+        except StopIteration:
+            markersit = iter(_markers)
+            markers[_d] = next(markersit)
+        if verbose is True:
+            print('markers: ', _d, markers[_d])
+
     colors = {}
     colors_data = {}
 

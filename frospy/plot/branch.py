@@ -429,7 +429,8 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
     for m in marker_order:
         _markers.update([(m, markers[m])])
 
-    print('models :', len(model), 'markers :', len(markers))
+    if verbose:
+        print('models :', len(model), 'markers :', len(markers))
     markersit = iter(_markers)
     markers = {}
     for _m in model:

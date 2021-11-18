@@ -1106,8 +1106,10 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 if _label.split()[-1] == '0':
                     _zorder = 100
                 if datain[key] not in label_set:
+                    print('Setting new key ', datain[key])
                     _label = datain[key]
                 else:
+                    print('NO LABEL', datain[key])
                     label_set[datain[key]] = True
                 # if damping_label is not None:
                 #     _label = label.split()[1]

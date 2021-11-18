@@ -448,7 +448,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
             markers[_m] = next(markersit)
         if verbose is True:
             print('markers: ', _m, markers[_m])
-    for _d in datain.keys():
+    for _d in datain.values():
         try:
             markers[_d] = next(markersit)
         except StopIteration:

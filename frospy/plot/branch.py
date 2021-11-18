@@ -1074,6 +1074,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
     legend_set = False
     # Do the plotting loop here using plot_dict
     # from IPython import embed; embed()
+    label_set = {}
     for ax, data in plot_dict.items():
         for models, items in data.items():
             x = items[0]
@@ -1104,7 +1105,10 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 _zorder = zorder_damping[idx][_label]
                 if _label.split()[-1] == '0':
                     _zorder = 100
-                _label = datain[key]
+                if datain[key] not in label_set:
+                    _label = datain[key]
+                else:
+                    label_set[datain[key]] = True
                 # if damping_label is not None:
                 #     _label = label.split()[1]
                 # else:

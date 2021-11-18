@@ -302,30 +302,32 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
     # spacing between coeffs for the same modes,
     # only if one than one data set is plotted
     from IPython import embed; embed()
+    dkey = 'data'
     if spacing: # and
         if model[0] is None:
             input = []
             for d in datain:
                 input.append(d)
+            if 'data' in input:
+                dkey = 'measurement'
+            input.append(dkey)
             for _m in model[1:]:
                 input.append(_m)
 
         else:
             input = list(model)
-        dkey = 'data'
-        if 'data' in input:
-            input.insert(len(input),'measurement')
-            dkey = 'measurement'
-        else:
-            input.insert(len(input), 'data')
+
         n_input = len(input)
         # right now S20, S40 and SP12 are plotted as a line by Default
         # if we make that optional we have to change this if condition too
         # If S20/S40 are not lines, but dots, they need to be taken
         # into account, as well as 'data'
-        for xin in ('S20RTS', 'S40RTS', 'SP12RTS', dkey):
+        for xin in ('S20RTS', 'S40RTS', 'SP12RTS'):
             if xin in input:
                 n_input += -1
+
+        if len(datain) == 0:
+            n_input += -1
 
         if type(spacing) in (int, float):
             ww = np.linspace(-spacing, spacing, n_input)
@@ -337,22 +339,23 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         for m in input:
             # right now S20 and S40 are plotted as a line by Default
             # if we make that optional we have to change this if condition too
-            if m in ('S20RTS', 'S40RTS', 'SP12RTS', dkey):
+            if m in ('S20RTS', 'S40RTS', 'SP12RTS'):
+                width[m] = 0
+            if m == dkey and len(datain) == 0:
                 width[m] = 0
             else:
                 width[m] = ww[i]
                 i += 1
     else:
-        dkey = 'data'
         input = list(model)
-        input.insert(-1, 'data')
+        input.insert(-1, dkey)
         width = {}
         for m in input:
             width[m] = 0
 
     if verbose is True:
         print('Final models ', model)
-    print('Spacing ', width)
+        print('Spacing ', width)
     # Prepare Figures and Plot
     # use first splitting function to check the amount of plots
     # we need 2 * degree + 1 figures

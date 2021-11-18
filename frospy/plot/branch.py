@@ -1110,6 +1110,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                     _label = datain[key]
                     label_set[datain[key]] = True
                 else:
+                    _label = None
                     print('NO LABEL', datain[key])
                 # if damping_label is not None:
                 #     _label = label.split()[1]

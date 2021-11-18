@@ -274,19 +274,19 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         model = [None]
     # reading second set of SF types. Only two possible tight now
     m = []
-    datain = []
+    datain = {}
     if verbose is True:
         print('\nLoaded Data/models:')
     for S in SF:
         if verbose is True:
             print(S)
         # if S.stats.name.split('_')[0] not in m:
-        if S.stats.model not in m:
-            m.append(S.stats.model)
         if S.stats.name != 'data' and S.stats.name.startswith('data'):
             name = S.stats.name.split()[0]
             if name not in datain:
-                datain.append(name)
+                datain[name] = S.stats.model
+        else S.stats.model not in m:
+            m.append(S.stats.model)
 
     if verbose is True:
         print('models', m)
@@ -306,7 +306,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
     if spacing: # and
         if model[0] is None:
             input = []
-            for d in datain:
+            for d in datain.keys():
                 input.append(d)
             if 'data' in input:
                 dkey = 'measurement'
@@ -443,7 +443,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
             markers[_m] = next(markersit)
         if verbose is True:
             print('markers: ', _m, markers[_m])
-    for _d in datain:
+    for _d in datain.keys():
         try:
             markers[_d] = next(markersit)
         except StopIteration:
@@ -1087,20 +1087,23 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                 _label = data_label[0]
             elif models.startswith('data'):
                 # Trying to make it possible to plot all dampings for a run
-                idx = _label.lower().split()[0].split('data')[-1]
+                key = _label.lower().split()[0]
+                idx = key.split('data')[-1]
+
                 if idx == '':
                     idx = 0
                 else:
                     idx = int(idx)
-                _marker = markers[_label.lower().split()[0]]
+                _marker = markers[key]
                 _color = cmap_damping[idx][_label]
                 _zorder = zorder_damping[idx][_label]
                 if _label.split()[-1] == '0':
                     _zorder = 100
-                if damping_label is not None:
-                    _label = label.split()[1]
-                else:
-                    _label = None
+                _label = datain[key]
+                # if damping_label is not None:
+                #     _label = label.split()[1]
+                # else:
+                #     _label = None
             else:
                 _zorder = 10
                 _marker = mark[models]

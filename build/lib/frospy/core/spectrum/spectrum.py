@@ -176,7 +176,7 @@ class Spectrum(object):
                 syn_label = None
 
             if syn_label is None:
-                num = np.arange(1, len(syn_stream)+1).astype(str)
+                num = np.arange(1, len(syn_stream) + 1).astype(str)
                 name = num.copy()
                 name[:] = 'synthetics '
                 syn_label = np.core.defchararray.add(name, num)

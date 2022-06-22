@@ -327,12 +327,14 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         # if we make that optional we have to change this if condition too
         # If S20/S40 are not lines, but dots, they need to be taken
         # into account, as well as 'data'
-        for xin in ('S20RTS', 'S40RTS', 'SP12RTS'):
-            if xin in input:
-                n_input += -1
+        # Don't know why, but it doesn't work anymore like this
 
-        if len(datain) == 0:
-            n_input += -1
+        # for xin in ('S20RTS', 'S40RTS', 'SP12RTS'):
+        #     if xin in input:
+        #         n_input += -1
+        #
+        # if len(datain) == 0:
+        #     n_input += -1
 
         if type(spacing) in (int, float):
             ww = np.linspace(-spacing, spacing, n_input)
@@ -341,6 +343,7 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
 
         width = {}
         i = 0
+
         for m in input:
             # right now S20 and S40 are plotted as a line by Default
             # if we make that optional we have to change this if condition too

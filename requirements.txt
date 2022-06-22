@@ -1,6 +1,6 @@
-pytorch torchvision -c pytorch
-obspy -c conda-forge
-basemap cartopy -c conda-forge
+#pytorch torchvision -c pytorch
+#obspy -c conda-forge
+#basemap cartopy -c conda-forge
 mechanize
 natsort
 numpy
@@ -9,4 +9,4 @@ pandoc
 pip
 scipy
 sqlite
-tk=8.6.8
+tk==8.6.8

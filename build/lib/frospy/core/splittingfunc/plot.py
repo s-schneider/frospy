@@ -599,14 +599,25 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
               kind_in_title=True, show_title=True, legend_show=True,
               ticks=False, weight="bold", llsvp=False, plates=False,
               outline_color="k", outline_thick=1, coastline_thick=1,
-              meridians_thick=0.5, lon_0=180.0,
+              meridians_thick=0.5, lon_0=180.0, lat_0=None, proj='kav7',
+              resolution='c',
               **kwargs):
 
     bins = Bin()
     lon_0 = -lon_0
     fig_config = {'figsize': (3, 1.8)}
-    map_config = {'projection': 'kav7', 'lon_0': lon_0,
-                  'resolution': 'c'}
+    if lat_0 is not None:
+        map_config = {'projection': proj, 'lon_0': lon_0,
+                      'lat_0': lat_0,
+                      'resolution': resolution}
+    else:
+        map_config = {'projection': proj, 'lon_0': lon_0,
+                      'resolution': resolution}
+
+    if 'plot_kernel' in kwargs:
+        plot_kernel = kwargs['plot_kernel']
+    else:
+        plot_kernel = True
 
     if 'smax' in kwargs:
         smax = kwargs['smax']
@@ -638,6 +649,10 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
         show_colorbar = True
     else:
         show_colorbar = False
+    if 'drawlines' in kwargs:
+        drawlines = kwargs['drawlines']
+    else:
+        drawlines = True
 
     if 'cmap' in kwargs:
         cmap = kwargs['cmap']
@@ -747,6 +762,7 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
                            stop=1.0, name='shiftedcmap')
 
     if '-' not in mode.name:
+
         if ax is None:
             if os.path.exists(bins.sc_cstkernels):
                 gs = gridspec.GridSpec(1, 2, width_ratios=[0.8, 3.2],
@@ -857,9 +873,12 @@ def _plot_map(clm, mode, kind, suptitle, html=False,
             ax.set_title(title, fontsize=fs)
 
     cp = m.drawmapboundary()
-    m.drawcoastlines(linewidth=coastline_thick)
-    m.drawparallels(np.arange(-90., 120., 60.), linewidth=meridians_thick, zorder=1, dashes=(None,None))
-    m.drawmeridians(np.arange(0., 420., 60.), linewidth=meridians_thick, zorder=1, dashes=(None,None))
+    if resolution is not None:
+        m.drawcoastlines(linewidth=coastline_thick)
+
+    if drawlines is True:
+        m.drawparallels(np.arange(-90., 120., 60.), linewidth=meridians_thick, zorder=1, dashes=(None,None))
+        m.drawmeridians(np.arange(0., 420., 60.), linewidth=meridians_thick, zorder=1, dashes=(None,None))
 
     if plates: # scattering has no wrapping depending on lon_0
         path = tplates.__path__[0]

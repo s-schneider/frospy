@@ -124,6 +124,11 @@ def load(ifile=None, modes=None, setup=None, modesin_dir=None,
             model = format
             path = None
 
+        if include_CRUST is True and format != 'CRUST':
+            name += '\n+CRUST5.1'
+        if format == 'CRUST':
+            name = 'CRUST5.1'
+
     elif ifile is not None and ifile.endswith('.sqlite3') and not ifile.endswith('sph'):
         if name_overide is True:
             name = name

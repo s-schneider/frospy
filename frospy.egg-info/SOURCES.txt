@@ -1,6 +1,7 @@
 MANIFEST.in
 README.md
 setup.py
+frospy/.DS_Store
 frospy/__init__.py
 frospy.egg-info/PKG-INFO
 frospy.egg-info/SOURCES.txt

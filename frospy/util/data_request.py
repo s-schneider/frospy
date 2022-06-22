@@ -685,15 +685,33 @@ def data_request(client_name, start=None, end=None, minmag=None, cat=None,
         catalog = cat
         client = Client(client_name)
     else:
+        client = Client(client_name)
         if cat_client_name == 'globalcmt':
             catalog = request_gcmt(starttime=start, endtime=end,
                                    minmagnitude=minmag, mindepth=mindepth,
                                    maxdepth=maxdepth, minlatitude=minlat,
                                    maxlatitude=maxlat, minlongitude=minlon,
                                    maxlongitude=maxlon)
-            client = Client(client_name)
+        elif cat_client_name is not None:
+            catclient = Client(cat_client_name)
+            try:
+                catalog = catclient.get_events(starttime=start, endtime=end,
+                                            minmagnitude=minmag,
+                                            mindepth=mindepth,
+                                            maxdepth=maxdepth,
+                                            latitude=radialcenterlat,
+                                            longitude=radialcenterlon,
+                                            minradius=minrad,
+                                            maxradius=maxrad,
+                                            minlatitude=minlat,
+                                            maxlatitude=maxlat,
+                                            minlongitude=minlon,
+                                            maxlongitude=maxlon)
+
+            except FDSNNoDataException:
+                print("No events found for given parameters.")
+                return
         else:
-            client = Client(client_name)
             try:
                 catalog = client.get_events(starttime=start, endtime=end,
                                             minmagnitude=minmag,

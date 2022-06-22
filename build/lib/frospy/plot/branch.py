@@ -274,14 +274,25 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         model = [None]
     # reading second set of SF types. Only two possible tight now
     m = []
+    datain = {}
     if verbose is True:
         print('\nLoaded Data/models:')
     for S in SF:
         if verbose is True:
             print(S)
-        # if S.stats.name.split('_')[0] not in m:
+        if S.stats.name != 'data' and S.stats.name.startswith('data'):
+            name = S.stats.name.split()[0]
+            if name not in datain:
+                datain[name] = S.stats.model
+
         if S.stats.model not in m:
-            m.append(S.stats.model)
+            if S.stats.name == 'data':
+                # print(S.stats.name, S.stats.model)
+                m.append(S.stats.model)
+            elif not S.stats.name.startswith('data'):
+                # print(S.stats.name, S.stats.model)
+                m.append(S.stats.model)
+
     if verbose is True:
         print('models', m)
     if SF_in is not None:
@@ -295,17 +306,35 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
         print('models w/o data', model)
     # spacing between coeffs for the same modes,
     # only if one than one data set is plotted
-    if spacing and model[0] is not None:
-        input = list(model)
-        input.insert(len(input), 'data')
+    # from IPython import embed; embed()
+    dkey = 'data'
+    if spacing: # and
+        if model[0] is None:
+            input = []
+            for d in datain.keys():
+                input.append(d)
+            if 'data' in input:
+                dkey = 'measurement'
+            input.append(dkey)
+            for _m in model[1:]:
+                input.append(_m)
+
+        else:
+            input = list(model)
+
         n_input = len(input)
         # right now S20, S40 and SP12 are plotted as a line by Default
         # if we make that optional we have to change this if condition too
         # If S20/S40 are not lines, but dots, they need to be taken
         # into account, as well as 'data'
-        for xin in ('S20RTS', 'S40RTS', 'SP12RTS', 'data'):
-            if xin in input:
-                n_input += -1
+        # Don't know why, but it doesn't work anymore like this
+
+        # for xin in ('S20RTS', 'S40RTS', 'SP12RTS'):
+        #     if xin in input:
+        #         n_input += -1
+        #
+        # if len(datain) == 0:
+        #     n_input += -1
 
         if type(spacing) in (int, float):
             ww = np.linspace(-spacing, spacing, n_input)
@@ -314,23 +343,27 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
 
         width = {}
         i = 0
+
         for m in input:
             # right now S20 and S40 are plotted as a line by Default
             # if we make that optional we have to change this if condition too
-            if m in ('S20RTS', 'S40RTS', 'SP12RTS', 'data'):
+            if m in ('S20RTS', 'S40RTS', 'SP12RTS'):
+                width[m] = 0
+            if m == dkey and len(datain) == 0:
                 width[m] = 0
             else:
                 width[m] = ww[i]
                 i += 1
     else:
         input = list(model)
-        input.insert(-1, 'data')
+        input.insert(-1, dkey)
         width = {}
         for m in input:
             width[m] = 0
 
     if verbose is True:
         print('Final models ', model)
+        print('Spacing ', width)
     # Prepare Figures and Plot
     # use first splitting function to check the amount of plots
     # we need 2 * degree + 1 figures
@@ -404,7 +437,8 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
     for m in marker_order:
         _markers.update([(m, markers[m])])
 
-    print('models :', len(model), 'markers :', len(markers))
+    if verbose:
+        print('models :', len(model), 'markers :', len(markers))
     markersit = iter(_markers)
     markers = {}
     for _m in model:
@@ -417,6 +451,15 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
             markers[_m] = next(markersit)
         if verbose is True:
             print('markers: ', _m, markers[_m])
+    for _d in datain.values():
+        try:
+            markers[_d] = next(markersit)
+        except StopIteration:
+            markersit = iter(_markers)
+            markers[_d] = next(markersit)
+        if verbose is True:
+            print('markers: ', _d, markers[_d])
+
     colors = {}
     colors_data = {}
 
@@ -963,10 +1006,21 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
                                          linestyle='--')
 
                     _label = s.stats.name
-                    _width = 'data'
-                    if _label.lower() != 'data' and _label.lower().startswith('data'):
-                        if _label not in _label_damping:
-                            _label_damping += [_label]
+                    _width = dkey
+                    if _label.lower() != 'data':
+                        if _label.lower().startswith('data'):
+                            _width = _label.split()[0]
+                            if verbose:
+                                print(_label, _label.split()[0], width[_width])
+                            idx = _label.lower().split()[0].split('data')[-1]
+                            if idx == '':
+                                idx = 0
+                            else:
+                                idx = int(idx)
+                            if idx + 1 > len(_label_damping):
+                                _label_damping.append([])
+                            if _label not in _label_damping[idx]:
+                                _label_damping[idx] += [_label]
 
                 _ax = ax_dict[i]
                 if _label not in plot_dict[_ax]:
@@ -991,30 +1045,39 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
 
     # Set the colors for the different dampings
     if len(_label_damping) != 0:
-        y = [float(y.split()[1]) for y in _label_damping]
-        # x.sort()
-        x = _label_damping
-        _label_damping = [x for _, x in sorted(zip(y, x))]
-        # _label_damping = ["data %s" % str(y) for y in x]
-        _cmap = getattr(cm, cmap_all_damping)
-        _N = len(_label_damping)
-        # had something to do with the dmapings?
-        if skip2 is True:
-            cmap_damping = _cmap(np.linspace(0, 1, _N + 2))
-            cmap_damping = cmap_damping[2:]
-        else:
-            cmap_damping = _cmap(np.linspace(0, 1, _N))
+        cmap_damping = list([0] * len(_label_damping))
+        zorder_damping = list([0] * len(_label_damping))
+        for _j, _ld in enumerate(_label_damping):
+            y = [float(y.split()[1]) for y in _ld]
+            # x.sort()
+            x = _ld
+            _ld = [x for _, x in sorted(zip(y, x))]
+            # _label_damping = ["data %s" % str(y) for y in x]
+            if type(cmap_all_damping) != list:
+                cad = cmap_all_damping
+            else:
+                cad = cmap_all_damping[_j]
+            _cmap = getattr(cm, cad)
+            _N = len(_ld)
+            # had something to do with the dmapings?
+            if skip2 is True:
+                cmap_tmp = _cmap(np.linspace(0, 1, _N + 2))
+                cmap_tmp = cmap_tmp[2:]
+            else:
+                cmap_tmp = _cmap(np.linspace(0, 1, _N))
 
-        _cmap_damping = {}
-        zorder_damping = {}
-        for _i, _ld in enumerate(_label_damping):
-            _cmap_damping[_ld] = cmap_damping[_i]
-            zorder_damping[_ld] = 99 - _i
-        cmap_damping = _cmap_damping
+            _cmap_damping = {}
+            _zorder_damping = {}
+            for _i, _l in enumerate(_ld):
+                _cmap_damping[_l] = cmap_tmp[_i]
+                _zorder_damping[_l] = 99 - _i
+            cmap_damping[_j] = _cmap_damping
+            zorder_damping[_j] = _zorder_damping
 
     legend_set = False
     # Do the plotting loop here using plot_dict
     # from IPython import embed; embed()
+    label_set = {}
     for ax, data in plot_dict.items():
         for models, items in data.items():
             x = items[0]
@@ -1029,17 +1092,31 @@ def branch(ifiles=None, data_label=None, label1=None, SF_in=None,
             if models == 'data':
                 _marker = marker
                 _color = color1
-                _zorder = 100
+                _zorder = 101
                 _label = data_label[0]
             elif models.startswith('data'):
                 # Trying to make it possible to plot all dampings for a run
-                _marker = marker
-                _color = cmap_damping[_label]
-                _zorder = zorder_damping[_label]
-                if damping_label is not None:
-                    _label = label.split()[1]
+                key = _label.lower().split()[0]
+                idx = key.split('data')[-1]
+
+                if idx == '':
+                    idx = 0
+                else:
+                    idx = int(idx)
+                _marker = markers[datain[key]]
+                _color = cmap_damping[idx][_label]
+                _zorder = zorder_damping[idx][_label]
+                if _label.split()[-1] == '0':
+                    _zorder = 100
+                if datain[key] not in label_set:
+                    _label = datain[key]
+                    label_set[datain[key]] = True
                 else:
                     _label = None
+                # if damping_label is not None:
+                #     _label = label.split()[1]
+                # else:
+                #     _label = None
             else:
                 _zorder = 10
                 _marker = mark[models]

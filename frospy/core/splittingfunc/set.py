@@ -657,7 +657,7 @@ class Set(object):
                     # divider = make_axes_locatable(ax)
                     # cax = divider.append_axes("right", size="5%", pad=0.05)
                     cax = axes.flat[-1]
-                    cax.set_aspect(12.5, adjustable='datalim')  # shrinking cb
+                    # cax.set_aspect(12.5, adjustable='datalim')  # shrinking cb
                     if vlim[0] < 0 and vlim[1] > 0:
                         ticks = [vlim[0], 0., vlim[1]]
                     else:
